@@ -13,50 +13,41 @@
       box-sizing: border-box;
     }
 
-    /* Full-Screen Background */
+    /* Body & Background */
     body {
       font-family: 'Roboto', sans-serif;
-      background: #121212;
+      background: linear-gradient(135deg, #121212, #1e1e1e);
       color: white;
+      margin: 0;
+      padding: 0;
       overflow-x: hidden;
+      height: 100vh;
       scroll-behavior: smooth;
-      position: relative;
-    }
-
-    /* Parallax Effect for Background */
-    .parallax {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url('https://source.unsplash.com/1600x900/?space,tech');
-      background-size: cover;
-      background-position: center;
       background-attachment: fixed;
-      filter: blur(5px);
-      z-index: -1;
     }
 
-    /* Centered Content Container */
+    /* Container for content */
     .container {
-      position: relative;
+      padding: 20px;
       text-align: center;
-      z-index: 2;
-      padding-top: 10%;
-      padding-bottom: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
     }
 
-    /* Title / Name with Glitch and Neon Effect */
+    /* Title / Name with glitch effect */
     .name {
       font-size: 5em;
       font-weight: 700;
+      text-transform: uppercase;
       color: #FFD700;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.7);
-      animation: glitch 3s infinite linear alternate-reverse;
+      animation: glitch 2s infinite linear alternate-reverse;
+      position: relative;
     }
 
+    /* Glitch Animation */
     @keyframes glitch {
       0% {
         text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
@@ -64,15 +55,15 @@
       }
       50% {
         text-shadow: -2px -2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
-        transform: translateX(-10px);
+        transform: translateX(-5px);
       }
       100% {
         text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
-        transform: translateX(10px);
+        transform: translateX(5px);
       }
     }
 
-    /* Neon Heading Styling */
+    /* Section Titles with Neon Glow */
     h2, h3 {
       font-size: 2.5em;
       color: #6C63FF;
@@ -80,6 +71,7 @@
       animation: neonGlow 2s ease-in-out infinite alternate;
     }
 
+    /* Neon Glow Animation */
     @keyframes neonGlow {
       0% {
         text-shadow: 0 0 20px #6C63FF, 0 0 30px #6C63FF, 0 0 40px #6C63FF;
@@ -89,34 +81,13 @@
       }
     }
 
-    /* About Me Section Styling */
-    .about {
-      margin-top: 20px;
-      font-size: 1.2em;
-      line-height: 1.6;
-      animation: fadeIn 3s ease-out;
-    }
-
-    /* Fade-in Animation */
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Image Styling with Hover Effect */
+    /* Image Styling (with 3D effect) */
     .image img {
-      width: 200px;
-      height: 200px;
+      width: 250px;
       border-radius: 50%;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform: perspective(500px) rotateY(0deg);
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      transform: perspective(500px) rotateY(0deg);
     }
 
     .image img:hover {
@@ -124,12 +95,20 @@
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
     }
 
-    /* Social Icons with Pulse Effect */
+    /* About Me Text Styling */
+    .about {
+      margin-top: 40px;
+      font-size: 1.3em;
+      animation: fadeIn 3s ease-out;
+      line-height: 1.6;
+    }
+
+    /* Social Icons with Pulsing Effect */
     .socials a {
-      margin: 10px;
+      margin: 20px;
       transition: transform 0.3s ease, color 0.3s;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       display: inline-block;
       transform-origin: center center;
     }
@@ -155,16 +134,23 @@
       }
     }
 
-    /* Footer Styling */
+    /* Footer */
     footer {
       text-align: center;
       margin-top: 40px;
-      font-size: 1.5em;
+      font-size: 1.2em;
       color: #ccc;
-      animation: fadeInFooter 4s ease-out;
+      animation: fadeIn 4s ease-out;
     }
 
     /* Footer Text Fade-in */
+    .thanks-message {
+      font-size: 1.5em;
+      color: #ccc;
+      opacity: 0;
+      animation: fadeInFooter 3s ease-out forwards;
+    }
+
     @keyframes fadeInFooter {
       0% {
         opacity: 0;
@@ -176,41 +162,16 @@
       }
     }
 
-    /* Scroll Snap to Ensure Smooth Section Scrolling */
-    html, body {
-      height: 100%;
-      scroll-snap-type: y mandatory;
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
     }
-
-    section {
-      padding: 20px;
-      scroll-snap-align: start;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .name {
-        font-size: 4em;
-      }
-      h2, h3 {
-        font-size: 2em;
-      }
-      .about {
-        font-size: 1.1em;
-      }
-      .socials a {
-        width: 40px;
-        height: 40px;
-      }
-    }
-
   </style>
 </head>
 <body>
 
-  <div class="parallax"></div>
-
   <div class="container">
+
     <!-- Logo and Name -->
     <div class="image">
       <img src="logo.avif" alt="SaOYaD's Logo">
@@ -220,31 +181,27 @@
     <hr>
 
     <!-- About Me Section -->
-    <section>
-      <h2>🌟 About Me</h2>
-      <div class="image">
-        <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
-      </div>
-      <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
-      <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
-      <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
-      <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
-    </section>
+    <h2>🌟 About Me</h2>
+    <div class="image">
+      <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
+    </div>
+    <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
+    <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
+    <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
+    <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
 
     <hr>
 
     <!-- Social Links Section -->
-    <section>
-      <div class="socials">
-        <details>
-          <summary><h3>🌐 Socials</h3></summary>
-          <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
-          <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
-          <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
-          <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
-        </details>
-      </div>
-    </section>
+    <div class="socials">
+      <details>
+        <summary><h3>🌐 Socials</h3></summary>
+        <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
+        <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
+        <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
+        <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
+      </details>
+    </div>
 
     <hr>
 
@@ -252,6 +209,7 @@
     <footer>
       <p class="thanks-message">Thanks For Visiting 💖</p>
     </footer>
+
   </div>
 
 </body>
