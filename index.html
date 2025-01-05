@@ -58,6 +58,15 @@
     .socials a {
       margin: 10px;
       transition: transform 0.3s ease;
+      width: 40px; /* Set width for consistent size */
+      height: 40px; /* Set height for consistent size */
+      display: inline-block; /* Ensure they're aligned horizontally */
+    }
+
+    .socials a img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Ensure images fit well within the container */
     }
 
     .socials a:hover {
