@@ -17,7 +17,7 @@
     body {
       font-family: 'Roboto', sans-serif;
       height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
       background: #121212;
       color: white;
       scroll-behavior: smooth;
@@ -45,6 +45,7 @@
       text-align: center;
       padding-top: 10%;
       z-index: 2;
+      scroll-snap-align: start;
     }
 
     /* Title / Name with Glitch and Neon Effect */
@@ -175,6 +176,17 @@
       }
     }
 
+    /* Scroll Snap to Ensure Smooth Section Scrolling */
+    html, body {
+      height: 100%;
+      scroll-snap-type: y mandatory;
+    }
+
+    section {
+      height: 100vh;
+      scroll-snap-align: start;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .name {
@@ -192,9 +204,6 @@
       }
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
   </style>
 </head>
 <body>
@@ -202,7 +211,6 @@
   <div class="parallax"></div>
 
   <div class="container">
-
     <!-- Logo and Name -->
     <div class="image">
       <img src="logo.avif" alt="SaOYaD's Logo">
@@ -212,27 +220,31 @@
     <hr>
 
     <!-- About Me Section -->
-    <h2>🌟 About Me</h2>
-    <div class="image">
-      <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
-    </div>
-    <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
-    <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
-    <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
-    <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
+    <section>
+      <h2>🌟 About Me</h2>
+      <div class="image">
+        <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
+      </div>
+      <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
+      <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
+      <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
+      <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
+    </section>
 
     <hr>
 
     <!-- Social Links Section -->
-    <div class="socials">
-      <details>
-        <summary><h3>🌐 Socials</h3></summary>
-        <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
-        <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
-        <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
-        <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
-      </details>
-    </div>
+    <section>
+      <div class="socials">
+        <details>
+          <summary><h3>🌐 Socials</h3></summary>
+          <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
+          <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
+          <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
+          <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
+        </details>
+      </div>
+    </section>
 
     <hr>
 
@@ -240,7 +252,6 @@
     <footer>
       <p class="thanks-message">Thanks For Visiting 💖</p>
     </footer>
-
   </div>
 
 </body>
