@@ -5,58 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SaOYaD's Profile</title>
   <style>
+    /* Body & Background */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #1e1e1e, #333333);
       color: white;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
     }
-    h1, h2, h3, p {
-      text-align: center;
-    }
+
+    /* Centering content and padding */
     .container {
       padding: 20px;
-    }
-    .stats, .tech-stack, .socials, .system-info {
-      margin-top: 40px;
-    }
-    .image {
       text-align: center;
     }
+
+    /* Styling for the name */
+    .name {
+      font-size: 3em;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #FFD700;
+      animation: fadeIn 2s ease-out;
+    }
+
+    /* Styling for headings */
+    h2, h3 {
+      font-size: 2em;
+      color: #6C63FF;
+      animation: fadeIn 2s ease-out;
+    }
+
+    /* Image styling */
     .image img {
-      width: 350px;
+      width: 250px;
       border-radius: 50%;
+      transition: transform 0.5s ease;
     }
-    .tech-stack img, .socials img {
-      height: 30px;
-      margin-right: 12px;
+
+    .image img:hover {
+      transform: scale(1.1);
     }
+
+    /* Animating text */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* Social media icons */
     .socials a {
-      margin-right: 12px;
-    }
-    .stats img {
       margin: 10px;
+      transition: transform 0.3s ease;
     }
-    .system-info pre {
-      background-color: #333;
-      padding: 15px;
-      overflow: auto;
+
+    .socials a:hover {
+      transform: scale(1.2);
     }
+
+    /* About Me Section */
+    .about {
+      margin-top: 40px;
+      animation: fadeIn 3s ease-out;
+    }
+
+    /* Footer */
     footer {
       text-align: center;
       margin-top: 40px;
-    }
-    .name {
-      font-size: 2em;
-      font-weight: bold;
+      font-size: 1.1em;
+      color: #ccc;
+      animation: fadeIn 4s ease-out;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-
 
     <!-- Logo and Name -->
     <div class="image">
@@ -66,19 +92,17 @@
     
     <hr>
 
-
     <!-- About Me Section -->
     <h2>🌟 About Me</h2>
     <div class="image">
       <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
     </div>
-    <p>🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
-    <p>🌐 <strong>Social Butterfly</strong> active on Discord.</p>
-    <p>💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
-    <p>💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
+    <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
+    <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
+    <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
+    <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
 
     <hr>
-
 
     <!-- Social Links Section -->
     <div class="socials">
@@ -93,7 +117,8 @@
 
     <hr>
 
-
+    <!-- Footer -->
+    <footer>
       <p>Thanks For Visiting 💖</p>
     </footer>
 
