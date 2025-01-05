@@ -13,46 +13,28 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      animation: backgroundAnimation 5s ease-in-out infinite;
-    }
-
-    /* Background animation */
-    @keyframes backgroundAnimation {
-      0% { background: linear-gradient(45deg, #1e1e1e, #333333); }
-      50% { background: linear-gradient(45deg, #333333, #1e1e1e); }
-      100% { background: linear-gradient(45deg, #1e1e1e, #333333); }
     }
 
     /* Centering content and padding */
     .container {
-      padding: 40px;
+      padding: 20px;
       text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
-      animation: fadeIn 3s ease-out;
     }
 
     /* Styling for the name */
     .name {
-      font-size: 4em;
+      font-size: 3em;
       font-weight: bold;
       text-transform: uppercase;
       color: #FFD700;
-      text-shadow: 2px 2px 10px rgba(255, 215, 0, 0.6);
-      animation: nameAnimation 2s ease-out;
-    }
-
-    /* Name animation */
-    @keyframes nameAnimation {
-      0% { transform: translateY(-20px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
+      animation: fadeIn 2s ease-out;
     }
 
     /* Styling for headings */
     h2, h3 {
-      font-size: 2.5em;
+      font-size: 2em;
       color: #6C63FF;
-      animation: fadeIn 3s ease-out;
+      animation: fadeIn 2s ease-out;
     }
 
     /* Image styling */
@@ -60,7 +42,6 @@
       width: 250px;
       border-radius: 50%;
       transition: transform 0.5s ease;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     }
 
     .image img:hover {
@@ -75,31 +56,27 @@
 
     /* Social media icons */
     .socials a {
-      margin: 15px;
-      transition: transform 0.3s ease, filter 0.3s ease;
-      width: 50px;
-      height: 50px;
-      display: inline-block;
+      margin: 10px;
+      transition: transform 0.3s ease;
+      width: 40px; /* Set width for consistent size */
+      height: 40px; /* Set height for consistent size */
+      display: inline-block; /* Ensure they're aligned horizontally */
     }
 
     .socials a img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: contain; /* Ensure images fit well within the container */
     }
 
     .socials a:hover {
       transform: scale(1.2);
-      filter: brightness(1.2);
     }
 
     /* About Me Section */
     .about {
       margin-top: 40px;
-      font-size: 1.2em;
-      line-height: 1.6;
-      color: #ccc;
-      animation: fadeIn 4s ease-out;
+      animation: fadeIn 3s ease-out;
     }
 
     /* Footer */
@@ -107,10 +84,23 @@
       text-align: center;
       margin-top: 40px;
       font-size: 1.1em;
-      color: #aaa;
-      animation: fadeIn 5s ease-out;
+      color: #ccc;
+      animation: fadeIn 4s ease-out;
     }
 
+    /* Footer text animation */
+    .thanks-message {
+      font-size: 1.2em;
+      color: #ccc;
+      opacity: 0;
+      animation: fadeInFooter 3s ease-out forwards;
+    }
+
+    /* Footer text fade-in animation */
+    @keyframes fadeInFooter {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -152,7 +142,7 @@
 
     <!-- Footer -->
     <footer>
-      <p>Thanks For Visiting 💖</p>
+      <p class="thanks-message">Thanks For Visiting 💖</p>
     </footer>
 
   </div>
