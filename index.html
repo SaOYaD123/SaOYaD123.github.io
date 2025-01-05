@@ -4,65 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SaOYaD's Portfolio</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #1a1a2e;
-      color: #eaeaea;
-      text-align: center;
-    }
-
-    header {
-      background-color: #0f3460;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    header img {
-      width: 80px;
-      height: auto;
-      border-radius: 50%;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    }
-
-    header h1 {
-      font-size: 2rem;
-      color: #eaeaea;
-      margin: 0;
-    }
-
-    main {
-      padding: 20px;
-    }
-
-    footer {
-      margin-top: 30px;
-      padding: 10px;
-      font-size: 0.9rem;
-      background-color: #16213e;
-      color: #eaeaea;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <img src="images/logo.avif" alt="SaOYaD Logo">
-    <h1>Welcome to SaOYaD's Portfolio</h1>
+  <header class="hero">
+    <h1>Hi There! 👋 I'm <span class="highlight">SaOYaD</span></h1>
+    <h2>A Linux Enthusiast & Aspiring Full-Stack Developer</h2>
+    <a href="#about" class="button">Explore More</a>
   </header>
 
-  <main>
-    <h2>Tech Stack</h2>
-    <p>Explore my skills, projects, and technologies I work with!</p>
-    <!-- Add your tech stack content here -->
-  </main>
+  <section id="about" class="about">
+    <h2>About Me</h2>
+    <p>🌱 I love Linux, tinkering with tech, and exploring new JavaScript features!</p>
+    <p>💻 Currently diving deep into web development and aspiring to become a full-stack developer.</p>
+  </section>
 
-  <footer>
-    <p>© 2025 SaOYaD - Made with ❤️</p>
+  <footer class="footer">
+    <p>Follow me on:</p>
+    <div class="socials">
+      <a href="https://discord.gg/2aRd2B52qZ" target="_blank">Discord</a>
+      <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank">YouTube</a>
+      <a href="https://x.com/SaOYaD123" target="_blank">X (Twitter)</a>
+      <a href="https://www.reddit.com/user/SaOYaD/" target="_blank">Reddit</a>
+    </div>
   </footer>
 </body>
 </html>
