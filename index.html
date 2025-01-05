@@ -9,22 +9,32 @@
     /* Body & Background */
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #121212, #1e1e1e);
+      background: url('wallpaper.jpg') no-repeat center center fixed;
+      background-size: cover; /* Cover the entire screen with wallpaper */
       color: white;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
       height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       scroll-behavior: smooth;
     }
 
-    /* Centering content and padding */
+    /* Centered content with 16:9 aspect ratio */
     .container {
+      width: 90vw; /* 90% of the viewport width */
+      height: 50vw; /* 50% of the viewport width to maintain 16:9 aspect ratio */
+      max-width: 1200px;
+      max-height: 675px; /* Corresponds to 16:9 aspect ratio */
       padding: 20px;
       text-align: center;
-      max-width: 1200px;
-      margin: 0 auto;
       position: relative;
+      overflow-y: auto;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.5); /* Optional dark overlay to make text stand out */
+      border-radius: 10px;
     }
 
     /* Styling for the name */
@@ -113,6 +123,7 @@
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
   </style>
 </head>
 <body>
