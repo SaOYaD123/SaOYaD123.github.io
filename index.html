@@ -3,31 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SaOYaD's Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <title>SaOYaD's Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3, p {
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+    }
+    .stats, .tech-stack, .socials, .system-info {
+      margin-top: 40px;
+    }
+    .image {
+      text-align: center;
+    }
+    .image img {
+      width: 350px;
+    }
+    .tech-stack img, .socials img {
+      height: 30px;
+      margin-right: 12px;
+    }
+    .socials a {
+      margin-right: 12px;
+    }
+    .stats img {
+      margin: 10px;
+    }
+    .system-info pre {
+      background-color: #333;
+      padding: 15px;
+      overflow: auto;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
-  <header class="hero">
-    <h1>Hi There! 👋 I'm <span class="highlight">SaOYaD</span></h1>
-    <h2>A Linux Enthusiast & Aspiring Full-Stack Developer</h2>
-    <a href="#about" class="button">Explore More</a>
-  </header>
 
-  <section id="about" class="about">
-    <h2>About Me</h2>
-    <p>🌱 I love Linux, tinkering with tech, and exploring new JavaScript features!</p>
-    <p>💻 Currently diving deep into web development and aspiring to become a full-stack developer.</p>
-  </section>
+  <div class="container">
 
-  <footer class="footer">
-    <p>Follow me on:</p>
-    <div class="socials">
-      <a href="https://discord.gg/2aRd2B52qZ" target="_blank">Discord</a>
-      <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank">YouTube</a>
-      <a href="https://x.com/SaOYaD123" target="_blank">X (Twitter)</a>
-      <a href="https://www.reddit.com/user/SaOYaD/" target="_blank">Reddit</a>
+    <!-- Profile Visitor Counter -->
+    <p align="right">
+      <img src="https://komarev.com/ghpvc/?username=SaOYaD123&color=6C63FF" alt="Profile Visitor Counter">
+    </p>
+
+    <!-- Typing SVG Header -->
+    <h1>
+      <img src="https://readme-typing-svg.demolab.com/?lines=Hi+There!👋;I+Am+SaOYaD;A+Linux+Enthusiast🐧;A+Nature+Lover🌱;&font=Poppins">
+    </h1>
+
+    <hr>
+
+    <!-- About Me Section -->
+    <h2>🌟 About Me</h2>
+    <div class="image">
+      <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
     </div>
-  </footer>
+    <p>🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
+    <p>🌐 <strong>Social Butterfly</strong> active on Discord.</p>
+    <p>💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
+    <p>💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
+
+    <hr>
+
+    <!-- Statistics Section -->
+    <div class="stats">
+      <details>
+        <summary><h3>📊 My Statistics</h3></summary>
+        <p align="center"><img src="https://streak-stats.demolab.com/?user=SaOYaD123&theme=tokyonight"/></p>
+        <p align="center"><img src="http://github-profile-summary-cards.vercel.app/api/cards/stats?username=SaOYaD123&theme=tokyonight"/></p>
+        <p align="center"><img src="http://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=SaOYaD123&theme=tokyonight"/></p>
+        <p align="center"><img src="https://github-readme-activity-graph.vercel.app/graph?username=SaOYaD123&theme=tokyo-night"/></p>
+      </details>
+    </div>
+
+    <hr>
+
+    <!-- Social Links Section -->
+    <div class="socials">
+      <details>
+        <summary><h3>🌐 Socials</h3></summary>
+        <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
+        <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
+        <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
+        <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
+      </details>
+    </div>
+
+    <hr>
+
+    <!-- Tech Stack Section -->
+    <div class="tech-stack">
+      <details>
+        <summary><h3>💻 Tech Stack</h3></summary>
+        <div>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" alt="GitLab logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" alt="Nginx logo"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg" alt="Raspberry Pi logo"/>
+        </div>
+      </details>
+    </div>
+
+    <hr>
+
+    <!-- System Info Section -->
+    <div class="system-info">
+      <h3>⚡ System Info</h3>
+      <pre>
+saoyad@archbtw:~$ fastfetch
+
+                   .~vVeZNgQBBBQQg9Ze1v~.                   
+              `^}%B@@@@@@@@@@@@@@@@@@@@@@8%}=`                saoyad@archbtw
+           -Lq#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#qr-              -----------------------
+        .V0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@0?.           OS: Arch-linux
+      _l#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#l`         Uptime: 15 years
+    `o@@@@@@@@v^r}P0@@@@@@@@@@@@@@@@@@@@ghlr<r@@@@@@@#o`       Packages: 1030 (pacman)
+   ;0@@@@@@@@0      .?szL?*;!!!!~*|]Vox_      P@@@@@@@@0.      Shell: /bin/zsh
+  ?@@@@@@@@@@q                                z@@@@@@@@@#?     Editors: vscode , neovim
+ :@@@@@@@@@@@Q                                R@@@@@@@@@@@"    Home: git@github.com:SaOYaD123
+_g@@@@@@@@@@2-                                `M@@@@@@@@@@0    
+a@@@@@@@@@@2                                    v@@@@@@@@@@;   Contact Information
+#@@@@@@@@@@_                                     @@@@@@@@@@y   -------------------
+@@@@@@@@@@@.                                     @@@@@@@@@@%   Github: SaOYaD123
+#@@@@@@@@@@r                                    :@@@@@@@@@@s
+W@@@@@@@@@@Q`                                  _0@@@@@@@@@@*   Device Specifications
+~#@@@@@@@@@@9!                                ,Q@@@@@@@@@@#    ---------------------
+ ;@@@@@@@@@@@@6^.                          `\p@@@@@@@@@@@@~    CPU: Normal Human Brain
+  n@@@@@PlVd@@@@#6Vv~_`              `_!?zd#@@@@@@@@@@@@#n
+   2#@@@#hr _Y#@@@@@@@#q`          `X#@@@@@@@@@@@@@@@@@#~
+    .d@@@@@D` .n6#@@@#V`             Q@@@@@@@@@@@@@@@@d.
+      x0@@@@0^   `__-                M@@@@@@@@@@@@@@0=
+        =p#@@@#%Il]]L1,              M@@@@@@@@@@@#V=
+          `vR#@@@@@@@@?              M@@@@@@@@#Pv`
+              "Lf8@@@@v              q@@@#Qa?:
+                  -!v|`              _?v!
+      </pre>
+    </div>
+
+    <footer>
+      <p><img src="https://raw.githubusercontent.com/SaOYaD123/SaOYaD123/output/github-contribution-grid-snake-dark.svg" alt="Contribution Grid"></p>
+      <p>Thanks For Visiting 💖</p>
+    </footer>
+
+  </div>
+
 </body>
 </html>
