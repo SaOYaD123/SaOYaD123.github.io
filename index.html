@@ -14,18 +14,27 @@
       color: white;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
       height: 100vh;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
+      align-items: center;
       scroll-behavior: smooth;
     }
 
-    /* General Layout */
-    h1, h2, h3, p {
-      margin: 20px;
+    /* Centered content with 16:9 aspect ratio */
+    .container {
+      width: 90vw; /* 90% of the viewport width */
+      height: 50vw; /* 50% of the viewport width to maintain 16:9 aspect ratio */
+      max-width: 1200px;
+      max-height: 675px; /* Corresponds to 16:9 aspect ratio */
+      padding: 20px;
       text-align: center;
-      z-index: 1;
+      position: relative;
+      overflow-y: auto;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.5); /* Optional dark overlay to make text stand out */
+      border-radius: 10px;
     }
 
     /* Styling for the name */
@@ -52,7 +61,6 @@
       border-radius: 50%;
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
       transition: transform 0.5s ease, box-shadow 0.5s ease;
-      margin: 0 auto;
     }
 
     .image img:hover {
@@ -88,10 +96,9 @@
 
     /* About Me Section */
     .about {
+      margin-top: 40px;
       font-size: 1.3em;
       animation: fadeIn 3s ease-out;
-      text-align: center;
-      z-index: 1;
     }
 
     /* Footer */
@@ -101,7 +108,6 @@
       font-size: 1.2em;
       color: #ccc;
       animation: fadeIn 4s ease-out;
-      z-index: 1;
     }
 
     /* Footer text animation */
@@ -117,39 +123,52 @@
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
   </style>
 </head>
 <body>
 
-  <!-- Name and Logo -->
-  <h1 class="name">SaOYaD</h1>
-  <div class="image">
-    <img src="logo.avif" alt="SaOYaD's Logo">
-  </div>
+  <div class="container">
 
-  <!-- About Me Section -->
-  <h2>🌟 About Me</h2>
-  <div class="image">
-    <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
-  </div>
-  <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
-  <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
-  <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
-  <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
+    <!-- Logo and Name -->
+    <div class="image">
+      <img src="logo.avif" alt="SaOYaD's Logo">
+    </div>
+    <h1 class="name">SaOYaD</h1>
+    
+    <hr>
 
-  <!-- Social Links Section -->
-  <h3>🌐 Socials</h3>
-  <div class="socials">
-    <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
-    <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
-    <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
-    <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
-  </div>
+    <!-- About Me Section -->
+    <h2>🌟 About Me</h2>
+    <div class="image">
+      <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
+    </div>
+    <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
+    <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
+    <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
+    <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
 
-  <!-- Footer -->
-  <footer>
-    <p class="thanks-message">Thanks For Visiting 💖</p>
-  </footer>
+    <hr>
+
+    <!-- Social Links Section -->
+    <div class="socials">
+      <details>
+        <summary><h3>🌐 Socials</h3></summary>
+        <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
+        <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
+        <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
+        <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
+      </details>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <p class="thanks-message">Thanks For Visiting 💖</p>
+    </footer>
+
+  </div>
 
 </body>
 </html>
