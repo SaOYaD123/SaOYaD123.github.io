@@ -6,71 +6,131 @@
   <title>SaOYaD's Legendary Profile</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Body & Background */
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #121212, #1e1e1e);
-      color: white;
+    /* Global Reset */
+    * {
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
-      height: 100vh;
-      scroll-behavior: smooth;
+      box-sizing: border-box;
     }
 
-    /* Centering content and padding */
-    .container {
-      padding: 20px;
-      text-align: center;
-      max-width: 1200px;
-      margin: 0 auto;
+    /* Full-Screen Background */
+    body {
+      font-family: 'Roboto', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background: #121212;
+      color: white;
+      scroll-behavior: smooth;
       position: relative;
     }
 
-    /* Styling for the name */
-    .name {
-      font-size: 4em;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #FFD700;
-      letter-spacing: 3px;
-      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7);
-      animation: fadeIn 2s ease-out;
+    /* Parallax Effect for Background */
+    .parallax {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://source.unsplash.com/1600x900/?space,tech');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: blur(5px);
+      z-index: -1;
     }
 
-    /* Styling for headings */
+    /* Centered Content Container */
+    .container {
+      position: relative;
+      text-align: center;
+      padding-top: 10%;
+      z-index: 2;
+    }
+
+    /* Title / Name with Glitch and Neon Effect */
+    .name {
+      font-size: 6em;
+      font-weight: 700;
+      color: #FFD700;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.7);
+      animation: glitch 3s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch {
+      0% {
+        text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
+        transform: translateX(0);
+      }
+      50% {
+        text-shadow: -2px -2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
+        transform: translateX(-10px);
+      }
+      100% {
+        text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.7);
+        transform: translateX(10px);
+      }
+    }
+
+    /* Neon Heading Styling */
     h2, h3 {
       font-size: 2.5em;
       color: #6C63FF;
-      animation: fadeIn 2s ease-out;
+      text-shadow: 0 0 20px #6C63FF, 0 0 30px #6C63FF, 0 0 40px #6C63FF;
+      animation: neonGlow 2s ease-in-out infinite alternate;
     }
 
-    /* Image styling */
+    @keyframes neonGlow {
+      0% {
+        text-shadow: 0 0 20px #6C63FF, 0 0 30px #6C63FF, 0 0 40px #6C63FF;
+      }
+      100% {
+        text-shadow: 0 0 30px #FFD700, 0 0 50px #FFD700, 0 0 60px #FFD700;
+      }
+    }
+
+    /* About Me Section Styling */
+    .about {
+      margin-top: 20px;
+      font-size: 1.4em;
+      line-height: 1.8;
+      animation: fadeIn 3s ease-out;
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Image Styling with Hover Effect */
     .image img {
-      width: 250px;
+      width: 300px;
       border-radius: 50%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform: perspective(500px) rotateY(0deg);
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
     }
 
     .image img:hover {
-      transform: scale(1.1);
+      transform: scale(1.1) rotateY(15deg);
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
     }
 
-    /* Animating text */
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    /* Social media icons */
+    /* Social Icons with Pulse Effect */
     .socials a {
       margin: 20px;
       transition: transform 0.3s ease, color 0.3s;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       display: inline-block;
+      transform-origin: center center;
     }
 
     .socials a img {
@@ -80,42 +140,66 @@
     }
 
     .socials a:hover {
-      transform: scale(1.2);
+      transform: scale(1.3);
       color: #FFD700;
+      animation: pulse 1s infinite alternate;
     }
 
-    /* About Me Section */
-    .about {
-      margin-top: 40px;
-      font-size: 1.3em;
-      animation: fadeIn 3s ease-out;
+    @keyframes pulse {
+      0% {
+        transform: scale(1.3);
+      }
+      100% {
+        transform: scale(1.2);
+      }
     }
 
-    /* Footer */
+    /* Footer Styling */
     footer {
       text-align: center;
-      margin-top: 40px;
-      font-size: 1.2em;
-      color: #ccc;
-      animation: fadeIn 4s ease-out;
-    }
-
-    /* Footer text animation */
-    .thanks-message {
+      margin-top: 60px;
       font-size: 1.5em;
       color: #ccc;
-      opacity: 0;
-      animation: fadeInFooter 3s ease-out forwards;
+      animation: fadeInFooter 4s ease-out;
     }
 
-    /* Footer text fade-in animation */
+    /* Footer Text Fade-in */
     @keyframes fadeInFooter {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .name {
+        font-size: 3.5em;
+      }
+      h2, h3 {
+        font-size: 2em;
+      }
+      .about {
+        font-size: 1.2em;
+      }
+      .socials a {
+        width: 50px;
+        height: 50px;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
   </style>
 </head>
 <body>
+
+  <div class="parallax"></div>
 
   <div class="container">
 
