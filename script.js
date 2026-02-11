@@ -40,8 +40,8 @@ class GitHubAPI {
     let totalBytes = 0;
 
     try {
-      // Fetch language data for each repo (limited to avoid rate limiting)
-      const reposToCheck = repos.slice(0, 20); // Check top 20 repos
+      // Fetch language data for top 20 most recently updated repos (to avoid rate limiting)
+      const reposToCheck = repos.slice(0, 20);
       
       for (const repo of reposToCheck) {
         if (repo.language) {
@@ -154,7 +154,10 @@ class PortfolioUI {
 
   renderHeroSection(userData, repoCount, totalStars) {
     const heroContent = document.querySelector('.hero-content');
-    if (!heroContent) return;
+    if (!heroContent) {
+      console.warn('Hero content element not found');
+      return;
+    }
 
     const avatarUrl = userData.avatar_url || 'logo.avif';
     const name = userData.name || userData.login || 'SaOYaD';
@@ -201,7 +204,10 @@ class PortfolioUI {
 
   renderAboutSection(userData, languages) {
     const aboutSection = document.getElementById('about');
-    if (!aboutSection) return;
+    if (!aboutSection) {
+      console.warn('About section element not found');
+      return;
+    }
 
     const location = userData.location ? `📍 ${userData.location}` : '';
     const company = userData.company ? `🏢 ${userData.company}` : '';
@@ -250,7 +256,10 @@ class PortfolioUI {
 
   renderProjectsSection(repos) {
     const projectsSection = document.getElementById('projects');
-    if (!projectsSection) return;
+    if (!projectsSection) {
+      console.warn('Projects section element not found');
+      return;
+    }
 
     const projectsHTML = repos.length > 0 ? repos.map(repo => this.createProjectCard(repo)).join('') : 
       '<p style="text-align: center; color: var(--text-secondary);">No repositories found.</p>';
@@ -311,7 +320,10 @@ class PortfolioUI {
 
   renderActivitySection(userData, repositories, totalStars) {
     const activitySection = document.getElementById('activity');
-    if (!activitySection) return;
+    if (!activitySection) {
+      console.warn('Activity section element not found');
+      return;
+    }
 
     const totalRepos = repositories.length;
     const publicRepos = repositories.filter(r => !r.private).length;
@@ -353,7 +365,10 @@ class PortfolioUI {
 
   renderConnectSection() {
     const connectSection = document.getElementById('connect');
-    if (!connectSection) return;
+    if (!connectSection) {
+      console.warn('Connect section element not found');
+      return;
+    }
 
     connectSection.innerHTML = `
       <div class="container">
@@ -408,7 +423,10 @@ class PortfolioUI {
 
   startTypewriterEffect() {
     const typewriterElement = document.querySelector('.typewriter-text');
-    if (!typewriterElement) return;
+    if (!typewriterElement) {
+      console.warn('Typewriter element not found');
+      return;
+    }
 
     let currentText = '';
     let isDeleting = false;
@@ -475,7 +493,10 @@ class PortfolioUI {
 
   initializeParticles() {
     const canvas = document.getElementById('particles-canvas');
-    if (!canvas) return;
+    if (!canvas) {
+      console.warn('Particles canvas element not found');
+      return;
+    }
 
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
