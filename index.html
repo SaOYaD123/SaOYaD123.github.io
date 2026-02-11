@@ -3,172 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SaOYaD's Profile</title>
+  <meta name="description" content="SaOYaD - Full-Stack Developer & Linux Enthusiast. Explore my portfolio, projects, and GitHub contributions.">
+  <meta name="keywords" content="SaOYaD, Developer, Portfolio, GitHub, JavaScript, Full-Stack">
+  <meta name="author" content="SaOYaD">
+  
+  <title>SaOYaD - Premium Portfolio</title>
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* Body & Background */
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: url('wallpaper.jpg') no-repeat center center fixed;
-      background-size: cover; /* Cover the entire screen with wallpaper */
-      color: white;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      scroll-behavior: smooth;
-    }
-
-    /* Centered content with 16:9 aspect ratio */
-    .container {
-      width: 90vw; /* 90% of the viewport width */
-      height: 50vw; /* 50% of the viewport width to maintain 16:9 aspect ratio */
-      max-width: 1200px;
-      max-height: 675px; /* Corresponds to 16:9 aspect ratio */
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      overflow-y: auto;
-      box-sizing: border-box;
-      background: rgba(0, 0, 0, 0.5); /* Optional dark overlay to make text stand out */
-      border-radius: 10px;
-    }
-
-    /* Styling for the name */
-    .name {
-      font-size: 4em;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #FFD700;
-      letter-spacing: 3px;
-      text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.7);
-      animation: fadeIn 2s ease-out;
-    }
-
-    /* Styling for headings */
-    h2, h3 {
-      font-size: 2.5em;
-      color: #6C63FF;
-      animation: fadeIn 2s ease-out;
-    }
-
-    /* Image styling */
-    .image img {
-      width: 250px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-      transition: transform 0.5s ease, box-shadow 0.5s ease;
-    }
-
-    .image img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
-    }
-
-    /* Animating text */
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    /* Social media icons */
-    .socials a {
-      margin: 20px;
-      transition: transform 0.3s ease, color 0.3s;
-      width: 50px;
-      height: 50px;
-      display: inline-block;
-    }
-
-    .socials a img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .socials a:hover {
-      transform: scale(1.2);
-      color: #FFD700;
-    }
-
-    /* About Me Section */
-    .about {
-      margin-top: 40px;
-      font-size: 1.3em;
-      animation: fadeIn 3s ease-out;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 1.2em;
-      color: #ccc;
-      animation: fadeIn 4s ease-out;
-    }
-
-    /* Footer text animation */
-    .thanks-message {
-      font-size: 1.5em;
-      color: #ccc;
-      opacity: 0;
-      animation: fadeInFooter 3s ease-out forwards;
-    }
-
-    /* Footer text fade-in animation */
-    @keyframes fadeInFooter {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-  </style>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <div class="container">
-
-    <!-- Logo and Name -->
-    <div class="image">
-      <img src="logo.avif" alt="SaOYaD's Logo">
-    </div>
-    <h1 class="name">SaOYaD</h1>
-    
-    <hr>
-
-    <!-- About Me Section -->
-    <h2>🌟 About Me</h2>
-    <div class="image">
-      <img src="https://raw.githubusercontent.com/sanjay-kv/sanjay-kv/main/Assets/illustration.png" alt="Illustration">
-    </div>
-    <p class="about">🌱 <strong>Linux Enthusiast</strong> who loves tinkering with laptops.</p>
-    <p class="about">🌐 <strong>Social Butterfly</strong> active on Discord.</p>
-    <p class="about">💽 <strong>Tech Savvy</strong>, currently diving into <strong>JavaScript</strong>.</p>
-    <p class="about">💻 Aspiring <strong>Full-Stack Developer</strong>.</p>
-
-    <hr>
-
-    <!-- Social Links Section -->
-    <div class="socials">
-      <details>
-        <summary><h3>🌐 Socials</h3></summary>
-        <a href="https://discord.gg/2aRd2B52qZ" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord logo"></a>
-        <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank"><img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube logo"></a>
-        <a href="https://x.com/SaOYaD123" target="_blank"><img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter logo"></a>
-        <a href="https://www.reddit.com/user/SaOYaD/" target="_blank"><img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit logo"></a>
-      </details>
-    </div>
-
-    <hr>
-
-    <!-- Footer -->
-    <footer>
-      <p class="thanks-message">Thanks For Visiting 💖</p>
-    </footer>
-
+  <!-- Loading Screen -->
+  <div class="loading-screen">
+    <div class="loader"></div>
   </div>
 
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+  
+  <!-- Particle Canvas -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <!-- Content will be dynamically loaded -->
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <!-- Content will be dynamically loaded -->
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section">
+    <!-- Content will be dynamically loaded -->
+  </section>
+
+  <!-- Activity Section -->
+  <section id="activity" class="section">
+    <!-- Content will be dynamically loaded -->
+  </section>
+
+  <!-- Connect Section -->
+  <section id="connect" class="section">
+    <!-- Content will be dynamically loaded -->
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p class="footer-message">Thanks For Visiting 💖</p>
+      <p class="footer-copyright">
+        © 2024 SaOYaD. Built with passion and code.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
 </body>
 </html>
