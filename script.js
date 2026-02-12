@@ -1,5 +1,5 @@
 // ==================== Configuration ====================
-const GITHUB_USERNAME = 'SaOYaD123';
+const GITHUB_USERNAME = 'saoyadszn';
 const GITHUB_API_BASE = 'https://api.github.com';
 
 // ==================== GitHub API Functions ====================
@@ -385,7 +385,7 @@ class PortfolioUI {
           <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank" class="social-link" title="YouTube">
             <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube">
           </a>
-          <a href="https://x.com/SaOYaD123" target="_blank" class="social-link" title="Twitter/X">
+          <a href="https://x.com/saoyadszn" target="_blank" class="social-link" title="Twitter/X">
             <img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter">
           </a>
           <a href="https://www.reddit.com/user/SaOYaD/" target="_blank" class="social-link" title="Reddit">
