@@ -1,10 +1,10 @@
 <div align="center">
 
-# ✨ SaOYaD123 Portfolio
+# ✨ saoyadszn Portfolio
 
 ### A Modern Digital Experience
 
-[![Live Site](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-blue?style=for-the-badge)](https://SaOYaD123.github.io)
+[![Live Site](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-blue?style=for-the-badge)](https://saoyadszn.github.io)
 [![GitHub Pages](https://img.shields.io/badge/Powered_by-GitHub_Pages-181717?style=for-the-badge&logo=github)](https://pages.github.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
@@ -36,7 +36,7 @@ Assets:       Optimized images (AVIF, JPG)
 ## 📂 Project Architecture
 
 ```
-SaOYaD123.github.io/
+saoyadszn.github.io/
 │
 ├── 📄 index.html          # Main entry point
 ├── 🖼️ wallpaper.jpg       # Visual assets
@@ -47,7 +47,7 @@ SaOYaD123.github.io/
 
 ## 🌐 Live Deployment
 
-**Experience it live:** [https://SaOYaD123.github.io](https://SaOYaD123.github.io)
+**Experience it live:** [https://saoyadszn.github.io](https://saoyadszn.github.io)
 
 ## 🤝 Contributing
 
@@ -73,6 +73,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Thank you for visiting!** If you find this project interesting, consider giving it a ⭐
 
-[Website](https://SaOYaD123.github.io) • [Report Bug](../../issues) • [Request Feature](../../issues)
+[Website](https://saoyadszn.github.io) • [Report Bug](../../issues) • [Request Feature](../../issues)
 
 </div>
