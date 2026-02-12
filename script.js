@@ -1,5 +1,5 @@
 // ==================== Configuration ====================
-const GITHUB_USERNAME = 'SaOYaD123';
+const GITHUB_USERNAME = 'SaOYaD-SZN';
 const GITHUB_API_BASE = 'https://api.github.com';
 
 // ==================== GitHub API Functions ====================
