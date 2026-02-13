@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✨ SaOYaD123 Portfolio
+# ✨ SaOYaD Portfolio
 
 ### A Modern Digital Experience
 
