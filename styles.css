@@ -1,35 +1,48 @@
 /* ==================== CSS Variables ==================== */
 :root {
-  /* Premium Color Palette */
-  --deep-dark: #0a0a0f;
-  --dark-secondary: #0f0f1e;
-  --primary-purple: #8b5cf6;
-  --secondary-purple: #a78bfa;
-  --primary-cyan: #06b6d4;
-  --secondary-blue: #3b82f6;
-  --primary-pink: #ec4899;
-  --secondary-pink: #f472b6;
-  --primary-gold: #fbbf24;
+  /* Anime-Inspired Pastel Color Palette */
+  --primary-pink: #FFB6C1;
+  --lavender: #E6E6FA;
+  --soft-purple: #DDA0DD;
+  --mint: #98FF98;
+  --peach: #FFDAB9;
+  --rose-gold: #B76E79;
+  --white-cream: #FFFEF9;
+  --dark-bg: #2D1B3D;
+  --deep-purple: #1A0B2E;
+  --soft-blue: #B0E0E6;
+  --sakura-pink: #FFB7C5;
+  
+  /* Light Mode Background (can be toggled) */
+  --bg-primary: var(--deep-purple);
+  --bg-secondary: var(--dark-bg);
   --text-primary: #ffffff;
-  --text-secondary: #e5e5e5;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-secondary: var(--lavender);
   
-  /* Premium Gradients */
-  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
-  --gradient-secondary: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-  --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-  --gradient-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  /* Glass Morphism Effects */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 182, 193, 0.2);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
   
-  /* Enhanced Shadows & Effects */
-  --shadow-glow-purple: 0 0 30px rgba(139, 92, 246, 0.4);
-  --shadow-glow-cyan: 0 0 30px rgba(6, 182, 212, 0.4);
-  --shadow-glow-pink: 0 0 30px rgba(236, 72, 153, 0.4);
-  --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.5);
+  /* Anime Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--soft-purple) 0%, var(--primary-pink) 50%, var(--peach) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--lavender) 0%, var(--mint) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--sakura-pink) 0%, var(--soft-purple) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--peach) 0%, var(--rose-gold) 100%);
+  --gradient-pastel: linear-gradient(135deg, #FFB6C1 0%, #E6E6FA 25%, #DDA0DD 50%, #98FF98 75%, #FFDAB9 100%);
   
-  /* Smooth Transitions */
+  /* Kawaii Shadows & Glows */
+  --shadow-glow-pink: 0 0 40px rgba(255, 182, 193, 0.5);
+  --shadow-glow-lavender: 0 0 40px rgba(230, 230, 250, 0.5);
+  --shadow-glow-purple: 0 0 40px rgba(221, 160, 221, 0.5);
+  --shadow-glow-mint: 0 0 40px rgba(152, 255, 152, 0.4);
+  --shadow-strong: 0 20px 60px rgba(221, 160, 221, 0.3);
+  --shadow-soft: 0 8px 32px rgba(255, 182, 193, 0.2);
+  
+  /* Smooth Premium Transitions */
   --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-elastic: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.95);
 }
 
 /* ==================== Global Styles ==================== */
@@ -46,7 +59,7 @@ html {
 
 body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--deep-dark);
+  background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
@@ -71,39 +84,40 @@ body {
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background: var(--primary-purple);
+  background: var(--sakura-pink);
   border-radius: 50%;
   position: fixed;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 10000;
-  box-shadow: 0 0 20px var(--primary-purple);
+  box-shadow: 0 0 20px var(--sakura-pink), 0 0 40px var(--primary-pink);
   transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
 }
 
 .cursor-outline {
   width: 40px;
   height: 40px;
-  border: 2px solid var(--primary-cyan);
+  border: 2px solid var(--lavender);
   border-radius: 50%;
   position: fixed;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 9999;
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
-  opacity: 0.5;
+  opacity: 0.6;
+  box-shadow: 0 0 15px var(--lavender);
 }
 
 .cursor-dot.expand {
   width: 20px;
   height: 20px;
-  background: var(--primary-cyan);
+  background: var(--soft-purple);
 }
 
 .cursor-outline.expand {
   width: 60px;
   height: 60px;
-  border-color: var(--primary-purple);
+  border-color: var(--primary-pink);
 }
 
 /* ==================== Animated Background ==================== */
@@ -114,7 +128,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: linear-gradient(-45deg, #0a0a0f, #1a0a2e, #16213e, #0f0f1e, #1e1b4b);
+  background: linear-gradient(-45deg, var(--deep-purple), #2D1B3D, #3A2855, #1A0B2E, #2E1A47);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
@@ -149,7 +163,7 @@ body {
 .shape-1 {
   width: 300px;
   height: 300px;
-  background: var(--primary-purple);
+  background: var(--primary-pink);
   top: 10%;
   left: 10%;
   animation-duration: 25s;
@@ -159,7 +173,7 @@ body {
 .shape-2 {
   width: 400px;
   height: 400px;
-  background: var(--primary-cyan);
+  background: var(--lavender);
   top: 50%;
   right: 10%;
   animation-duration: 30s;
@@ -170,7 +184,7 @@ body {
 .shape-3 {
   width: 250px;
   height: 250px;
-  background: var(--primary-pink);
+  background: var(--soft-purple);
   bottom: 20%;
   left: 20%;
   animation-duration: 22s;
@@ -181,7 +195,7 @@ body {
 .shape-4 {
   width: 350px;
   height: 350px;
-  background: var(--secondary-blue);
+  background: var(--mint);
   top: 30%;
   left: 50%;
   animation-duration: 28s;
@@ -192,7 +206,7 @@ body {
 .shape-5 {
   width: 200px;
   height: 200px;
-  background: var(--primary-gold);
+  background: var(--peach);
   bottom: 10%;
   right: 30%;
   animation-duration: 20s;
@@ -263,7 +277,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--deep-dark);
+  background: linear-gradient(135deg, var(--deep-purple) 0%, var(--dark-bg) 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -281,10 +295,11 @@ body {
   width: 60px;
   height: 60px;
   border: 5px solid var(--glass-border);
-  border-top: 5px solid var(--primary-purple);
-  border-right: 5px solid var(--primary-cyan);
+  border-top: 5px solid var(--primary-pink);
+  border-right: 5px solid var(--lavender);
   border-radius: 50%;
   animation: spin 1s linear infinite, colorShift 3s ease infinite;
+  box-shadow: var(--shadow-glow-pink);
 }
 
 @keyframes spin {
@@ -294,12 +309,12 @@ body {
 
 @keyframes colorShift {
   0%, 100% { 
-    border-top-color: var(--primary-purple);
-    border-right-color: var(--primary-cyan);
+    border-top-color: var(--primary-pink);
+    border-right-color: var(--lavender);
   }
   50% { 
-    border-top-color: var(--primary-pink);
-    border-right-color: var(--primary-gold);
+    border-top-color: var(--soft-purple);
+    border-right-color: var(--mint);
   }
 }
 
@@ -333,24 +348,24 @@ body {
 .scroll-mouse {
   width: 30px;
   height: 50px;
-  border: 2px solid var(--primary-purple);
+  border: 2px solid var(--sakura-pink);
   border-radius: 20px;
   margin: 0 auto 10px;
   position: relative;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 20px rgba(255, 182, 197, 0.5);
 }
 
 .scroll-wheel {
   width: 4px;
   height: 10px;
-  background: var(--primary-cyan);
+  background: var(--lavender);
   border-radius: 2px;
   position: absolute;
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
   animation: scrollWheel 2s infinite;
-  box-shadow: 0 0 10px var(--primary-cyan);
+  box-shadow: 0 0 10px var(--lavender);
 }
 
 @keyframes scrollWheel {
@@ -420,8 +435,8 @@ body {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid var(--primary-purple);
-  box-shadow: var(--shadow-glow-purple);
+  border: 5px solid var(--sakura-pink);
+  box-shadow: var(--shadow-glow-pink);
   transition: var(--transition-smooth);
   position: relative;
   z-index: 1;
@@ -429,8 +444,8 @@ body {
 
 .profile-image:hover {
   transform: scale(1.1);
-  box-shadow: var(--shadow-glow-cyan);
-  border-color: var(--primary-cyan);
+  box-shadow: var(--shadow-glow-lavender);
+  border-color: var(--lavender);
 }
 
 .hero-name {
@@ -459,12 +474,12 @@ body {
 
 .typewriter-text {
   display: inline-block;
-  border-right: 2px solid var(--primary-purple);
+  border-right: 2px solid var(--sakura-pink);
   animation: blink 0.7s step-end infinite;
 }
 
 @keyframes blink {
-  0%, 49% { border-color: var(--primary-purple); }
+  0%, 49% { border-color: var(--sakura-pink); }
   50%, 100% { border-color: transparent; }
 }
 
@@ -506,7 +521,7 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 182, 193, 0.3), transparent);
   transition: left 0.5s ease;
 }
 
@@ -516,9 +531,9 @@ body {
 
 .stat-item:hover {
   transform: translateY(-10px) scale(1.05);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: var(--shadow-glow-purple);
-  border-color: var(--primary-purple);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-glow-pink);
+  border-color: var(--sakura-pink);
 }
 
 .stat-number {
@@ -620,7 +635,7 @@ body {
 .btn-secondary {
   background: transparent;
   color: var(--text-primary);
-  border: 2px solid var(--primary-purple);
+  border: 2px solid var(--sakura-pink);
   position: relative;
   overflow: hidden;
 }
@@ -642,9 +657,9 @@ body {
 }
 
 .btn-secondary:hover {
-  border-color: var(--primary-cyan);
+  border-color: var(--lavender);
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 25px rgba(230, 230, 250, 0.4);
 }
 
 /* ==================== Section Styles ==================== */
@@ -726,9 +741,9 @@ body {
 
 .language-item:hover {
   transform: translateX(10px);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--primary-purple);
-  box-shadow: var(--shadow-glow-purple);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--sakura-pink);
+  box-shadow: var(--shadow-glow-pink);
 }
 
 .language-header {
@@ -843,8 +858,8 @@ body {
 
 .project-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
-  border-color: var(--primary-purple);
+  box-shadow: 0 20px 60px rgba(255, 182, 193, 0.4);
+  border-color: var(--sakura-pink);
 }
 
 /* 3D Tilt Effect - will be controlled by JavaScript */
@@ -876,16 +891,16 @@ body {
   align-items: center;
   gap: 5px;
   padding: 5px 15px;
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba(255, 182, 193, 0.2);
   border-radius: 20px;
   font-size: 0.85rem;
-  color: var(--secondary-purple);
-  border: 1px solid var(--primary-purple);
+  color: var(--sakura-pink);
+  border: 1px solid var(--sakura-pink);
   transition: var(--transition-smooth);
 }
 
 .project-card:hover .project-language {
-  background: rgba(139, 92, 246, 0.4);
+  background: rgba(255, 182, 193, 0.4);
   transform: scale(1.05);
 }
 
@@ -893,7 +908,7 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--primary-purple);
+  background: var(--sakura-pink);
 }
 
 .project-description {
@@ -958,9 +973,9 @@ body {
 }
 
 .project-link:hover {
-  border-color: var(--primary-purple);
+  border-color: var(--sakura-pink);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
 }
 
 /* ==================== Activity Section ==================== */
@@ -991,7 +1006,7 @@ body {
   left: 50%;
   width: 0;
   height: 0;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent);
+  background: radial-gradient(circle, rgba(255, 182, 193, 0.3), transparent);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.6s ease, height 0.6s ease;
@@ -1004,15 +1019,15 @@ body {
 
 .activity-card:hover {
   transform: translateY(-10px) scale(1.05);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: var(--shadow-glow-purple);
-  border-color: var(--primary-purple);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-glow-pink);
+  border-color: var(--sakura-pink);
 }
 
 .activity-icon {
   font-size: 3rem;
   margin-bottom: 15px;
-  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+  filter: drop-shadow(0 0 10px rgba(255, 182, 193, 0.5));
   transition: var(--transition-smooth);
 }
 
@@ -1112,13 +1127,13 @@ body {
 
 .social-link:hover {
   transform: translateY(-10px) rotate(5deg) scale(1.1);
-  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.5);
-  border-color: var(--primary-purple);
+  box-shadow: 0 15px 30px rgba(255, 182, 193, 0.5);
+  border-color: var(--sakura-pink);
 }
 
 .social-link:hover img {
   transform: scale(1.2) rotate(-5deg);
-  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.6));
+  filter: drop-shadow(0 0 10px rgba(230, 230, 250, 0.6));
 }
 
 /* ==================== Footer ==================== */
@@ -1328,5 +1343,160 @@ body {
 
   .stat-number {
     font-size: 1.5rem;
+  }
+}
+
+/* ==================== Sakura Petals ==================== */
+.sakura-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.sakura-petal {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: var(--sakura-pink);
+  border-radius: 50% 0 50% 0;
+  opacity: 0.7;
+  animation: sakuraFall linear infinite;
+  box-shadow: 0 0 5px rgba(255, 182, 197, 0.5);
+}
+
+@keyframes sakuraFall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg) translateX(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* ==================== Sparkles ==================== */
+.sparkles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--lavender), 0 0 20px var(--primary-pink);
+  animation: sparkleAnimation 2s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes sparkleAnimation {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================== Shimmer Effect on Headings ==================== */
+.section-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmerHeading 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmerHeading {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ==================== Kawaii Decorative Elements ==================== */
+.kawaii-star {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+.kawaii-heart {
+  position: relative;
+  width: 20px;
+  height: 18px;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.kawaii-heart::before,
+.kawaii-heart::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 16px;
+  background: var(--sakura-pink);
+  border-radius: 10px 10px 0 0;
+}
+
+.kawaii-heart::before {
+  left: 10px;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.kawaii-heart::after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ==================== Accessibility: Reduced Motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .sakura-petal,
+  .sparkle,
+  .floating-shapes .shape {
+    animation: none !important;
   }
 }

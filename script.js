@@ -520,6 +520,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Initialize parallax scrolling
   initParallaxEffects();
+  
+  // Initialize sakura petals
+  initSakuraPetals();
+  
+  // Initialize sparkles
+  initSparkles();
 });
 
 // ==================== Custom Cursor ====================
@@ -747,9 +753,10 @@ function initEnhancedParticles() {
     
     getRandomColor() {
       const colors = [
-        'rgba(139, 92, 246, ',  // purple
-        'rgba(6, 182, 212, ',   // cyan
-        'rgba(59, 130, 246, ',  // blue
+        'rgba(255, 182, 193, ',  // sakura pink
+        'rgba(230, 230, 250, ',  // lavender
+        'rgba(221, 160, 221, ',  // soft purple
+        'rgba(152, 255, 152, ',  // mint
       ];
       return colors[Math.floor(Math.random() * colors.length)];
     }
@@ -817,7 +824,7 @@ function initEnhancedParticles() {
         
         if (distance < 120) {
           const opacity = (1 - distance / 120) * 0.3;
-          ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+          ctx.strokeStyle = `rgba(255, 182, 193, ${opacity})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -869,4 +876,105 @@ function addStaggerAnimation() {
   document.querySelectorAll('.project-card').forEach(card => {
     observer.observe(card);
   });
+}
+
+// ==================== Sakura Petals Animation ====================
+function initSakuraPetals() {
+  // Check for reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+  
+  const container = document.querySelector('.sakura-container');
+  if (!container) return;
+  
+  const petalCount = window.innerWidth < 768 ? 15 : 30;
+  
+  function createPetal() {
+    const petal = document.createElement('div');
+    petal.className = 'sakura-petal';
+    
+    // Random starting position
+    petal.style.left = Math.random() * 100 + '%';
+    
+    // Random size
+    const size = 10 + Math.random() * 10;
+    petal.style.width = size + 'px';
+    petal.style.height = size + 'px';
+    
+    // Random animation duration
+    const duration = 10 + Math.random() * 20;
+    petal.style.animationDuration = duration + 's';
+    
+    // Random delay
+    petal.style.animationDelay = Math.random() * 10 + 's';
+    
+    container.appendChild(petal);
+    
+    // Remove petal after animation completes and recreate
+    setTimeout(() => {
+      petal.remove();
+      createPetal();
+    }, (duration + Math.random() * 10) * 1000);
+  }
+  
+  // Create initial petals
+  for (let i = 0; i < petalCount; i++) {
+    setTimeout(() => createPetal(), i * 300);
+  }
+}
+
+// ==================== Sparkles Animation ====================
+function initSparkles() {
+  // Check for reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+  
+  const container = document.querySelector('.sparkles-container');
+  if (!container) return;
+  
+  // Create sparkles on mouse move
+  let lastSparkleTime = 0;
+  const sparkleInterval = 100; // milliseconds between sparkles
+  
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastSparkleTime < sparkleInterval) return;
+    lastSparkleTime = now;
+    
+    // Only create sparkle 30% of the time to avoid too many
+    if (Math.random() > 0.3) return;
+    
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = e.clientX + (Math.random() * 40 - 20) + 'px';
+    sparkle.style.top = e.clientY + (Math.random() * 40 - 20) + 'px';
+    sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+    
+    container.appendChild(sparkle);
+    
+    // Remove sparkle after animation
+    setTimeout(() => sparkle.remove(), 2000);
+  });
+  
+  // Also create random sparkles across the screen
+  function createRandomSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+    sparkle.style.animationDuration = (1 + Math.random() * 2) + 's';
+    
+    container.appendChild(sparkle);
+    
+    setTimeout(() => sparkle.remove(), 3000);
+  }
+  
+  // Create random sparkles periodically
+  setInterval(() => {
+    if (Math.random() > 0.5) {
+      createRandomSparkle();
+    }
+  }, 1000);
 }
