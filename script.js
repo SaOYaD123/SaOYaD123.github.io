@@ -505,7 +505,196 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Add stagger animation to project cards
   addStaggerAnimation();
+  
+  // Initialize custom cursor
+  initCustomCursor();
+  
+  // Initialize 3D tilt effects
+  init3DTiltEffects();
+  
+  // Initialize magnetic buttons
+  initMagneticEffects();
+  
+  // Initialize ripple effects
+  initRippleEffects();
+  
+  // Initialize parallax scrolling
+  initParallaxEffects();
 });
+
+// ==================== Custom Cursor ====================
+function initCustomCursor() {
+  const cursor = document.querySelector('.custom-cursor');
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorOutline = document.querySelector('.cursor-outline');
+  
+  if (!cursor || !cursorDot || !cursorOutline) return;
+  
+  // Only enable on devices with fine pointer (mouse)
+  if (!window.matchMedia('(pointer: fine)').matches) {
+    cursor.style.display = 'none';
+    document.body.style.cursor = 'default';
+    return;
+  }
+  
+  let mouseX = 0, mouseY = 0;
+  let outlineX = 0, outlineY = 0;
+  
+  // Track mouse position
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top = mouseY + 'px';
+  });
+  
+  // Smooth follow for outline
+  function animateOutline() {
+    const speed = 0.15;
+    outlineX += (mouseX - outlineX) * speed;
+    outlineY += (mouseY - outlineY) * speed;
+    
+    cursorOutline.style.left = outlineX + 'px';
+    cursorOutline.style.top = outlineY + 'px';
+    
+    requestAnimationFrame(animateOutline);
+  }
+  animateOutline();
+  
+  // Expand on hover over interactive elements
+  const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .social-link, .stat-item, .activity-card');
+  
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorDot.classList.add('expand');
+      cursorOutline.classList.add('expand');
+    });
+    
+    el.addEventListener('mouseleave', () => {
+      cursorDot.classList.remove('expand');
+      cursorOutline.classList.remove('expand');
+    });
+  });
+}
+
+// ==================== 3D Tilt Effects ====================
+function init3DTiltEffects() {
+  // Disable on mobile/touch devices
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  
+  const cards = document.querySelectorAll('.project-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.classList.add('tilt-active');
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('tilt-active');
+      card.style.transform = '';
+    });
+    
+    card.addEventListener('mousemove', (e) => {
+      if (!card.classList.contains('tilt-active')) return;
+      
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+  });
+}
+
+// ==================== Magnetic Effects ====================
+function initMagneticEffects() {
+  // Disable on mobile/touch devices
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  
+  const magneticElements = document.querySelectorAll('.social-link, .btn');
+  
+  magneticElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      el.classList.add('magnetic-active');
+    });
+    
+    el.addEventListener('mouseleave', () => {
+      el.classList.remove('magnetic-active');
+      el.style.transform = '';
+    });
+    
+    el.addEventListener('mousemove', (e) => {
+      if (!el.classList.contains('magnetic-active')) return;
+      
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      const moveX = x * 0.3;
+      const moveY = y * 0.3;
+      
+      el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+  });
+}
+
+// ==================== Ripple Effects ====================
+function initRippleEffects() {
+  const buttons = document.querySelectorAll('.btn, .project-link');
+  
+  buttons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      this.classList.add('ripple');
+      
+      setTimeout(() => {
+        this.classList.remove('ripple');
+      }, 600);
+    });
+  });
+}
+
+// ==================== Parallax Effects ====================
+function initParallaxEffects() {
+  let ticking = false;
+  
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        parallaxScroll();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  
+  function parallaxScroll() {
+    const scrolled = window.pageYOffset;
+    
+    // Parallax for floating shapes - preserve CSS animations
+    const shapes = document.querySelectorAll('.shape');
+    shapes.forEach((shape, index) => {
+      const speed = 0.1 + (index * 0.05);
+      const yPos = -(scrolled * speed);
+      // Use CSS variable to combine with existing animation
+      shape.style.setProperty('--parallax-y', `${yPos}px`);
+    });
+    
+    // Parallax for hero content
+    const heroContent = document.querySelector('.hero-content');
+    if (heroContent) {
+      const yPos = scrolled * 0.3;
+      heroContent.style.transform = `translateY(${yPos}px)`;
+      heroContent.style.opacity = Math.max(0, 1 - (scrolled / 600));
+    }
+  }
+}
 
 // ==================== Scroll Progress Indicator ====================
 function initScrollProgress() {
