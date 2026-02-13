@@ -915,7 +915,7 @@ function initSakuraPetals() {
     setTimeout(() => {
       petal.remove();
       createPetal();
-    }, (duration + Math.random() * 10) * 1000);
+    }, duration * 1000);
   }
   
   // Create initial petals

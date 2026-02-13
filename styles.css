@@ -267,14 +267,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--dark-bg);
+  background: var(--bg-secondary);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--gradient-primary);
   border-radius: 10px;
-  border: 2px solid var(--dark-bg);
+  border: 2px solid var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -1469,17 +1469,7 @@ body {
 }
 
 /* ==================== Shimmer Effect on Headings ==================== */
-.section-title::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: shimmerHeading 3s infinite;
-  pointer-events: none;
-}
+/* Note: Using ::after for shimmer to avoid conflict with ::before decorative star */
 
 @keyframes shimmerHeading {
   0% { left: -100%; }
