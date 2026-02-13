@@ -143,6 +143,7 @@ body {
   filter: blur(60px);
   opacity: 0.15;
   animation: floatShape 20s infinite ease-in-out;
+  --parallax-y: 0px;
 }
 
 .shape-1 {
@@ -152,6 +153,7 @@ body {
   top: 10%;
   left: 10%;
   animation-duration: 25s;
+  transform: translateY(var(--parallax-y));
 }
 
 .shape-2 {
@@ -162,6 +164,7 @@ body {
   right: 10%;
   animation-duration: 30s;
   animation-delay: -5s;
+  transform: translateY(var(--parallax-y));
 }
 
 .shape-3 {
@@ -172,6 +175,7 @@ body {
   left: 20%;
   animation-duration: 22s;
   animation-delay: -10s;
+  transform: translateY(var(--parallax-y));
 }
 
 .shape-4 {
@@ -182,6 +186,7 @@ body {
   left: 50%;
   animation-duration: 28s;
   animation-delay: -15s;
+  transform: translateY(var(--parallax-y));
 }
 
 .shape-5 {
@@ -192,6 +197,7 @@ body {
   right: 30%;
   animation-duration: 20s;
   animation-delay: -8s;
+  transform: translateY(var(--parallax-y));
 }
 
 @keyframes floatShape {
@@ -1296,8 +1302,9 @@ body {
     perspective: none;
   }
   
-  .project-card:hover {
-    transform: translateY(-5px) !important;
+  /* Simplified hover for mobile */
+  .project-card.tilt-active {
+    transition: var(--transition-smooth);
   }
 }
 

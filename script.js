@@ -580,6 +580,9 @@ function initCustomCursor() {
 
 // ==================== 3D Tilt Effects ====================
 function init3DTiltEffects() {
+  // Disable on mobile/touch devices
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  
   const cards = document.querySelectorAll('.project-card');
   
   cards.forEach(card => {
@@ -589,7 +592,7 @@ function init3DTiltEffects() {
     
     card.addEventListener('mouseleave', () => {
       card.classList.remove('tilt-active');
-      card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+      card.style.transform = '';
     });
     
     card.addEventListener('mousemove', (e) => {
@@ -612,6 +615,9 @@ function init3DTiltEffects() {
 
 // ==================== Magnetic Effects ====================
 function initMagneticEffects() {
+  // Disable on mobile/touch devices
+  if (window.matchMedia('(max-width: 768px)').matches) return;
+  
   const magneticElements = document.querySelectorAll('.social-link, .btn');
   
   magneticElements.forEach(el => {
@@ -671,12 +677,13 @@ function initParallaxEffects() {
   function parallaxScroll() {
     const scrolled = window.pageYOffset;
     
-    // Parallax for floating shapes
+    // Parallax for floating shapes - preserve CSS animations
     const shapes = document.querySelectorAll('.shape');
     shapes.forEach((shape, index) => {
       const speed = 0.1 + (index * 0.05);
       const yPos = -(scrolled * speed);
-      shape.style.transform = `translateY(${yPos}px)`;
+      // Use CSS variable to combine with existing animation
+      shape.style.setProperty('--parallax-y', `${yPos}px`);
     });
     
     // Parallax for hero content
@@ -684,7 +691,7 @@ function initParallaxEffects() {
     if (heroContent) {
       const yPos = scrolled * 0.3;
       heroContent.style.transform = `translateY(${yPos}px)`;
-      heroContent.style.opacity = 1 - (scrolled / 600);
+      heroContent.style.opacity = Math.max(0, 1 - (scrolled / 600));
     }
   }
 }
