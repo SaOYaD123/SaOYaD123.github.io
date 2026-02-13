@@ -127,7 +127,6 @@ class PortfolioUI {
 
       // Initialize animations
       this.initializeAnimations();
-      this.initializeParticles();
       this.startTypewriterEffect();
 
       // Hide loading screen
@@ -490,92 +489,6 @@ class PortfolioUI {
       });
     }, 500);
   }
-
-  initializeParticles() {
-    const canvas = document.getElementById('particles-canvas');
-    if (!canvas) {
-      console.warn('Particles canvas element not found');
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = [];
-    const particleCount = 50;
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
-        this.opacity = Math.random() * 0.5 + 0.2;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-      }
-
-      draw() {
-        ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    // Create particles
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
-
-    // Animation loop
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach(particle => {
-        particle.update();
-        particle.draw();
-      });
-
-      // Draw connections
-      particles.forEach((particleA, indexA) => {
-        particles.slice(indexA + 1).forEach(particleB => {
-          const dx = particleA.x - particleB.x;
-          const dy = particleA.y - particleB.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 100) {
-            ctx.strokeStyle = `rgba(108, 99, 255, ${0.2 * (1 - distance / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(particleA.x, particleA.y);
-            ctx.lineTo(particleB.x, particleB.y);
-            ctx.stroke();
-          }
-        });
-      });
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    // Resize handler
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  }
 }
 
 // ==================== Initialize Application ====================
@@ -583,4 +496,188 @@ document.addEventListener('DOMContentLoaded', async () => {
   const api = new GitHubAPI(GITHUB_USERNAME);
   const ui = new PortfolioUI(api);
   await ui.initialize();
+  
+  // Initialize scroll progress
+  initScrollProgress();
+  
+  // Initialize enhanced particles with mouse interaction
+  initEnhancedParticles();
+  
+  // Add stagger animation to project cards
+  addStaggerAnimation();
 });
+
+// ==================== Scroll Progress Indicator ====================
+function initScrollProgress() {
+  const progressBar = document.querySelector('.scroll-progress');
+  if (!progressBar) return;
+  
+  window.addEventListener('scroll', () => {
+    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (window.scrollY / windowHeight) * 100;
+    progressBar.style.width = `${scrolled}%`;
+  });
+}
+
+// ==================== Enhanced Particle System ====================
+function initEnhancedParticles() {
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const particles = [];
+  const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
+  let mouse = { x: null, y: null, radius: 150 };
+  
+  // Track mouse position
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  });
+  
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  
+  class EnhancedParticle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 3 + 1;
+      this.baseX = this.x;
+      this.baseY = this.y;
+      this.speedX = Math.random() * 0.5 - 0.25;
+      this.speedY = Math.random() * 0.5 - 0.25;
+      this.opacity = Math.random() * 0.5 + 0.3;
+      this.color = this.getRandomColor();
+    }
+    
+    getRandomColor() {
+      const colors = [
+        'rgba(139, 92, 246, ',  // purple
+        'rgba(6, 182, 212, ',   // cyan
+        'rgba(59, 130, 246, ',  // blue
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    update() {
+      // Mouse interaction
+      if (mouse.x && mouse.y) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < mouse.radius) {
+          const force = (mouse.radius - distance) / mouse.radius;
+          const angle = Math.atan2(dy, dx);
+          this.x -= Math.cos(angle) * force * 3;
+          this.y -= Math.sin(angle) * force * 3;
+        } else {
+          // Return to base position
+          if (this.x !== this.baseX) {
+            const dx = this.x - this.baseX;
+            this.x -= dx * 0.05;
+          }
+          if (this.y !== this.baseY) {
+            const dy = this.y - this.baseY;
+            this.y -= dy * 0.05;
+          }
+        }
+      }
+      
+      // Normal movement
+      this.baseX += this.speedX;
+      this.baseY += this.speedY;
+      
+      // Wrap around edges
+      if (this.baseX > canvas.width) this.baseX = 0;
+      if (this.baseX < 0) this.baseX = canvas.width;
+      if (this.baseY > canvas.height) this.baseY = 0;
+      if (this.baseY < 0) this.baseY = canvas.height;
+    }
+    
+    draw() {
+      ctx.fillStyle = this.color + this.opacity + ')';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Add glow effect
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color + '0.5)';
+    }
+  }
+  
+  // Create particles
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new EnhancedParticle());
+  }
+  
+  // Connect particles
+  function connectParticles() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 120) {
+          const opacity = (1 - distance / 120) * 0.3;
+          ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  
+  // Animation loop
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.shadowBlur = 0;
+    
+    particles.forEach(particle => {
+      particle.update();
+      particle.draw();
+    });
+    
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+  
+  // Resize handler
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+}
+
+// ==================== Stagger Animation for Cards ====================
+function addStaggerAnimation() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        // Add delay based on index
+        const cards = entry.target.parentElement.children;
+        const cardIndex = Array.from(cards).indexOf(entry.target);
+        entry.target.style.animationDelay = `${cardIndex * 0.1}s`;
+        entry.target.classList.add('revealed');
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  // Observe project cards
+  document.querySelectorAll('.project-card').forEach(card => {
+    observer.observe(card);
+  });
+}
