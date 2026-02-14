@@ -1145,5 +1145,3 @@ document.addEventListener('DOMContentLoaded', () => {
   app.init();
 });
 
-// ==================== Export for Module System ====================
-export { PortfolioApp, GitHubAPI, ThemeManager, UIComponents };
