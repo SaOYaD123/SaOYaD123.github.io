@@ -1,8 +1,101 @@
-// ==================== Configuration ====================
-const GITHUB_USERNAME = 'SaOYaD-SZN';
-const GITHUB_API_BASE = 'https://api.github.com';
+// ==================== Configuration & Constants ====================
+const CONFIG = {
+  GITHUB_USERNAME: 'SaOYaD-SZN',
+  GITHUB_API_BASE: 'https://api.github.com',
+  TYPEWRITER_SPEED: 100,
+  TYPEWRITER_DELETE_SPEED: 50,
+  TYPEWRITER_PAUSE: 2000,
+  PARTICLE_COUNT: 50,
+  THEME_KEY: 'saoyad-theme',
+};
 
-// ==================== GitHub API Functions ====================
+const TYPEWRITER_TEXTS = [
+  'Full-Stack Developer',
+  'Linux Enthusiast',
+  'Open Source Contributor',
+  'Tech Innovator',
+  'Problem Solver',
+];
+
+// ==================== Utility Functions ====================
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+};
+
+const sanitizeHTML = (str) => {
+  const temp = document.createElement('div');
+  temp.textContent = str;
+  return temp.innerHTML;
+};
+
+// ==================== Theme Manager ====================
+class ThemeManager {
+  constructor() {
+    this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
+    this.init();
+  }
+
+  init() {
+    this.applyTheme(this.currentTheme);
+    this.setupToggle();
+    this.watchSystemTheme();
+  }
+
+  getStoredTheme() {
+    return localStorage.getItem(CONFIG.THEME_KEY);
+  }
+
+  getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(CONFIG.THEME_KEY, theme);
+    this.currentTheme = theme;
+  }
+
+  toggle() {
+    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme(newTheme);
+  }
+
+  setupToggle() {
+    const toggleBtn = document.querySelector('.theme-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => this.toggle());
+    }
+  }
+
+  watchSystemTheme() {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+      if (!localStorage.getItem(CONFIG.THEME_KEY)) {
+        this.applyTheme(e.matches ? 'light' : 'dark');
+      }
+    });
+  }
+}
+
+// ==================== GitHub API Manager ====================
 class GitHubAPI {
   constructor(username) {
     this.username = username;
@@ -11,7 +104,7 @@ class GitHubAPI {
 
   async fetchUserData() {
     try {
-      const response = await fetch(`${GITHUB_API_BASE}/users/${this.username}`);
+      const response = await fetch(`${CONFIG.GITHUB_API_BASE}/users/${this.username}`);
       if (!response.ok) throw new Error('Failed to fetch user data');
       const data = await response.json();
       this.cache.userData = data;
@@ -24,7 +117,7 @@ class GitHubAPI {
 
   async fetchRepositories() {
     try {
-      const response = await fetch(`${GITHUB_API_BASE}/users/${this.username}/repos?per_page=100&sort=updated`);
+      const response = await fetch(`${CONFIG.GITHUB_API_BASE}/users/${this.username}/repos?per_page=100&sort=updated`);
       if (!response.ok) throw new Error('Failed to fetch repositories');
       const data = await response.json();
       this.cache.repositories = data;
@@ -37,34 +130,23 @@ class GitHubAPI {
 
   async fetchLanguages(repos) {
     const languageStats = {};
-    let totalBytes = 0;
-
-    try {
-      // Fetch language data for top 20 most recently updated repos (to avoid rate limiting)
-      const reposToCheck = repos.slice(0, 20);
-      
-      for (const repo of reposToCheck) {
-        if (repo.language) {
-          languageStats[repo.language] = (languageStats[repo.language] || 0) + 1;
-        }
+    
+    repos.forEach(repo => {
+      if (repo.language) {
+        languageStats[repo.language] = (languageStats[repo.language] || 0) + 1;
       }
+    });
 
-      // Calculate percentages based on repo count
-      const totalRepos = Object.values(languageStats).reduce((a, b) => a + b, 0);
-      const languagePercentages = {};
-      
-      for (const [lang, count] of Object.entries(languageStats)) {
-        languagePercentages[lang] = ((count / totalRepos) * 100).toFixed(1);
-      }
-
-      // Sort by percentage
-      return Object.entries(languagePercentages)
-        .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]))
-        .slice(0, 6); // Top 6 languages
-    } catch (error) {
-      console.error('Error calculating languages:', error);
-      return [['JavaScript', '100']];
+    const totalRepos = Object.values(languageStats).reduce((a, b) => a + b, 0);
+    const languagePercentages = {};
+    
+    for (const [lang, count] of Object.entries(languageStats)) {
+      languagePercentages[lang] = ((count / totalRepos) * 100).toFixed(1);
     }
+
+    return Object.entries(languagePercentages)
+      .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]))
+      .slice(0, 6);
   }
 
   getFallbackUserData() {
@@ -73,7 +155,6 @@ class GitHubAPI {
       bio: '🌱 Linux Enthusiast | 💻 Full-Stack Developer | 🌐 Tech Savvy',
       avatar_url: 'logo.avif',
       location: 'Unknown',
-      company: null,
       public_repos: 0,
       followers: 0,
       following: 0
@@ -85,896 +166,984 @@ class GitHubAPI {
   }
 
   getFeaturedRepos(repos) {
-    // Sort by stars and get top repos
     return repos
-      .filter(repo => !repo.fork) // Exclude forks
+      .filter(repo => !repo.fork)
       .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
-      .slice(0, 6); // Top 6 repos
+      .slice(0, 6);
   }
 }
 
 // ==================== UI Components ====================
-class PortfolioUI {
+class UIComponents {
   constructor(api) {
     this.api = api;
     this.typewriterIndex = 0;
-    this.typewriterTexts = [
-      'Linux Enthusiast 🐧',
-      'Full-Stack Developer 💻',
-      'Open Source Contributor 🌟',
-      'Tech Explorer 🚀'
-    ];
-    this.currentTextIndex = 0;
+    this.typewriterTextIndex = 0;
+    this.typewriterDeleting = false;
   }
 
-  async initialize() {
-    this.showLoadingScreen();
-    
-    try {
-      // Fetch all data
-      const userData = await this.api.fetchUserData();
-      const repositories = await this.api.fetchRepositories();
-      const languages = await this.api.fetchLanguages(repositories);
-      const totalStars = this.api.calculateTotalStars(repositories);
-      const featuredRepos = this.api.getFeaturedRepos(repositories);
-
-      // Render all sections
-      this.renderHeroSection(userData, repositories.length, totalStars);
-      this.renderAboutSection(userData, languages);
-      this.renderProjectsSection(featuredRepos);
-      this.renderActivitySection(userData, repositories, totalStars);
-      this.renderConnectSection();
-
-      // Initialize animations
-      this.initializeAnimations();
-      this.startTypewriterEffect();
-
-      // Hide loading screen
-      setTimeout(() => this.hideLoadingScreen(), 500);
-    } catch (error) {
-      console.error('Error initializing portfolio:', error);
-      this.hideLoadingScreen();
-    }
-  }
-
-  showLoadingScreen() {
-    const loadingScreen = document.querySelector('.loading-screen');
-    if (loadingScreen) {
-      loadingScreen.classList.remove('hidden');
-    }
-  }
-
-  hideLoadingScreen() {
-    const loadingScreen = document.querySelector('.loading-screen');
-    if (loadingScreen) {
-      loadingScreen.classList.add('hidden');
-    }
-  }
-
-  renderHeroSection(userData, repoCount, totalStars) {
-    const heroContent = document.querySelector('.hero-content');
-    if (!heroContent) {
-      console.warn('Hero content element not found');
-      return;
-    }
-
-    const avatarUrl = userData.avatar_url || 'logo.avif';
-    const name = userData.name || userData.login || 'SaOYaD';
-    const bio = userData.bio || '🌱 Linux Enthusiast | 💻 Full-Stack Developer';
-
-    heroContent.innerHTML = `
-      <div class="profile-image-container">
-        <img src="${avatarUrl}" alt="${name}" class="profile-image">
-      </div>
-      <h1 class="hero-name">${name}</h1>
-      <p class="hero-tagline">
-        <span class="typewriter-text"></span>
-      </p>
-      <p class="hero-bio">${bio}</p>
-      
-      <div class="quick-stats">
-        <div class="stat-item">
-          <span class="stat-number" data-target="${repoCount}">0</span>
-          <span class="stat-label">Repositories</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="${totalStars}">0</span>
-          <span class="stat-label">Total Stars</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="${userData.followers || 0}">0</span>
-          <span class="stat-label">Followers</span>
-        </div>
-      </div>
-
-      <div class="cta-buttons">
-        <a href="https://github.com/${this.api.username}" target="_blank" class="btn btn-primary">
-          View GitHub Profile
-        </a>
-        <a href="#projects" class="btn btn-secondary">
-          View Projects
-        </a>
-      </div>
-    `;
-
-    // Animate stat numbers
-    this.animateNumbers();
-  }
-
-  renderAboutSection(userData, languages) {
-    const aboutSection = document.getElementById('about');
-    if (!aboutSection) {
-      console.warn('About section element not found');
-      return;
-    }
-
-    const location = userData.location ? `📍 ${userData.location}` : '';
-    const company = userData.company ? `🏢 ${userData.company}` : '';
-
-    aboutSection.innerHTML = `
-      <div class="container">
-        <h2 class="section-title scroll-reveal">About Me</h2>
-        <p class="section-subtitle scroll-reveal">Get to know more about my journey and skills</p>
-        
-        <div class="about-content scroll-reveal">
-          <div class="about-text">
-            <p>${userData.bio || '🌱 Linux Enthusiast who loves tinkering with technology.'}</p>
-            <p>🌐 Social Butterfly active on Discord and various tech communities.</p>
-            <p>💽 Tech Savvy, currently diving deep into modern web development.</p>
-            <p>💻 Aspiring Full-Stack Developer passionate about creating innovative solutions.</p>
-            ${location ? `<p>${location}</p>` : ''}
-            ${company ? `<p>${company}</p>` : ''}
-          </div>
-          
-          <div class="languages-chart">
-            <h3 style="color: var(--primary-gold); margin-bottom: 20px;">Top Languages</h3>
-            ${this.renderLanguages(languages)}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  renderLanguages(languages) {
-    if (!languages || languages.length === 0) {
-      return '<p style="color: var(--text-secondary);">Loading language data...</p>';
-    }
-
-    return languages.map(([lang, percentage]) => `
-      <div class="language-item">
-        <div class="language-header">
-          <span class="language-name">${lang}</span>
-          <span class="language-percentage">${percentage}%</span>
-        </div>
-        <div class="language-bar">
-          <div class="language-bar-fill" data-width="${percentage}"></div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  renderProjectsSection(repos) {
-    const projectsSection = document.getElementById('projects');
-    if (!projectsSection) {
-      console.warn('Projects section element not found');
-      return;
-    }
-
-    const projectsHTML = repos.length > 0 ? repos.map(repo => this.createProjectCard(repo)).join('') : 
-      '<p style="text-align: center; color: var(--text-secondary);">No repositories found.</p>';
-
-    projectsSection.innerHTML = `
-      <div class="container">
-        <h2 class="section-title scroll-reveal">Featured Projects</h2>
-        <p class="section-subtitle scroll-reveal">Check out some of my recent work</p>
-        
-        <div class="projects-grid">
-          ${projectsHTML}
-        </div>
-      </div>
-    `;
-  }
-
-  createProjectCard(repo) {
-    const description = repo.description || 'No description available';
-    const language = repo.language || 'Unknown';
-    const stars = repo.stargazers_count || 0;
-    const forks = repo.forks_count || 0;
-    const homepage = repo.homepage;
-
-    return `
-      <div class="project-card scroll-reveal">
-        <div class="project-header">
-          <h3 class="project-title">${repo.name}</h3>
-          <span class="project-language">
-            <span class="language-dot"></span>
-            ${language}
-          </span>
-        </div>
-        
-        <p class="project-description">${description}</p>
-        
-        <div class="project-stats">
-          <span class="stat">
-            <svg viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>
-            </svg>
-            ${stars}
-          </span>
-          <span class="stat">
-            <svg viewBox="0 0 16 16" fill="currentColor">
-              <path d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"/>
-            </svg>
-            ${forks}
-          </span>
-        </div>
-        
-        <div class="project-links">
-          <a href="${repo.html_url}" target="_blank" class="project-link">View Code</a>
-          ${homepage ? `<a href="${homepage}" target="_blank" class="project-link">Live Demo</a>` : ''}
-        </div>
-      </div>
-    `;
-  }
-
-  renderActivitySection(userData, repositories, totalStars) {
-    const activitySection = document.getElementById('activity');
-    if (!activitySection) {
-      console.warn('Activity section element not found');
-      return;
-    }
-
-    const totalRepos = repositories.length;
-    const publicRepos = repositories.filter(r => !r.private).length;
-    const forkedRepos = repositories.filter(r => r.fork).length;
-
-    activitySection.innerHTML = `
-      <div class="container">
-        <h2 class="section-title scroll-reveal">GitHub Activity</h2>
-        <p class="section-subtitle scroll-reveal">My contribution statistics</p>
-        
-        <div class="activity-grid">
-          <div class="activity-card scroll-reveal">
-            <div class="activity-icon">📊</div>
-            <span class="activity-value">${totalRepos}</span>
-            <span class="activity-label">Total Repositories</span>
-          </div>
-          
-          <div class="activity-card scroll-reveal">
-            <div class="activity-icon">⭐</div>
-            <span class="activity-value">${totalStars}</span>
-            <span class="activity-label">Total Stars</span>
-          </div>
-          
-          <div class="activity-card scroll-reveal">
-            <div class="activity-icon">👥</div>
-            <span class="activity-value">${userData.followers || 0}</span>
-            <span class="activity-label">Followers</span>
-          </div>
-          
-          <div class="activity-card scroll-reveal">
-            <div class="activity-icon">🔄</div>
-            <span class="activity-value">${forkedRepos}</span>
-            <span class="activity-label">Forked Repos</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  renderConnectSection() {
-    const connectSection = document.getElementById('connect');
-    if (!connectSection) {
-      console.warn('Connect section element not found');
-      return;
-    }
-
-    connectSection.innerHTML = `
-      <div class="container">
-        <h2 class="section-title scroll-reveal">Let's Connect</h2>
-        <p class="section-subtitle scroll-reveal">Find me on these platforms</p>
-        
-        <div class="social-links scroll-reveal">
-          <a href="https://github.com/${this.api.username}" target="_blank" class="social-link" title="GitHub">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
-          </a>
-          <a href="https://discord.gg/2aRd2B52qZ" target="_blank" class="social-link" title="Discord">
-            <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="Discord">
-          </a>
-          <a href="https://www.youtube.com/@Silver_Lining_Skies" target="_blank" class="social-link" title="YouTube">
-            <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="YouTube">
-          </a>
-          <a href="https://x.com/SaOYaD123" target="_blank" class="social-link" title="Twitter/X">
-            <img src="https://img.freepik.com/free-vector/new-2023-twitter-logo-x-icon-design_1017-45418.jpg" alt="Twitter">
-          </a>
-          <a href="https://www.reddit.com/user/SaOYaD/" target="_blank" class="social-link" title="Reddit">
-            <img src="https://www.iconpacks.net/icons/5/free-reddit-circle-logo-icon-16620.png" alt="Reddit">
-          </a>
-        </div>
-      </div>
-    `;
-  }
-
-  // ==================== Animations ====================
-  animateNumbers() {
-    const statNumbers = document.querySelectorAll('.stat-number');
-    
-    statNumbers.forEach(stat => {
-      const target = parseInt(stat.getAttribute('data-target'));
-      const duration = 2000; // 2 seconds
-      const increment = target / (duration / 16); // 60 fps
-      let current = 0;
-
-      const updateNumber = () => {
-        current += increment;
-        if (current < target) {
-          stat.textContent = Math.floor(current);
-          requestAnimationFrame(updateNumber);
-        } else {
-          stat.textContent = target;
-        }
-      };
-
-      // Start animation when element is visible
-      setTimeout(updateNumber, 500);
-    });
-  }
-
-  startTypewriterEffect() {
-    const typewriterElement = document.querySelector('.typewriter-text');
-    if (!typewriterElement) {
-      console.warn('Typewriter element not found');
-      return;
-    }
-
-    let currentText = '';
-    let isDeleting = false;
-    let textIndex = 0;
-    let charIndex = 0;
+  // Typewriter Effect
+  startTypewriter() {
+    const element = document.querySelector('.typewriter-text');
+    if (!element) return;
 
     const type = () => {
-      const fullText = this.typewriterTexts[textIndex];
+      const currentText = TYPEWRITER_TEXTS[this.typewriterTextIndex];
       
-      if (isDeleting) {
-        currentText = fullText.substring(0, charIndex - 1);
-        charIndex--;
+      if (this.typewriterDeleting) {
+        element.textContent = currentText.substring(0, this.typewriterIndex--);
+        
+        if (this.typewriterIndex < 0) {
+          this.typewriterDeleting = false;
+          this.typewriterTextIndex = (this.typewriterTextIndex + 1) % TYPEWRITER_TEXTS.length;
+          setTimeout(type, 500);
+          return;
+        }
       } else {
-        currentText = fullText.substring(0, charIndex + 1);
-        charIndex++;
+        element.textContent = currentText.substring(0, this.typewriterIndex++);
+        
+        if (this.typewriterIndex > currentText.length) {
+          this.typewriterDeleting = true;
+          setTimeout(type, CONFIG.TYPEWRITER_PAUSE);
+          return;
+        }
       }
-
-      typewriterElement.textContent = currentText;
-
-      let typeSpeed = isDeleting ? 50 : 100;
-
-      if (!isDeleting && charIndex === fullText.length) {
-        typeSpeed = 2000; // Pause at end
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        textIndex = (textIndex + 1) % this.typewriterTexts.length;
-        typeSpeed = 500;
-      }
-
-      setTimeout(type, typeSpeed);
+      
+      setTimeout(type, this.typewriterDeleting ? CONFIG.TYPEWRITER_DELETE_SPEED : CONFIG.TYPEWRITER_SPEED);
     };
 
     type();
   }
 
-  initializeAnimations() {
-    // Scroll reveal animation
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+  // Render Hero Section
+  async renderHero(userData) {
+    const heroContent = document.querySelector('.hero-content');
+    if (!heroContent) return;
+
+    heroContent.innerHTML = `
+      <img src="${userData.avatar_url}" alt="${sanitizeHTML(userData.name)}" class="hero-avatar" loading="lazy">
+      <p class="hero-greeting">Hello, I'm</p>
+      <h1 class="hero-title">${sanitizeHTML(userData.name || 'SaOYaD')}</h1>
+      <div class="hero-subtitle">
+        <span class="typewriter-text"></span>
+      </div>
+      <p class="hero-description">${sanitizeHTML(userData.bio || '')}</p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">
+          <span>View Projects</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          <span>Get in Touch</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-social">
+        <a href="https://github.com/${CONFIG.GITHUB_USERNAME}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
+        ${userData.twitter_username ? `
+        <a href="https://twitter.com/${userData.twitter_username}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+          </svg>
+        </a>
+        ` : ''}
+        ${userData.blog ? `
+        <a href="${userData.blog}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Website">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </a>
+        ` : ''}
+      </div>
+    `;
+
+    this.startTypewriter();
+  }
+
+  // Render About Section
+  async renderAbout(userData, repos) {
+    const aboutSection = document.querySelector('.about-section .container');
+    if (!aboutSection) return;
+
+    const totalStars = this.api.calculateTotalStars(repos);
+
+    aboutSection.innerHTML += `
+      <div class="about-content">
+        <div class="about-image">
+          <img src="${userData.avatar_url}" alt="${sanitizeHTML(userData.name)}" loading="lazy">
+        </div>
+        <div class="about-text">
+          <h3>About Me</h3>
+          <p>${sanitizeHTML(userData.bio || 'Passionate developer building amazing things.')}</p>
+          <p>With a strong foundation in full-stack development and a deep passion for Linux systems, I create innovative solutions that make a difference. My journey in tech is driven by curiosity and a commitment to continuous learning.</p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number">${userData.public_repos}</span>
+              <span class="stat-label">Repositories</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">${totalStars}</span>
+              <span class="stat-label">Stars</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">${userData.followers}</span>
+              <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">${userData.following}</span>
+              <span class="stat-label">Following</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render Skills Section
+  renderSkills() {
+    const skillsSection = document.querySelector('.skills-section .container');
+    if (!skillsSection) return;
+
+    const skills = {
+      'Frontend': [
+        { name: 'HTML/CSS', level: 95 },
+        { name: 'JavaScript', level: 90 },
+        { name: 'React', level: 85 },
+        { name: 'Vue.js', level: 80 },
+      ],
+      'Backend': [
+        { name: 'Node.js', level: 88 },
+        { name: 'Python', level: 85 },
+        { name: 'PHP', level: 75 },
+        { name: 'Databases', level: 82 },
+      ],
+      'Tools & Others': [
+        { name: 'Git', level: 92 },
+        { name: 'Linux', level: 90 },
+        { name: 'Docker', level: 85 },
+        { name: 'CI/CD', level: 80 },
+      ],
     };
 
+    const skillsHTML = Object.entries(skills).map(([category, items]) => `
+      <div class="skill-category">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          ${category}
+        </h3>
+        ${items.map(skill => `
+          <div class="skill-item">
+            <div class="skill-name">
+              <span>${skill.name}</span>
+              <span class="skill-percentage">${skill.level}%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 0%" data-width="${skill.level}%"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+
+    skillsSection.innerHTML += `<div class="skills-grid">${skillsHTML}</div>`;
+
+    // Animate skill bars when in view
+    this.animateSkillBars();
+  }
+
+  animateSkillBars() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
+          const progressBars = entry.target.querySelectorAll('.skill-progress');
+          progressBars.forEach(bar => {
+            const width = bar.getAttribute('data-width');
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 100);
+          });
+          observer.unobserve(entry.target);
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.5 });
 
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-      observer.observe(el);
+    const skillsSection = document.querySelector('.skills-section');
+    if (skillsSection) observer.observe(skillsSection);
+  }
+
+  // Render Projects
+  renderProjects(repos) {
+    const projectsGrid = document.getElementById('projects-grid');
+    if (!projectsGrid) return;
+
+    const featuredRepos = this.api.getFeaturedRepos(repos);
+
+    projectsGrid.innerHTML = featuredRepos.map(repo => `
+      <div class="project-card" data-name="${sanitizeHTML(repo.name)}" data-language="${sanitizeHTML(repo.language || '')}">
+        <div class="project-image">
+          <img src="wallpaper.jpg" alt="${sanitizeHTML(repo.name)}" loading="lazy">
+          <div class="project-overlay">
+            ${repo.html_url ? `
+            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View on GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+            ` : ''}
+            ${repo.homepage ? `
+            <a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Live Demo">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+            ` : ''}
+          </div>
+        </div>
+        <div class="project-info">
+          <h3 class="project-title">${sanitizeHTML(repo.name)}</h3>
+          <p class="project-description">${sanitizeHTML(repo.description || 'No description available')}</p>
+          <div class="project-tech">
+            ${repo.language ? `<span class="tech-tag">${sanitizeHTML(repo.language)}</span>` : ''}
+            ${repo.topics ? repo.topics.slice(0, 3).map(topic => `<span class="tech-tag">${sanitizeHTML(topic)}</span>`).join('') : ''}
+          </div>
+          <div class="project-stats">
+            <div class="project-stat">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              ${repo.stargazers_count || 0}
+            </div>
+            <div class="project-stat">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="18" r="3"></circle>
+                <circle cx="6" cy="6" r="3"></circle>
+                <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+                <line x1="6" y1="9" x2="6" y2="21"></line>
+              </svg>
+              ${repo.forks_count || 0}
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    this.setupProjectFilters();
+  }
+
+  setupProjectFilters() {
+    const projectCards = document.querySelectorAll('.project-card');
+    const searchBox = document.getElementById('project-search');
+    const filterButtons = document.querySelector('.filter-buttons');
+
+    // Get unique languages for filters
+    const languages = new Set();
+    projectCards.forEach(card => {
+      const lang = card.getAttribute('data-language');
+      if (lang) languages.add(lang);
     });
 
-    // Animate language bars
-    setTimeout(() => {
-      document.querySelectorAll('.language-bar-fill').forEach(bar => {
-        const width = bar.getAttribute('data-width');
-        bar.style.width = `${width}%`;
+    // Create filter buttons
+    if (filterButtons) {
+      filterButtons.innerHTML = `
+        <button class="filter-btn active" data-filter="all">All</button>
+        ${[...languages].map(lang => `
+          <button class="filter-btn" data-filter="${lang}">${lang}</button>
+        `).join('')}
+      `;
+
+      // Filter functionality
+      filterButtons.addEventListener('click', (e) => {
+        if (e.target.classList.contains('filter-btn')) {
+          filterButtons.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          
+          const filter = e.target.getAttribute('data-filter');
+          projectCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-language') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        }
       });
-    }, 500);
+    }
+
+    // Search functionality
+    if (searchBox) {
+      searchBox.addEventListener('input', debounce((e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        projectCards.forEach(card => {
+          const name = card.getAttribute('data-name').toLowerCase();
+          const description = card.querySelector('.project-description').textContent.toLowerCase();
+          if (name.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }, 300));
+    }
+  }
+
+  // Render Activity Section
+  async renderActivity(userData, repos) {
+    const activitySection = document.querySelector('.activity-section .container');
+    if (!activitySection) return;
+
+    const totalStars = this.api.calculateTotalStars(repos);
+    const languages = await this.api.fetchLanguages(repos);
+
+    activitySection.innerHTML += `
+      <div class="activity-dashboard">
+        <div class="activity-card">
+          <div class="activity-header">
+            <h3 class="activity-title">Total Repositories</h3>
+            <svg class="activity-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="activity-value">${userData.public_repos}</div>
+        </div>
+        
+        <div class="activity-card">
+          <div class="activity-header">
+            <h3 class="activity-title">Total Stars</h3>
+            <svg class="activity-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div class="activity-value">${totalStars}</div>
+        </div>
+        
+        <div class="activity-card">
+          <div class="activity-header">
+            <h3 class="activity-title">Followers</h3>
+            <svg class="activity-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="activity-value">${userData.followers}</div>
+        </div>
+        
+        <div class="activity-card" style="grid-column: span 2;">
+          <div class="activity-header">
+            <h3 class="activity-title">Top Languages</h3>
+            <svg class="activity-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <div class="language-chart">
+            ${languages.map(([lang, percentage]) => `
+              <div class="language-item">
+                <span class="language-name">${sanitizeHTML(lang)}</span>
+                <div class="language-bar-container">
+                  <div class="language-bar" style="width: 0%" data-width="${percentage}%"></div>
+                </div>
+                <span class="language-percentage">${percentage}%</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Animate language bars
+    this.animateLanguageBars();
+  }
+
+  animateLanguageBars() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bars = entry.target.querySelectorAll('.language-bar');
+          bars.forEach(bar => {
+            const width = bar.getAttribute('data-width');
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 100);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const activitySection = document.querySelector('.activity-section');
+    if (activitySection) observer.observe(activitySection);
+  }
+
+  // Render Achievements
+  renderAchievements() {
+    const achievementsSection = document.querySelector('.achievements-section .achievements-grid');
+    if (!achievementsSection) return;
+
+    const achievements = [
+      {
+        icon: '🏆',
+        title: 'Open Source Contributor',
+        description: 'Active contributor to open source projects',
+        date: '2024'
+      },
+      {
+        icon: '🎓',
+        title: 'Self-Taught Developer',
+        description: 'Mastered web development through dedication',
+        date: '2023'
+      },
+      {
+        icon: '💻',
+        title: 'Full-Stack Developer',
+        description: 'Proficient in both frontend and backend',
+        date: '2024'
+      },
+      {
+        icon: '🐧',
+        title: 'Linux Enthusiast',
+        description: 'Expert in Linux systems administration',
+        date: '2023'
+      }
+    ];
+
+    achievementsSection.innerHTML = achievements.map(achievement => `
+      <div class="achievement-card">
+        <div class="achievement-icon">${achievement.icon}</div>
+        <h3 class="achievement-title">${sanitizeHTML(achievement.title)}</h3>
+        <p class="achievement-description">${sanitizeHTML(achievement.description)}</p>
+        <span class="achievement-date">${sanitizeHTML(achievement.date)}</span>
+      </div>
+    `).join('');
+  }
+
+  // Render Testimonials
+  renderTestimonials() {
+    const testimonialsSection = document.querySelector('.testimonials-section .testimonials-carousel');
+    if (!testimonialsSection) return;
+
+    const testimonials = [
+      {
+        text: 'Outstanding developer with excellent problem-solving skills. A pleasure to work with!',
+        author: 'John Doe',
+        role: 'Senior Developer',
+        avatar: 'logo.avif',
+        rating: 5
+      },
+      {
+        text: 'Delivers high-quality code and has deep knowledge of modern web technologies.',
+        author: 'Jane Smith',
+        role: 'Tech Lead',
+        avatar: 'logo.avif',
+        rating: 5
+      },
+      {
+        text: 'Passionate about technology and always willing to learn new things. Great team player!',
+        author: 'Mike Johnson',
+        role: 'Project Manager',
+        avatar: 'logo.avif',
+        rating: 5
+      }
+    ];
+
+    testimonialsSection.innerHTML = testimonials.map(testimonial => `
+      <div class="testimonial-card">
+        <p class="testimonial-text">"${sanitizeHTML(testimonial.text)}"</p>
+        <div class="testimonial-author">
+          <img src="${testimonial.avatar}" alt="${sanitizeHTML(testimonial.author)}" class="author-avatar" loading="lazy">
+          <div class="author-info">
+            <div class="author-name">${sanitizeHTML(testimonial.author)}</div>
+            <div class="author-role">${sanitizeHTML(testimonial.role)}</div>
+            <div class="testimonial-rating">
+              ${Array(testimonial.rating).fill('').map(() => `
+                <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Render Contact Section
+  renderContact() {
+    const contactLinks = document.querySelector('.contact-links');
+    if (!contactLinks) return;
+
+    contactLinks.innerHTML = `
+      <a href="https://github.com/${CONFIG.GITHUB_USERNAME}" target="_blank" rel="noopener noreferrer" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <a href="mailto:contact@saoyad.dev" class="contact-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <span>Email</span>
+      </a>
+    `;
+
+    // Render footer social links
+    const footerSocial = document.querySelector('.footer-social');
+    if (footerSocial) {
+      footerSocial.innerHTML = contactLinks.innerHTML;
+    }
+  }
+}
+
+// ==================== Particle System ====================
+class ParticleSystem {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.init();
+  }
+
+  init() {
+    this.resize();
+    this.createParticles();
+    this.animate();
+    window.addEventListener('resize', () => this.resize());
+  }
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+
+  createParticles() {
+    for (let i = 0; i < CONFIG.PARTICLE_COUNT; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1,
+      });
+    }
+  }
+
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    this.particles.forEach(particle => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+
+      if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+      if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+
+      this.ctx.beginPath();
+      this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      this.ctx.fillStyle = 'rgba(255, 182, 193, 0.5)';
+      this.ctx.fill();
+    });
+
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// ==================== Navigation ====================
+class Navigation {
+  constructor() {
+    this.navbar = document.querySelector('.navbar');
+    this.navLinks = document.querySelectorAll('.nav-link');
+    this.hamburger = document.querySelector('.hamburger');
+    this.navMenu = document.querySelector('.nav-menu');
+    this.init();
+  }
+
+  init() {
+    this.setupScrollBehavior();
+    this.setupActiveLinks();
+    this.setupMobileMenu();
+    this.setupSmoothScroll();
+  }
+
+  setupScrollBehavior() {
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', throttle(() => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 100) {
+        this.navbar.classList.add('scrolled');
+      } else {
+        this.navbar.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    }, 100));
+  }
+
+  setupActiveLinks() {
+    const sections = document.querySelectorAll('.section');
+    
+    window.addEventListener('scroll', throttle(() => {
+      let current = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      this.navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }, 100));
+  }
+
+  setupMobileMenu() {
+    if (this.hamburger && this.navMenu) {
+      this.hamburger.addEventListener('click', () => {
+        this.hamburger.classList.toggle('active');
+        this.navMenu.classList.toggle('active');
+        this.hamburger.setAttribute('aria-expanded', 
+          this.hamburger.classList.contains('active'));
+      });
+
+      this.navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          this.hamburger.classList.remove('active');
+          this.navMenu.classList.remove('active');
+          this.hamburger.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  }
+
+  setupSmoothScroll() {
+    this.navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }
+      });
+    });
+  }
+}
+
+// ==================== Scroll Progress ====================
+class ScrollProgress {
+  constructor() {
+    this.progressBar = document.querySelector('.scroll-progress');
+    this.init();
+  }
+
+  init() {
+    window.addEventListener('scroll', throttle(() => {
+      const winScroll = document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      
+      if (this.progressBar) {
+        this.progressBar.style.width = scrolled + '%';
+      }
+    }, 50));
+  }
+}
+
+// ==================== Back to Top Button ====================
+class BackToTop {
+  constructor() {
+    this.button = document.querySelector('.back-to-top');
+    this.init();
+  }
+
+  init() {
+    if (!this.button) return;
+
+    window.addEventListener('scroll', throttle(() => {
+      if (window.pageYOffset > 300) {
+        this.button.classList.add('visible');
+      } else {
+        this.button.classList.remove('visible');
+      }
+    }, 100));
+
+    this.button.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+}
+
+// ==================== Custom Cursor ====================
+class CustomCursor {
+  constructor() {
+    this.cursor = document.querySelector('.custom-cursor');
+    this.dot = document.querySelector('.cursor-dot');
+    this.outline = document.querySelector('.cursor-outline');
+    this.init();
+  }
+
+  init() {
+    if (!this.cursor || window.matchMedia('(pointer: coarse)').matches) return;
+
+    document.addEventListener('mousemove', (e) => {
+      this.dot.style.left = e.clientX + 'px';
+      this.dot.style.top = e.clientY + 'px';
+      this.outline.style.left = e.clientX + 'px';
+      this.outline.style.top = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        this.dot.style.transform = 'translate(-50%, -50%) scale(2)';
+        this.outline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        this.dot.style.transform = 'translate(-50%, -50%) scale(1)';
+        this.outline.style.transform = 'translate(-50%, -50%) scale(1)';
+      });
+    });
+  }
+}
+
+// ==================== Form Validation ====================
+class FormValidator {
+  constructor(form) {
+    this.form = form;
+    this.init();
+  }
+
+  init() {
+    if (!this.form) return;
+
+    this.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (this.validateForm()) {
+        this.submitForm();
+      }
+    });
+
+    // Real-time validation
+    this.form.querySelectorAll('input, textarea').forEach(field => {
+      field.addEventListener('blur', () => this.validateField(field));
+      field.addEventListener('input', () => {
+        if (field.classList.contains('error')) {
+          this.validateField(field);
+        }
+      });
+    });
+  }
+
+  validateField(field) {
+    const error = field.parentElement.querySelector('.form-error');
+    let isValid = true;
+    let message = '';
+
+    if (field.hasAttribute('required') && !field.value.trim()) {
+      isValid = false;
+      message = 'This field is required';
+    } else if (field.type === 'email' && field.value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(field.value)) {
+        isValid = false;
+        message = 'Please enter a valid email address';
+      }
+    }
+
+    if (isValid) {
+      field.classList.remove('error');
+      if (error) error.textContent = '';
+    } else {
+      field.classList.add('error');
+      if (error) error.textContent = message;
+    }
+
+    return isValid;
+  }
+
+  validateForm() {
+    let isValid = true;
+    
+    this.form.querySelectorAll('input, textarea').forEach(field => {
+      if (!this.validateField(field)) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  }
+
+  submitForm() {
+    const formData = new FormData(this.form);
+    const data = Object.fromEntries(formData);
+    
+    // Simulate form submission
+    const statusDiv = this.form.querySelector('.form-status');
+    
+    if (statusDiv) {
+      statusDiv.className = 'form-status success';
+      statusDiv.textContent = 'Message sent successfully! Thank you for reaching out.';
+      
+      this.form.reset();
+      
+      setTimeout(() => {
+        statusDiv.className = 'form-status';
+        statusDiv.textContent = '';
+      }, 5000);
+    }
+    
+    console.log('Form submitted:', data);
+  }
+}
+
+// ==================== Intersection Observer for Animations ====================
+class AnimationObserver {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    });
+
+    document.querySelectorAll('.animate-on-scroll, .section').forEach(el => {
+      el.classList.add('animate-on-scroll');
+      observer.observe(el);
+    });
+  }
+}
+
+// ==================== Loading Screen ====================
+class LoadingScreen {
+  constructor() {
+    this.loadingScreen = document.querySelector('.loading-screen');
+    this.init();
+  }
+
+  init() {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (this.loadingScreen) {
+          this.loadingScreen.classList.add('hidden');
+        }
+      }, 1000);
+    });
+  }
+}
+
+// ==================== Main Application ====================
+class PortfolioApp {
+  constructor() {
+    this.api = new GitHubAPI(CONFIG.GITHUB_USERNAME);
+    this.ui = new UIComponents(this.api);
+  }
+
+  async init() {
+    // Initialize theme
+    new ThemeManager();
+    
+    // Initialize loading screen
+    new LoadingScreen();
+    
+    // Initialize navigation
+    new Navigation();
+    
+    // Initialize scroll features
+    new ScrollProgress();
+    new BackToTop();
+    
+    // Initialize custom cursor
+    new CustomCursor();
+    
+    // Initialize particles
+    const canvas = document.getElementById('particles-canvas');
+    if (canvas) new ParticleSystem(canvas);
+    
+    // Initialize form validation
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) new FormValidator(contactForm);
+    
+    // Initialize animation observer
+    new AnimationObserver();
+    
+    // Load and render data
+    await this.loadData();
+  }
+
+  async loadData() {
+    try {
+      // Fetch GitHub data
+      const [userData, repos] = await Promise.all([
+        this.api.fetchUserData(),
+        this.api.fetchRepositories()
+      ]);
+
+      // Render all sections
+      await this.ui.renderHero(userData);
+      await this.ui.renderAbout(userData, repos);
+      this.ui.renderSkills();
+      this.ui.renderProjects(repos);
+      await this.ui.renderActivity(userData, repos);
+      this.ui.renderAchievements();
+      this.ui.renderTestimonials();
+      this.ui.renderContact();
+      
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
 }
 
 // ==================== Initialize Application ====================
-document.addEventListener('DOMContentLoaded', async () => {
-  const api = new GitHubAPI(GITHUB_USERNAME);
-  const ui = new PortfolioUI(api);
-  await ui.initialize();
-  
-  // Initialize scroll progress
-  initScrollProgress();
-  
-  // Initialize enhanced particles with mouse interaction
-  initEnhancedParticles();
-  
-  // Add stagger animation to project cards
-  addStaggerAnimation();
-  
-  // Initialize custom cursor
-  initCustomCursor();
-  
-  // Initialize 3D tilt effects
-  init3DTiltEffects();
-  
-  // Initialize magnetic buttons
-  initMagneticEffects();
-  
-  // Initialize ripple effects
-  initRippleEffects();
-  
-  // Initialize parallax scrolling
-  initParallaxEffects();
-  
-  // Initialize sakura petals
-  initSakuraPetals();
-  
-  // Initialize sparkles
-  initSparkles();
+document.addEventListener('DOMContentLoaded', () => {
+  const app = new PortfolioApp();
+  app.init();
 });
 
-// ==================== Custom Cursor ====================
-function initCustomCursor() {
-  const cursor = document.querySelector('.custom-cursor');
-  const cursorDot = document.querySelector('.cursor-dot');
-  const cursorOutline = document.querySelector('.cursor-outline');
-  
-  if (!cursor || !cursorDot || !cursorOutline) return;
-  
-  // Only enable on devices with fine pointer (mouse)
-  if (!window.matchMedia('(pointer: fine)').matches) {
-    cursor.style.display = 'none';
-    document.body.style.cursor = 'default';
-    return;
-  }
-  
-  let mouseX = 0, mouseY = 0;
-  let outlineX = 0, outlineY = 0;
-  
-  // Track mouse position
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    cursorDot.style.left = mouseX + 'px';
-    cursorDot.style.top = mouseY + 'px';
-  });
-  
-  // Smooth follow for outline
-  function animateOutline() {
-    const speed = 0.15;
-    outlineX += (mouseX - outlineX) * speed;
-    outlineY += (mouseY - outlineY) * speed;
-    
-    cursorOutline.style.left = outlineX + 'px';
-    cursorOutline.style.top = outlineY + 'px';
-    
-    requestAnimationFrame(animateOutline);
-  }
-  animateOutline();
-  
-  // Expand on hover over interactive elements
-  const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .social-link, .stat-item, .activity-card');
-  
-  interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursorDot.classList.add('expand');
-      cursorOutline.classList.add('expand');
-    });
-    
-    el.addEventListener('mouseleave', () => {
-      cursorDot.classList.remove('expand');
-      cursorOutline.classList.remove('expand');
-    });
-  });
-}
-
-// ==================== 3D Tilt Effects ====================
-function init3DTiltEffects() {
-  // Disable on mobile/touch devices
-  if (window.matchMedia('(max-width: 768px)').matches) return;
-  
-  const cards = document.querySelectorAll('.project-card');
-  
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.classList.add('tilt-active');
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      card.classList.remove('tilt-active');
-      card.style.transform = '';
-    });
-    
-    card.addEventListener('mousemove', (e) => {
-      if (!card.classList.contains('tilt-active')) return;
-      
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      const rotateX = ((y - centerY) / centerY) * -10;
-      const rotateY = ((x - centerX) / centerX) * 10;
-      
-      card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-    });
-  });
-}
-
-// ==================== Magnetic Effects ====================
-function initMagneticEffects() {
-  // Disable on mobile/touch devices
-  if (window.matchMedia('(max-width: 768px)').matches) return;
-  
-  const magneticElements = document.querySelectorAll('.social-link, .btn');
-  
-  magneticElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      el.classList.add('magnetic-active');
-    });
-    
-    el.addEventListener('mouseleave', () => {
-      el.classList.remove('magnetic-active');
-      el.style.transform = '';
-    });
-    
-    el.addEventListener('mousemove', (e) => {
-      if (!el.classList.contains('magnetic-active')) return;
-      
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      
-      const moveX = x * 0.3;
-      const moveY = y * 0.3;
-      
-      el.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    });
-  });
-}
-
-// ==================== Ripple Effects ====================
-function initRippleEffects() {
-  const buttons = document.querySelectorAll('.btn, .project-link');
-  
-  buttons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      this.classList.add('ripple');
-      
-      setTimeout(() => {
-        this.classList.remove('ripple');
-      }, 600);
-    });
-  });
-}
-
-// ==================== Parallax Effects ====================
-function initParallaxEffects() {
-  let ticking = false;
-  
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        parallaxScroll();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-  
-  function parallaxScroll() {
-    const scrolled = window.pageYOffset;
-    
-    // Parallax for floating shapes - preserve CSS animations
-    const shapes = document.querySelectorAll('.shape');
-    shapes.forEach((shape, index) => {
-      const speed = 0.1 + (index * 0.05);
-      const yPos = -(scrolled * speed);
-      // Use CSS variable to combine with existing animation
-      shape.style.setProperty('--parallax-y', `${yPos}px`);
-    });
-    
-    // Parallax for hero content
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-      const yPos = scrolled * 0.3;
-      heroContent.style.transform = `translateY(${yPos}px)`;
-      heroContent.style.opacity = Math.max(0, 1 - (scrolled / 600));
-    }
-  }
-}
-
-// ==================== Scroll Progress Indicator ====================
-function initScrollProgress() {
-  const progressBar = document.querySelector('.scroll-progress');
-  if (!progressBar) return;
-  
-  window.addEventListener('scroll', () => {
-    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (window.scrollY / windowHeight) * 100;
-    progressBar.style.width = `${scrolled}%`;
-  });
-}
-
-// ==================== Enhanced Particle System ====================
-function initEnhancedParticles() {
-  const canvas = document.getElementById('particles-canvas');
-  if (!canvas) return;
-  
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  
-  const particles = [];
-  const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
-  let mouse = { x: null, y: null, radius: 150 };
-  
-  // Track mouse position
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
-  });
-  
-  window.addEventListener('mouseout', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-  
-  class EnhancedParticle {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 3 + 1;
-      this.baseX = this.x;
-      this.baseY = this.y;
-      this.speedX = Math.random() * 0.5 - 0.25;
-      this.speedY = Math.random() * 0.5 - 0.25;
-      this.opacity = Math.random() * 0.5 + 0.3;
-      this.color = this.getRandomColor();
-    }
-    
-    getRandomColor() {
-      const colors = [
-        'rgba(255, 182, 193, ',  // sakura pink
-        'rgba(230, 230, 250, ',  // lavender
-        'rgba(221, 160, 221, ',  // soft purple
-        'rgba(152, 255, 152, ',  // mint
-      ];
-      return colors[Math.floor(Math.random() * colors.length)];
-    }
-    
-    update() {
-      // Mouse interaction
-      if (mouse.x && mouse.y) {
-        const dx = mouse.x - this.x;
-        const dy = mouse.y - this.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < mouse.radius) {
-          const force = (mouse.radius - distance) / mouse.radius;
-          const angle = Math.atan2(dy, dx);
-          this.x -= Math.cos(angle) * force * 3;
-          this.y -= Math.sin(angle) * force * 3;
-        } else {
-          // Return to base position
-          if (this.x !== this.baseX) {
-            const dx = this.x - this.baseX;
-            this.x -= dx * 0.05;
-          }
-          if (this.y !== this.baseY) {
-            const dy = this.y - this.baseY;
-            this.y -= dy * 0.05;
-          }
-        }
-      }
-      
-      // Normal movement
-      this.baseX += this.speedX;
-      this.baseY += this.speedY;
-      
-      // Wrap around edges
-      if (this.baseX > canvas.width) this.baseX = 0;
-      if (this.baseX < 0) this.baseX = canvas.width;
-      if (this.baseY > canvas.height) this.baseY = 0;
-      if (this.baseY < 0) this.baseY = canvas.height;
-    }
-    
-    draw() {
-      ctx.fillStyle = this.color + this.opacity + ')';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Add glow effect
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = this.color + '0.5)';
-    }
-  }
-  
-  // Create particles
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new EnhancedParticle());
-  }
-  
-  // Connect particles
-  function connectParticles() {
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 120) {
-          const opacity = (1 - distance / 120) * 0.3;
-          ctx.strokeStyle = `rgba(255, 182, 193, ${opacity})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-  }
-  
-  // Animation loop
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.shadowBlur = 0;
-    
-    particles.forEach(particle => {
-      particle.update();
-      particle.draw();
-    });
-    
-    connectParticles();
-    requestAnimationFrame(animate);
-  }
-  
-  animate();
-  
-  // Resize handler
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-}
-
-// ==================== Stagger Animation for Cards ====================
-function addStaggerAnimation() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        // Add delay based on index
-        const cards = entry.target.parentElement.children;
-        const cardIndex = Array.from(cards).indexOf(entry.target);
-        entry.target.style.animationDelay = `${cardIndex * 0.1}s`;
-        entry.target.classList.add('revealed');
-      }
-    });
-  }, { threshold: 0.1 });
-  
-  // Observe project cards
-  document.querySelectorAll('.project-card').forEach(card => {
-    observer.observe(card);
-  });
-}
-
-// ==================== Sakura Petals Animation ====================
-function initSakuraPetals() {
-  // Check for reduced motion preference
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return;
-  }
-  
-  const container = document.querySelector('.sakura-container');
-  if (!container) return;
-  
-  const petalCount = window.innerWidth < 768 ? 15 : 30;
-  
-  function createPetal() {
-    const petal = document.createElement('div');
-    petal.className = 'sakura-petal';
-    
-    // Random starting position
-    petal.style.left = Math.random() * 100 + '%';
-    
-    // Random size
-    const size = 10 + Math.random() * 10;
-    petal.style.width = size + 'px';
-    petal.style.height = size + 'px';
-    
-    // Random animation duration
-    const duration = 10 + Math.random() * 20;
-    petal.style.animationDuration = duration + 's';
-    
-    // Random delay
-    petal.style.animationDelay = Math.random() * 10 + 's';
-    
-    container.appendChild(petal);
-    
-    // Remove petal after animation completes and recreate
-    setTimeout(() => {
-      petal.remove();
-      createPetal();
-    }, duration * 1000);
-  }
-  
-  // Create initial petals
-  for (let i = 0; i < petalCount; i++) {
-    setTimeout(() => createPetal(), i * 300);
-  }
-}
-
-// ==================== Sparkles Animation ====================
-function initSparkles() {
-  // Check for reduced motion preference
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return;
-  }
-  
-  const container = document.querySelector('.sparkles-container');
-  if (!container) return;
-  
-  // Create sparkles on mouse move
-  let lastSparkleTime = 0;
-  const sparkleInterval = 100; // milliseconds between sparkles
-  
-  document.addEventListener('mousemove', (e) => {
-    const now = Date.now();
-    if (now - lastSparkleTime < sparkleInterval) return;
-    lastSparkleTime = now;
-    
-    // Only create sparkle 30% of the time to avoid too many
-    if (Math.random() > 0.3) return;
-    
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-    sparkle.style.left = e.clientX + (Math.random() * 40 - 20) + 'px';
-    sparkle.style.top = e.clientY + (Math.random() * 40 - 20) + 'px';
-    sparkle.style.animationDelay = Math.random() * 0.5 + 's';
-    
-    container.appendChild(sparkle);
-    
-    // Remove sparkle after animation
-    setTimeout(() => sparkle.remove(), 2000);
-  });
-  
-  // Also create random sparkles across the screen
-  function createRandomSparkle() {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
-    sparkle.style.left = Math.random() * window.innerWidth + 'px';
-    sparkle.style.top = Math.random() * window.innerHeight + 'px';
-    sparkle.style.animationDuration = (1 + Math.random() * 2) + 's';
-    
-    container.appendChild(sparkle);
-    
-    setTimeout(() => sparkle.remove(), 3000);
-  }
-  
-  // Create random sparkles periodically
-  setInterval(() => {
-    if (Math.random() > 0.5) {
-      createRandomSparkle();
-    }
-  }, 1000);
-}
+// ==================== Export for Module System ====================
+export { PortfolioApp, GitHubAPI, ThemeManager, UIComponents };

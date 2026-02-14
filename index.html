@@ -3,32 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SaOYaD - Full-Stack Developer & Linux Enthusiast. Explore my portfolio, projects, and GitHub contributions.">
-  <meta name="keywords" content="SaOYaD, Developer, Portfolio, GitHub, JavaScript, Full-Stack">
+  <meta name="description" content="SaOYaD - Full-Stack Developer & Linux Enthusiast. Explore my premium portfolio, cutting-edge projects, and GitHub contributions. Built with modern web technologies.">
+  <meta name="keywords" content="SaOYaD, Developer, Portfolio, GitHub, JavaScript, Full-Stack, Web Developer, Linux, Modern Web Design">
   <meta name="author" content="SaOYaD">
+  <meta name="theme-color" content="#1A0B2E">
   
-  <title>SaOYaD - Premium Portfolio</title>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://SaOYaD-SZN.github.io/">
+  <meta property="og:title" content="SaOYaD - Premium Portfolio">
+  <meta property="og:description" content="Full-Stack Developer & Linux Enthusiast. Explore my premium portfolio and cutting-edge projects.">
+  <meta property="og:image" content="https://SaOYaD-SZN.github.io/logo.avif">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://SaOYaD-SZN.github.io/">
+  <meta property="twitter:title" content="SaOYaD - Premium Portfolio">
+  <meta property="twitter:description" content="Full-Stack Developer & Linux Enthusiast. Explore my premium portfolio and cutting-edge projects.">
+  <meta property="twitter:image" content="https://SaOYaD-SZN.github.io/logo.avif">
+  
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https://api.github.com; frame-src 'self';">
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="logo.avif">
+  
+  <!-- Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.github.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  
+  <title>SaOYaD - Premium Portfolio 2026</title>
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
+  
+  <!-- JSON-LD Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "SaOYaD",
+    "url": "https://SaOYaD-SZN.github.io",
+    "image": "https://SaOYaD-SZN.github.io/logo.avif",
+    "sameAs": [
+      "https://github.com/SaOYaD-SZN"
+    ],
+    "jobTitle": "Full-Stack Developer",
+    "description": "Full-Stack Developer & Linux Enthusiast"
+  }
+  </script>
 </head>
 <body>
+  <!-- Skip to Content (Accessibility) -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
   <!-- Scroll Progress Indicator -->
-  <div class="scroll-progress"></div>
+  <div class="scroll-progress" role="progressbar" aria-label="Page scroll progress"></div>
 
   <!-- Loading Screen -->
-  <div class="loading-screen">
+  <div class="loading-screen" role="alert" aria-live="polite">
     <div class="loader"></div>
+    <p class="loading-text">Loading Experience...</p>
   </div>
 
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle Theme">
+    <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Scroll to top" title="Back to Top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+  </button>
+
   <!-- Animated Background -->
-  <div class="animated-bg"></div>
+  <div class="animated-bg" aria-hidden="true"></div>
   
   <!-- Floating Shapes Background -->
-  <div class="floating-shapes">
+  <div class="floating-shapes" aria-hidden="true">
     <div class="shape shape-1"></div>
     <div class="shape shape-2"></div>
     <div class="shape shape-3"></div>
@@ -37,22 +111,22 @@
   </div>
   
   <!-- Particle Canvas -->
-  <canvas id="particles-canvas"></canvas>
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
   
   <!-- Custom Cursor -->
-  <div class="custom-cursor">
+  <div class="custom-cursor" aria-hidden="true">
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
   </div>
 
   <!-- Sakura Petals Container -->
-  <div class="sakura-container"></div>
+  <div class="sakura-container" aria-hidden="true"></div>
   
   <!-- Sparkles Container -->
-  <div class="sparkles-container"></div>
+  <div class="sparkles-container" aria-hidden="true"></div>
 
   <!-- Decorative Elements -->
-  <div class="decorative-stars">
+  <div class="decorative-stars" aria-hidden="true">
     <svg class="star star-1" width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path d="M10 0L12.2451 7.75486L20 10L12.2451 12.2451L10 20L7.75486 12.2451L0 10L7.75486 7.75486L10 0Z" fill="#FFB6C1" opacity="0.6"/>
     </svg>
@@ -70,13 +144,39 @@
     </svg>
   </div>
 
+  <!-- Navigation Bar -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" aria-label="Home">
+        <img src="logo.avif" alt="SaOYaD Logo" width="40" height="40">
+        <span>SaOYaD</span>
+      </a>
+      
+      <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <ul class="nav-menu" role="menubar">
+        <li role="none"><a href="#home" class="nav-link active" role="menuitem">Home</a></li>
+        <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
+        <li role="none"><a href="#skills" class="nav-link" role="menuitem">Skills</a></li>
+        <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
+        <li role="none"><a href="#activity" class="nav-link" role="menuitem">Activity</a></li>
+        <li role="none"><a href="#achievements" class="nav-link" role="menuitem">Achievements</a></li>
+        <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <!-- Hero Section -->
-  <section class="hero-section">
+  <section id="home" class="hero-section" role="banner">
     <div class="hero-content">
       <!-- Content will be dynamically loaded -->
     </div>
     <!-- Scroll Indicator -->
-    <div class="scroll-indicator">
+    <div class="scroll-indicator" aria-hidden="true">
       <div class="scroll-mouse">
         <div class="scroll-wheel"></div>
       </div>
@@ -84,37 +184,161 @@
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about" class="section">
-    <!-- Content will be dynamically loaded -->
-  </section>
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <!-- Content will be dynamically loaded -->
+      </div>
+    </section>
 
-  <!-- Projects Section -->
-  <section id="projects" class="section">
-    <!-- Content will be dynamically loaded -->
-  </section>
+    <!-- Skills Section -->
+    <section id="skills" class="section skills-section">
+      <div class="container">
+        <h2 class="section-title">Skills & Expertise</h2>
+        <!-- Content will be dynamically loaded -->
+      </div>
+    </section>
 
-  <!-- Activity Section -->
-  <section id="activity" class="section">
-    <!-- Content will be dynamically loaded -->
-  </section>
+    <!-- Projects Section -->
+    <section id="projects" class="section projects-section">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-controls">
+          <div class="search-box">
+            <input type="search" id="project-search" placeholder="Search projects..." aria-label="Search projects">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          <div class="filter-buttons" role="group" aria-label="Project filters">
+            <!-- Filters will be dynamically generated -->
+          </div>
+        </div>
+        <div class="projects-grid" id="projects-grid">
+          <!-- Content will be dynamically loaded -->
+        </div>
+      </div>
+    </section>
 
-  <!-- Connect Section -->
-  <section id="connect" class="section">
-    <!-- Content will be dynamically loaded -->
-  </section>
+    <!-- GitHub Activity Dashboard -->
+    <section id="activity" class="section activity-section">
+      <div class="container">
+        <h2 class="section-title">GitHub Activity</h2>
+        <!-- Content will be dynamically loaded -->
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="section achievements-section">
+      <div class="container">
+        <h2 class="section-title">Achievements & Certifications</h2>
+        <div class="achievements-grid">
+          <!-- Content will be dynamically loaded -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section testimonials-section">
+      <div class="container">
+        <h2 class="section-title">What People Say</h2>
+        <div class="testimonials-carousel">
+          <!-- Content will be dynamically loaded -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+          <div class="contact-info">
+            <h3>Let's Connect</h3>
+            <p>Feel free to reach out for collaborations or just a friendly chat!</p>
+            <div class="contact-links">
+              <!-- Links will be dynamically loaded -->
+            </div>
+          </div>
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required aria-required="true">
+              <span class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required aria-required="true">
+              <span class="form-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+              <span class="form-error" role="alert"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <span>Send Message</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+            <div class="form-status" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="footer-content">
-      <p class="footer-message">Thanks For Visiting 💖</p>
-      <p class="footer-copyright">
-        © 2024 SaOYaD. Built with passion and code.
-      </p>
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>SaOYaD</h3>
+          <p>Building the future, one line of code at a time.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <div class="footer-social">
+            <!-- Social links will be dynamically loaded -->
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-message">Thanks For Visiting 💖</p>
+        <p class="footer-copyright">
+          © 2026 SaOYaD. Built with passion and cutting-edge web technologies.
+        </p>
+      </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="script.js"></script>
+  <script src="script.js" type="module"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed'));
+      });
+    }
+  </script>
 </body>
 </html>
