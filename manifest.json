@@ -1,0 +1,23 @@
+{
+  "name": "SaOYaD - Premium Portfolio",
+  "short_name": "SaOYaD",
+  "description": "Full-Stack Developer & Linux Enthusiast - Premium Portfolio Website",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A0B2E",
+  "theme_color": "#1A0B2E",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo.avif",
+      "sizes": "512x512",
+      "type": "image/avif",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "developer", "technology"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

@@ -1,0 +1,22 @@
+# Backup files
+*.backup
+
+# Node modules (if added later)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
