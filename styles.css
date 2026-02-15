@@ -773,3 +773,93 @@
   background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
+
+/* ==================== Multi-Theme Support ==================== */
+
+/* Cyberpunk Theme */
+[data-theme="cyberpunk"] {
+  --primary-pink: #00F0FF;
+  --lavender: #00F0FF;
+  --soft-purple: #FF006E;
+  --deep-purple: #0D0221;
+  --glass-bg: rgba(0, 240, 255, 0.1);
+  --glass-border: rgba(0, 240, 255, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+[data-theme="cyberpunk"] body {
+  background: linear-gradient(135deg, #0D0221, #1a0b2e, #0D0221);
+}
+
+/* Neon Nights Theme */
+[data-theme="neon"] {
+  --primary-pink: #B537F2;
+  --lavender: #E0B0FF;
+  --soft-purple: #B537F2;
+  --deep-purple: #0A0E27;
+  --glass-bg: rgba(181, 55, 242, 0.1);
+  --glass-border: rgba(181, 55, 242, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(181, 55, 242, 0.4);
+}
+
+[data-theme="neon"] body {
+  background: linear-gradient(135deg, #0A0E27, #1A0B2E, #0A0E27);
+}
+
+/* Pastel Dreams Theme */
+[data-theme="pastel"] {
+  --primary-pink: #FFB6C1;
+  --lavender: #E6E6FA;
+  --soft-purple: #DDA0DD;
+  --deep-purple: #FFF5F7;
+  --glass-bg: rgba(255, 182, 193, 0.2);
+  --glass-border: rgba(255, 182, 193, 0.3);
+  --shadow-glow-pink: 0 0 15px rgba(255, 182, 193, 0.3);
+}
+
+[data-theme="pastel"] body {
+  background: linear-gradient(135deg, #FFF5F7, #FFE4E9, #FFF5F7);
+}
+
+/* Midnight Blue Theme */
+[data-theme="midnight"] {
+  --primary-pink: #4A90E2;
+  --lavender: #B0C4DE;
+  --soft-purple: #6495ED;
+  --deep-purple: #0C1445;
+  --glass-bg: rgba(74, 144, 226, 0.1);
+  --glass-border: rgba(74, 144, 226, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(74, 144, 226, 0.4);
+}
+
+[data-theme="midnight"] body {
+  background: linear-gradient(135deg, #0C1445, #1A1F4E, #0C1445);
+}
+
+/* Theme-specific text colors */
+[data-theme="pastel"],
+[data-theme="light"] {
+  color: #6B4E71;
+}
+
+[data-theme="pastel"] .nav-logo,
+[data-theme="light"] .nav-logo,
+[data-theme="pastel"] .nav-link,
+[data-theme="light"] .nav-link {
+  color: #6B4E71;
+}
+
+[data-theme="cyberpunk"] .nav-logo,
+[data-theme="cyberpunk"] .nav-link {
+  color: #00F0FF;
+}
+
+[data-theme="neon"] .nav-logo,
+[data-theme="neon"] .nav-link {
+  color: #E0B0FF;
+}
+
+[data-theme="midnight"] .nav-logo,
+[data-theme="midnight"] .nav-link {
+  color: #B0C4DE;
+}
