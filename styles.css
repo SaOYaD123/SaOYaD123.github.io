@@ -113,17 +113,17 @@
 
 @keyframes profilePulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 182, 193, 0.5),
-                0 0 40px rgba(255, 182, 193, 0.3),
-                inset 0 0 10px rgba(255, 182, 193, 0.2);
+    box-shadow: 0 0 15px rgba(255, 182, 193, 0.3),
+                0 0 25px rgba(255, 182, 193, 0.2),
+                inset 0 0 8px rgba(255, 182, 193, 0.15);
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 182, 193, 0.8),
-                0 0 60px rgba(255, 182, 193, 0.5),
-                0 0 80px rgba(255, 182, 193, 0.3),
-                inset 0 0 20px rgba(255, 182, 193, 0.4);
-    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.5),
+                0 0 35px rgba(255, 182, 193, 0.3),
+                0 0 50px rgba(255, 182, 193, 0.2),
+                inset 0 0 15px rgba(255, 182, 193, 0.25);
+    transform: scale(1.02);
   }
 }
 
@@ -146,11 +146,11 @@
     filter: hue-rotate(0deg);
   }
   30% {
-    transform: rotate(5deg) scale(1.1);
+    transform: rotate(3deg) scale(1.05);
     filter: hue-rotate(90deg);
   }
   60% {
-    transform: rotate(-5deg) scale(1.15);
+    transform: rotate(-3deg) scale(1.05);
     filter: hue-rotate(180deg);
   }
   100% {
@@ -809,4 +809,286 @@
 [data-theme="midnight"] .nav-logo,
 [data-theme="midnight"] .nav-link {
   color: #B0C4DE;
+}
+
+/* ==================== Mobile Responsive Design ==================== */
+
+/* Tablet: 768px - 1024px */
+@media (max-width: 1024px) {
+  :root {
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3.5rem;
+  }
+  
+  /* Reduce backdrop blur for better performance */
+  .glass-card,
+  .project-card,
+  .skill-card,
+  .achievement-card,
+  .testimonial-card,
+  .stat-card {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* Mobile: 480px - 768px */
+@media (max-width: 768px) {
+  :root {
+    --spacing-xl: 1.5rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 3rem;
+    --glass-blur: 20px;
+  }
+  
+  /* Typography adjustments for mobile */
+  h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    line-height: 1.4;
+  }
+  
+  p {
+    font-size: clamp(0.95rem, 3.5vw, 1rem);
+    line-height: 1.6;
+  }
+  
+  /* Reduce blur on mobile for performance */
+  .glass-card,
+  .project-card,
+  .skill-card,
+  .achievement-card,
+  .testimonial-card,
+  .stat-card {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+  
+  /* Optimize fluid background on mobile */
+  .fluid-background {
+    filter: blur(40px);
+    opacity: 0.2;
+  }
+  
+  /* Card grids - single column on mobile */
+  .projects-grid,
+  .skills-grid,
+  .achievements-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-lg);
+  }
+  
+  /* Touch target improvements (min 44x44px) */
+  button,
+  .btn,
+  .nav-link,
+  a[role="button"],
+  .theme-toggle,
+  .back-to-top {
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  /* Navigation adjustments */
+  nav {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .nav-links {
+    gap: var(--spacing-sm);
+  }
+  
+  .nav-link {
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  /* Spacing adjustments */
+  section {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+  
+  /* Button adjustments */
+  .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 0.95rem;
+  }
+  
+  /* Card padding reduction */
+  .glass-card,
+  .project-card,
+  .skill-card,
+  .achievement-card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Small Mobile: < 480px */
+@media (max-width: 480px) {
+  :root {
+    --spacing-xl: 1.25rem;
+    --spacing-2xl: 1.75rem;
+    --spacing-3xl: 2.5rem;
+  }
+  
+  /* Further typography reduction */
+  h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+  }
+  
+  p {
+    font-size: clamp(0.9rem, 3.2vw, 0.95rem);
+  }
+  
+  /* Minimal blur on small mobile */
+  .glass-card,
+  .project-card,
+  .skill-card,
+  .achievement-card,
+  .testimonial-card,
+  .stat-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Fluid background further optimized */
+  .fluid-background {
+    filter: blur(30px);
+    opacity: 0.15;
+  }
+  
+  /* Tighter spacing on small screens */
+  section {
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+  
+  /* Navigation stack on very small screens */
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* Button full width on small screens */
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Hero buttons stack */
+  .hero-buttons {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+  }
+  
+  /* Reduce card padding further */
+  .glass-card,
+  .project-card,
+  .skill-card,
+  .achievement-card {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects, add tap feedback */
+  .btn:hover,
+  .nav-link:hover,
+  .card:hover {
+    transform: none;
+  }
+  
+  .btn:active,
+  .nav-link:active,
+  .card:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  /* Disable 3D effects on touch devices */
+  .card-3d {
+    transform: none !important;
+  }
+  
+  /* Make interactive elements more touch-friendly */
+  a,
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: rgba(255, 182, 193, 0.2);
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape */
+  section {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+  }
+  
+  .hero-section {
+    min-height: auto;
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+}
+
+/* Fix overflow issues */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+  
+  * {
+    max-width: 100%;
+  }
+  
+  img,
+  video,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* High DPI / Retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Optimize images and effects for retina */
+  .fluid-background {
+    filter: blur(50px);
+  }
+}
+
+/* Dark mode + mobile combined */
+@media (max-width: 768px) {
+  [data-theme="light"] .glass-card,
+  [data-theme="light"] .project-card,
+  [data-theme="light"] .skill-card,
+  [data-theme="light"] .achievement-card {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
 }

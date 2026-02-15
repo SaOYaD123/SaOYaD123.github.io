@@ -12,8 +12,8 @@ class BMWDriftAnimation {
     this.config = {
       animationDuration: this.isMobile ? 2500 : 3500,
       driftAngle: this.isMobile ? 0 : -15,
-      smokeParticleCount: this.isMobile ? 8 : 18,
-      smokeSize: { min: 10, max: 30 },
+      smokeParticleCount: this.isMobile ? 5 : 10,
+      smokeSize: { min: 8, max: 20 },
       carStartX: -100,
       carEndX: window.innerWidth + 200,
       carY: this.isMobile ? '60%' : '50%',
@@ -133,7 +133,7 @@ class BMWDriftAnimation {
 
         // Add wobble effect for drift
         if (!this.isMobile) {
-          const wobble = Math.sin(progress * Math.PI * 4) * 3;
+          const wobble = Math.sin(progress * Math.PI * 4) * 2;
           this.carElement.style.transform = 
             `translateY(-50%) rotate(${this.config.driftAngle + wobble}deg)`;
         }
@@ -179,10 +179,10 @@ class BMWDriftAnimation {
       top: ${y}px;
       width: ${size}px;
       height: ${size}px;
-      background: radial-gradient(circle, rgba(200, 200, 220, 0.6), transparent);
+      background: radial-gradient(circle, rgba(200, 200, 220, 0.4), transparent);
       border-radius: 50%;
       pointer-events: none;
-      filter: blur(8px);
+      filter: blur(6px);
       opacity: 1;
       transform: scale(1);
     `;
@@ -193,15 +193,15 @@ class BMWDriftAnimation {
     // Animate smoke
     particle.animate([
       { 
-        opacity: 0.6, 
+        opacity: 0.4, 
         transform: `translate(0, 0) scale(1)` 
       },
       { 
         opacity: 0, 
-        transform: `translate(${this.randomBetween(-40, -80)}px, ${this.randomBetween(-20, 20)}px) scale(2)` 
+        transform: `translate(${this.randomBetween(-30, -60)}px, ${this.randomBetween(-15, 15)}px) scale(1.5)` 
       }
     ], {
-      duration: 1500,
+      duration: 1200,
       easing: 'ease-out',
       fill: 'forwards'
     }).onfinish = () => {

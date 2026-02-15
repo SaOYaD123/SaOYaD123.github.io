@@ -98,9 +98,9 @@ class PerformanceMode {
       
       // Reduce particle count
       if (window.particleEngine) {
-        window.particleEngine.config.particleCount = 15;
+        window.particleEngine.config.particleCount = 10;
         window.particleEngine.config.meteorCount = 0;
-        window.particleEngine.config.orbCount = 2;
+        window.particleEngine.config.orbCount = 1;
       }
 
       // Disable cursor trail
@@ -118,9 +118,9 @@ class PerformanceMode {
       // Restore full particle count
       if (window.particleEngine) {
         const isMobile = window.innerWidth < 768;
-        window.particleEngine.config.particleCount = isMobile ? 25 : 50;
-        window.particleEngine.config.meteorCount = isMobile ? 2 : 5;
-        window.particleEngine.config.orbCount = isMobile ? 3 : 7;
+        window.particleEngine.config.particleCount = isMobile ? 15 : 30;
+        window.particleEngine.config.meteorCount = isMobile ? 1 : 3;
+        window.particleEngine.config.orbCount = isMobile ? 2 : 5;
       }
 
       // Re-enable cursor trail

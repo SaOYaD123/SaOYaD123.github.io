@@ -12,9 +12,9 @@ class ParticleEngine {
     this.isMobile = window.innerWidth < 768;
     
     this.config = {
-      particleCount: this.isMobile ? 25 : 50,
-      meteorCount: this.isMobile ? 2 : 5,
-      orbCount: this.isMobile ? 3 : 7,
+      particleCount: this.isMobile ? 15 : 30,
+      meteorCount: this.isMobile ? 1 : 3,
+      orbCount: this.isMobile ? 2 : 5,
       constellationDistance: 150,
       cursorRepelDistance: 100,
       cursorRepelForce: 0.5
@@ -259,10 +259,10 @@ class FloatingOrb {
     this.y = Math.random() * canvasHeight;
     this.baseX = this.x;
     this.baseY = this.y;
-    this.size = Math.random() * 40 + 20;
+    this.size = Math.random() * 25 + 15;
     this.angle = Math.random() * Math.PI * 2;
-    this.speed = Math.random() * 0.01 + 0.005;
-    this.radius = Math.random() * 50 + 30;
+    this.speed = Math.random() * 0.008 + 0.004;
+    this.radius = Math.random() * 40 + 25;
     this.color = this.randomGlowColor();
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
@@ -289,8 +289,8 @@ class FloatingOrb {
       this.x, this.y, this.size
     );
     
-    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.6)`);
-    gradient.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.3)`);
+    gradient.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.4)`);
+    gradient.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.2)`);
     gradient.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`);
 
     ctx.fillStyle = gradient;
