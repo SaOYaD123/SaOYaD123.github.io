@@ -73,17 +73,17 @@ class Card3DEffects {
       const centerX = leftX - bounds.width / 2;
       const centerY = topY - bounds.height / 2;
 
-      const rotateX = (centerY / bounds.height) * -15;
-      const rotateY = (centerX / bounds.width) * 15;
+      const rotateX = (centerY / bounds.height) * -8;
+      const rotateY = (centerX / bounds.width) * 8;
 
-      const brightness = 1 + (Math.abs(centerX) + Math.abs(centerY)) / (bounds.width + bounds.height) * 0.2;
+      const brightness = 1 + (Math.abs(centerX) + Math.abs(centerY)) / (bounds.width + bounds.height) * 0.1;
 
       card.style.transform = `
         perspective(${window.CSS && CSS.supports('perspective', '1000px') ? '1000px' : ''}))
         rotateX(${rotateX}deg) 
         rotateY(${rotateY}deg)
-        translateZ(20px)
-        scale3d(1.02, 1.02, 1.02)
+        translateZ(15px)
+        scale3d(1.01, 1.01, 1.01)
       `;
 
       card.style.filter = `brightness(${brightness})`;
@@ -125,13 +125,13 @@ class Card3DEffects {
       const deltaX = touch.clientX - touchStartX;
       const deltaY = touch.clientY - touchStartY;
 
-      const rotateX = (deltaY / bounds.height) * -10;
-      const rotateY = (deltaX / bounds.width) * 10;
+      const rotateX = (deltaY / bounds.height) * -6;
+      const rotateY = (deltaX / bounds.width) * 6;
 
       card.style.transform = `
         rotateX(${rotateX}deg) 
         rotateY(${rotateY}deg)
-        translateZ(10px)
+        translateZ(8px)
       `;
     }, 16);
 

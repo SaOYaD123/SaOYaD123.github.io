@@ -4,7 +4,7 @@ class CursorTrail {
     this.cursorDot = null;
     this.cursorOutline = null;
     this.trail = [];
-    this.trailLength = 8;
+    this.trailLength = 5;
     this.mouse = { x: 0, y: 0 };
     this.isDesktop = window.innerWidth >= 1024 && !('ontouchstart' in window);
     this.enabled = this.isDesktop && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -68,14 +68,14 @@ class CursorTrail {
       trailElement.className = 'cursor-trail-item';
       trailElement.style.cssText = `
         position: fixed;
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         background: radial-gradient(circle, var(--neon-purple), transparent);
         border-radius: 50%;
         pointer-events: none;
         z-index: ${9998 - i};
         transform: translate(-50%, -50%);
-        opacity: ${(this.trailLength - i) / this.trailLength * 0.5};
+        opacity: ${(this.trailLength - i) / this.trailLength * 0.3};
         filter: blur(2px);
       `;
       document.body.appendChild(trailElement);
@@ -190,13 +190,13 @@ class CursorTrail {
 
   createClickBurst() {
     // Create burst particles on click
-    const particleCount = 8;
+    const particleCount = 6;
     const particles = [];
 
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div');
       const angle = (Math.PI * 2 * i) / particleCount;
-      const velocity = 100;
+      const velocity = 80;
       
       particle.style.cssText = `
         position: fixed;
