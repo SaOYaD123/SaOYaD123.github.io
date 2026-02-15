@@ -1111,6 +1111,7 @@ class FormValidator {
 // ==================== Intersection Observer for Animations ====================
 class AnimationObserver {
   constructor() {
+    this.timeouts = new Map();
     this.init();
   }
 
@@ -1119,6 +1120,26 @@ class AnimationObserver {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('animated');
+          
+          // Stagger animation for child elements
+          const children = entry.target.querySelectorAll('.project-card, .skill-category, .achievement-card, .stat-card');
+          children.forEach((child, index) => {
+            const timeoutId = setTimeout(() => {
+              child.classList.add('animated');
+            }, index * 100);
+            
+            // Store timeout ID for cleanup
+            const timeouts = this.timeouts.get(entry.target) || [];
+            timeouts.push(timeoutId);
+            this.timeouts.set(entry.target, timeouts);
+          });
+        } else {
+          // Clear pending timeouts when element leaves viewport
+          const timeouts = this.timeouts.get(entry.target);
+          if (timeouts) {
+            timeouts.forEach(id => clearTimeout(id));
+            this.timeouts.delete(entry.target);
+          }
         }
       });
     }, {
@@ -1127,7 +1148,11 @@ class AnimationObserver {
     });
 
     document.querySelectorAll('.animate-on-scroll, .section').forEach(el => {
-      el.classList.add('animate-on-scroll');
+      observer.observe(el);
+    });
+    
+    // Observe grid items individually
+    document.querySelectorAll('.project-card, .skill-category, .achievement-card').forEach(el => {
       observer.observe(el);
     });
   }
@@ -1151,6 +1176,54 @@ class LoadingScreen {
   }
 }
 
+// ==================== Parallax Effect ====================
+class ParallaxEffect {
+  constructor() {
+    this.heroContent = null;
+    this.floatingShapes = null;
+    this.ticking = false;
+    this.init();
+  }
+
+  init() {
+    const heroSection = document.querySelector('.hero-section');
+    this.floatingShapes = document.querySelector('.floating-shapes');
+    
+    if (!heroSection) return;
+
+    this.heroContent = heroSection.querySelector('.hero-content');
+
+    window.addEventListener('scroll', () => {
+      if (!this.ticking) {
+        window.requestAnimationFrame(() => {
+          this.updateParallax();
+          this.ticking = false;
+        });
+        this.ticking = true;
+      }
+    });
+  }
+
+  updateParallax() {
+    const scrolled = window.pageYOffset;
+    const parallaxSpeed = 0.5;
+    
+    // Parallax for hero content
+    if (scrolled < window.innerHeight && this.heroContent) {
+      const translateY = scrolled * parallaxSpeed;
+      const opacity = 1 - (scrolled / window.innerHeight);
+      this.heroContent.style.transform = `translateY(${translateY}px)`;
+      this.heroContent.style.opacity = opacity;
+    }
+    
+    // Parallax for floating shapes
+    if (this.floatingShapes && scrolled < window.innerHeight) {
+      const translateY = scrolled * 0.3;
+      this.floatingShapes.style.transform = `translateY(${translateY}px)`;
+    }
+  }
+}
+
 // ==================== Main Application ====================
 class PortfolioApp {
   constructor() {
@@ -1171,6 +1244,9 @@ class PortfolioApp {
     // Initialize scroll features
     new ScrollProgress();
     new BackToTop();
+    
+    // Initialize parallax effects
+    new ParallaxEffect();
     
     // Initialize custom cursor
     new CustomCursor();
