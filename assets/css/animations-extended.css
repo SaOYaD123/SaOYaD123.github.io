@@ -1,0 +1,439 @@
+/* ==================== Extended Animations for 2026 Aesthetic ==================== */
+
+/* Logo Profile Pulse & Spin Animations */
+.nav-logo img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--primary-pink);
+  box-shadow: var(--shadow-glow-pink);
+  transition: var(--transition-smooth);
+  animation: profilePulse 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+
+@keyframes profilePulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.5),
+                0 0 40px rgba(255, 182, 193, 0.3),
+                inset 0 0 10px rgba(255, 182, 193, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 182, 193, 0.8),
+                0 0 60px rgba(255, 182, 193, 0.5),
+                0 0 80px rgba(255, 182, 193, 0.3),
+                inset 0 0 20px rgba(255, 182, 193, 0.4);
+    transform: scale(1.05);
+  }
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+  color: var(--primary-pink);
+}
+
+.nav-logo:hover img {
+  animation: profileSpinRainbow 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 0 40px rgba(255, 182, 193, 1),
+              0 0 60px rgba(230, 230, 250, 0.6),
+              0 0 80px rgba(221, 160, 221, 0.4),
+              inset 0 0 30px rgba(255, 182, 193, 0.5);
+}
+
+@keyframes profileSpinRainbow {
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: hue-rotate(0deg);
+  }
+  30% {
+    transform: rotate(5deg) scale(1.1);
+    filter: hue-rotate(90deg);
+  }
+  60% {
+    transform: rotate(-5deg) scale(1.15);
+    filter: hue-rotate(180deg);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Fluid Morphing Background */
+@keyframes fluidMorph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    background-position: 0% 50%;
+  }
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    background-position: 50% 50%;
+  }
+  50% {
+    border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+    background-position: 100% 50%;
+  }
+  75% {
+    border-radius: 60% 40% 60% 40% / 70% 30% 50% 60%;
+    background-position: 50% 100%;
+  }
+}
+
+.fluid-background {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(
+    45deg,
+    var(--primary-pink),
+    var(--lavender),
+    var(--soft-purple),
+    var(--neon-cyan),
+    var(--neon-purple),
+    var(--mint),
+    var(--peach)
+  );
+  background-size: 400% 400%;
+  animation: fluidMorph 20s ease-in-out infinite;
+  filter: blur(60px);
+  opacity: 0.3;
+  z-index: var(--z-particles);
+}
+
+/* 3D Card Tilt Effect */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-spring);
+  will-change: transform;
+}
+
+.card-3d-container {
+  perspective: var(--perspective);
+}
+
+.card-3d:hover {
+  transform: translateY(-10px) translateZ(50px);
+}
+
+.card-3d-inner {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-spring);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateZ(0);
+  }
+  50% {
+    transform: translateY(-20px) translateZ(20px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glow Pulse Effects */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor,
+                0 0 40px currentColor;
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Slide In Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Elastic Bounce */
+@keyframes elasticBounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.25);
+  }
+  40% {
+    transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  80% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.elastic-bounce {
+  animation: elasticBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Ripple Effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Neon Glow */
+@keyframes neonGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px var(--neon-cyan),
+                 0 0 20px var(--neon-cyan),
+                 0 0 30px var(--neon-purple);
+  }
+  50% {
+    text-shadow: 0 0 20px var(--neon-cyan),
+                 0 0 40px var(--neon-purple),
+                 0 0 60px var(--neon-pink);
+  }
+}
+
+.neon-text {
+  animation: neonGlow 2s ease-in-out infinite;
+}
+
+/* Rotation Utilities */
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-360 {
+  animation: rotate360 4s linear infinite;
+}
+
+/* Fade In/Out */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Scale In/Out */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.scale-out {
+  animation: scaleOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Meteor Shower */
+@keyframes meteorShower {
+  0% {
+    transform: translateX(0) translateY(0) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--neon-cyan),
+    transparent
+  );
+  animation: meteorShower 2s linear infinite;
+}
+
+/* Constellation Line Animation */
+@keyframes constellationPulse {
+  0%, 100% {
+    opacity: 0.3;
+    stroke-width: 1;
+  }
+  50% {
+    opacity: 0.8;
+    stroke-width: 2;
+  }
+}
+
+.constellation-line {
+  animation: constellationPulse 3s ease-in-out infinite;
+}
+
+/* Loading Skeleton */
+@keyframes skeleton {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200px 100%;
+  animation: skeleton 1.5s ease-in-out infinite;
+}

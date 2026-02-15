@@ -1,3 +1,105 @@
+/* ==================== CSS Custom Properties & Variables ==================== */
+:root {
+  /* 2026 Enhanced Color Palette */
+  --primary-pink: #FFB6C1;
+  --lavender: #E6E6FA;
+  --soft-purple: #DDA0DD;
+  --mint: #98FF98;
+  --peach: #FFDAB9;
+  --deep-purple: #1A0B2E;
+  
+  /* Neon Colors for 2026 */
+  --neon-cyan: #00F0FF;
+  --neon-purple: #B537F2;
+  --neon-pink: #FF006E;
+  --neon-yellow: #FFE600;
+  
+  /* BMW M4 Drift Effects */
+  --drift-smoke: rgba(200, 200, 220, 0.6);
+  --tire-mark: rgba(20, 20, 25, 0.7);
+  --underglow: linear-gradient(90deg, #00F0FF, #B537F2);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.08);
+  --glass-blur: 40px;
+  
+  /* Shadows & Depths */
+  --shadow-glow-pink: 0 0 20px rgba(255, 182, 193, 0.4);
+  --shadow-glow-purple: 0 0 20px rgba(221, 160, 221, 0.4);
+  --shadow-glow-cyan: 0 0 20px rgba(0, 240, 255, 0.4);
+  --shadow-neumorphic: 8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.05);
+  
+  /* Spacing & Sizing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-slow: 0.6s ease-in-out;
+  
+  /* Typography */
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Quicksand', sans-serif;
+  
+  /* 3D Perspective */
+  --perspective: 1000px;
+  --perspective-far: 2000px;
+  
+  /* Z-Index Layers */
+  --z-particles: -1;
+  --z-background: 0;
+  --z-content: 1;
+  --z-card: 10;
+  --z-nav: 100;
+  --z-modal: 1000;
+  --z-cursor: 9999;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] {
+  --deep-purple: #f5f5ff;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.8);
+  --shadow-neumorphic: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU Acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* ==================== Extended Animations for 2026 Aesthetic ==================== */
+
+/* Logo Profile Pulse & Spin Animations */
 .nav-logo img {
   width: 40px;
   height: 40px;
@@ -6,6 +108,7 @@
   box-shadow: var(--shadow-glow-pink);
   transition: var(--transition-smooth);
   animation: profilePulse 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
 }
 
 @keyframes profilePulse {
@@ -30,24 +133,680 @@
 }
 
 .nav-logo:hover img {
-  animation: profileSpin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: profileSpinRainbow 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 0 0 40px rgba(255, 182, 193, 1),
               0 0 60px rgba(230, 230, 250, 0.6),
               0 0 80px rgba(221, 160, 221, 0.4),
               inset 0 0 30px rgba(255, 182, 193, 0.5);
 }
 
-@keyframes profileSpin {
+@keyframes profileSpinRainbow {
   0% {
     transform: rotate(0deg) scale(1);
+    filter: hue-rotate(0deg);
   }
   30% {
     transform: rotate(5deg) scale(1.1);
+    filter: hue-rotate(90deg);
   }
   60% {
     transform: rotate(-5deg) scale(1.15);
+    filter: hue-rotate(180deg);
   }
   100% {
     transform: rotate(0deg) scale(1);
+    filter: hue-rotate(360deg);
   }
+}
+
+/* Fluid Morphing Background */
+@keyframes fluidMorph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    background-position: 0% 50%;
+  }
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    background-position: 50% 50%;
+  }
+  50% {
+    border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+    background-position: 100% 50%;
+  }
+  75% {
+    border-radius: 60% 40% 60% 40% / 70% 30% 50% 60%;
+    background-position: 50% 100%;
+  }
+}
+
+.fluid-background {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(
+    45deg,
+    var(--primary-pink),
+    var(--lavender),
+    var(--soft-purple),
+    var(--neon-cyan),
+    var(--neon-purple),
+    var(--mint),
+    var(--peach)
+  );
+  background-size: 400% 400%;
+  animation: fluidMorph 20s ease-in-out infinite;
+  filter: blur(60px);
+  opacity: 0.3;
+  z-index: var(--z-particles);
+}
+
+/* 3D Card Tilt Effect */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-spring);
+  will-change: transform;
+}
+
+.card-3d-container {
+  perspective: var(--perspective);
+}
+
+.card-3d:hover {
+  transform: translateY(-10px) translateZ(50px);
+}
+
+.card-3d-inner {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-spring);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateZ(0);
+  }
+  50% {
+    transform: translateY(-20px) translateZ(20px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glow Pulse Effects */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor,
+                0 0 40px currentColor;
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Slide In Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Elastic Bounce */
+@keyframes elasticBounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.25);
+  }
+  40% {
+    transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  80% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.elastic-bounce {
+  animation: elasticBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Ripple Effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Neon Glow */
+@keyframes neonGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px var(--neon-cyan),
+                 0 0 20px var(--neon-cyan),
+                 0 0 30px var(--neon-purple);
+  }
+  50% {
+    text-shadow: 0 0 20px var(--neon-cyan),
+                 0 0 40px var(--neon-purple),
+                 0 0 60px var(--neon-pink);
+  }
+}
+
+.neon-text {
+  animation: neonGlow 2s ease-in-out infinite;
+}
+
+/* Rotation Utilities */
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-360 {
+  animation: rotate360 4s linear infinite;
+}
+
+/* Fade In/Out */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Scale In/Out */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.scale-out {
+  animation: scaleOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Meteor Shower */
+@keyframes meteorShower {
+  0% {
+    transform: translateX(0) translateY(0) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--neon-cyan),
+    transparent
+  );
+  animation: meteorShower 2s linear infinite;
+}
+
+/* Constellation Line Animation */
+@keyframes constellationPulse {
+  0%, 100% {
+    opacity: 0.3;
+    stroke-width: 1;
+  }
+  50% {
+    opacity: 0.8;
+    stroke-width: 2;
+  }
+}
+
+.constellation-line {
+  animation: constellationPulse 3s ease-in-out infinite;
+}
+
+/* Loading Skeleton */
+@keyframes skeleton {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200px 100%;
+  animation: skeleton 1.5s ease-in-out infinite;
+}
+
+/* ==================== Additional 2026 Styles ==================== */
+
+/* Glassmorphism Card Base */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-neumorphic);
+  transition: all var(--transition-smooth);
+}
+
+.glass-card:hover {
+  background: var(--glass-hover);
+  box-shadow: var(--shadow-glow-pink), var(--shadow-neumorphic);
+}
+
+/* 3D Perspective Containers */
+.card-3d-container {
+  perspective: var(--perspective);
+  perspective-origin: center;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-spring);
+  will-change: transform;
+  position: relative;
+}
+
+.card-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(255, 182, 193, 0.2),
+    transparent 50%
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+  pointer-events: none;
+}
+
+.card-3d:hover::before {
+  opacity: 1;
+}
+
+/* Fluid Background Positioning */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.fluid-background {
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    var(--primary-pink),
+    var(--lavender),
+    var(--soft-purple),
+    var(--neon-cyan),
+    var(--neon-purple),
+    var(--mint),
+    var(--peach)
+  );
+  background-size: 400% 400%;
+  animation: fluidMorph 20s ease-in-out infinite;
+  filter: blur(80px);
+  opacity: 0.25;
+  z-index: var(--z-particles);
+  pointer-events: none;
+}
+
+/* BMW Drift Container Styles */
+.bmw-drift-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+/* Enhanced Cursor Styles */
+.custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--z-cursor);
+}
+
+.cursor-dot,
+.cursor-outline {
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+/* Particle Canvas Full Screen */
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-particles);
+  pointer-events: none;
+}
+
+/* Card Enhancements for Projects, Skills, Achievements */
+.project-card,
+.skill-card,
+.achievement-card,
+.testimonial-card,
+.stat-card {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-smooth);
+  will-change: transform;
+}
+
+/* Hide custom cursor on mobile */
+@media (max-width: 1023px) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .fluid-background,
+  .bmw-drift-container,
+  .meteor,
+  .floating,
+  .rotate-360,
+  .shimmer {
+    animation: none !important;
+  }
+  
+  .card-3d {
+    transform: none !important;
+  }
+}
+
+/* Performance optimizations */
+.gpu-accelerated,
+.card-3d,
+.bmw-car,
+.particle,
+.cursor-trail-item {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Light theme adjustments for new elements */
+[data-theme="light"] .fluid-background {
+  opacity: 0.15;
+}
+
+[data-theme="light"] .glass-card,
+[data-theme="light"] .project-card,
+[data-theme="light"] .skill-card,
+[data-theme="light"] .achievement-card {
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== Multi-Theme Support ==================== */
+
+/* Cyberpunk Theme */
+[data-theme="cyberpunk"] {
+  --primary-pink: #00F0FF;
+  --lavender: #00F0FF;
+  --soft-purple: #FF006E;
+  --deep-purple: #0D0221;
+  --glass-bg: rgba(0, 240, 255, 0.1);
+  --glass-border: rgba(0, 240, 255, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+[data-theme="cyberpunk"] body {
+  background: linear-gradient(135deg, #0D0221, #1a0b2e, #0D0221);
+}
+
+/* Neon Nights Theme */
+[data-theme="neon"] {
+  --primary-pink: #B537F2;
+  --lavender: #E0B0FF;
+  --soft-purple: #B537F2;
+  --deep-purple: #0A0E27;
+  --glass-bg: rgba(181, 55, 242, 0.1);
+  --glass-border: rgba(181, 55, 242, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(181, 55, 242, 0.4);
+}
+
+[data-theme="neon"] body {
+  background: linear-gradient(135deg, #0A0E27, #1A0B2E, #0A0E27);
+}
+
+/* Pastel Dreams Theme */
+[data-theme="pastel"] {
+  --primary-pink: #FFB6C1;
+  --lavender: #E6E6FA;
+  --soft-purple: #DDA0DD;
+  --deep-purple: #FFF5F7;
+  --glass-bg: rgba(255, 182, 193, 0.2);
+  --glass-border: rgba(255, 182, 193, 0.3);
+  --shadow-glow-pink: 0 0 15px rgba(255, 182, 193, 0.3);
+}
+
+[data-theme="pastel"] body {
+  background: linear-gradient(135deg, #FFF5F7, #FFE4E9, #FFF5F7);
+}
+
+/* Midnight Blue Theme */
+[data-theme="midnight"] {
+  --primary-pink: #4A90E2;
+  --lavender: #B0C4DE;
+  --soft-purple: #6495ED;
+  --deep-purple: #0C1445;
+  --glass-bg: rgba(74, 144, 226, 0.1);
+  --glass-border: rgba(74, 144, 226, 0.2);
+  --shadow-glow-pink: 0 0 20px rgba(74, 144, 226, 0.4);
+}
+
+[data-theme="midnight"] body {
+  background: linear-gradient(135deg, #0C1445, #1A1F4E, #0C1445);
+}
+
+/* Theme-specific text colors */
+[data-theme="pastel"],
+[data-theme="light"] {
+  color: #6B4E71;
+}
+
+[data-theme="pastel"] .nav-logo,
+[data-theme="light"] .nav-logo,
+[data-theme="pastel"] .nav-link,
+[data-theme="light"] .nav-link {
+  color: #6B4E71;
+}
+
+[data-theme="cyberpunk"] .nav-logo,
+[data-theme="cyberpunk"] .nav-link {
+  color: #00F0FF;
+}
+
+[data-theme="neon"] .nav-logo,
+[data-theme="neon"] .nav-link {
+  color: #E0B0FF;
+}
+
+[data-theme="midnight"] .nav-logo,
+[data-theme="midnight"] .nav-link {
+  color: #B0C4DE;
 }
