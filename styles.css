@@ -97,6 +97,65 @@
   will-change: transform;
   backface-visibility: hidden;
 }
+
+/* ==================== Base Typography ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--lavender);
+  background: var(--deep-purple);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw + 0.5rem, 3rem);
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw + 0.5rem, 2rem);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: clamp(1.25rem, 2.5vw + 0.5rem, 1.5rem);
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+a {
+  color: var(--primary-pink);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+a:hover {
+  color: var(--soft-purple);
+}
+
 /* ==================== Extended Animations for 2026 Aesthetic ==================== */
 
 /* Logo Profile Pulse & Spin Animations */
@@ -212,7 +271,7 @@
 }
 
 .card-3d:hover {
-  transform: translateY(-10px) translateZ(50px);
+  transform: translateY(-5px) translateZ(30px);
 }
 
 .card-3d-inner {
@@ -226,7 +285,7 @@
     transform: translateY(0px) translateZ(0);
   }
   50% {
-    transform: translateY(-20px) translateZ(20px);
+    transform: translateY(-10px) translateZ(10px);
   }
 }
 
@@ -238,14 +297,13 @@
 @keyframes glowPulse {
   0%, 100% {
     box-shadow: 0 0 5px currentColor,
-                0 0 10px currentColor,
-                0 0 15px currentColor;
+                0 0 8px currentColor,
+                0 0 12px currentColor;
   }
   50% {
-    box-shadow: 0 0 10px currentColor,
-                0 0 20px currentColor,
-                0 0 30px currentColor,
-                0 0 40px currentColor;
+    box-shadow: 0 0 8px currentColor,
+                0 0 15px currentColor,
+                0 0 20px currentColor;
   }
 }
 
