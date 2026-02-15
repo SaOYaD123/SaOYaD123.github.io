@@ -941,7 +941,7 @@ a:hover {
   .projects-grid,
   .skills-grid,
   .achievements-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
     gap: var(--spacing-lg);
   }
   
@@ -1088,8 +1088,11 @@ a:hover {
   }
   
   /* Disable 3D effects on touch devices */
-  .card-3d {
-    transform: none !important;
+  .card-3d,
+  .card-3d:hover,
+  .card-3d:active {
+    transform: none;
+    transition: none;
   }
   
   /* Make interactive elements more touch-friendly */
