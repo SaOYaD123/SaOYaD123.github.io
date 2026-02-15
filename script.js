@@ -1148,13 +1148,11 @@ class AnimationObserver {
     });
 
     document.querySelectorAll('.animate-on-scroll, .section').forEach(el => {
-      el.classList.add('animate-on-scroll');
       observer.observe(el);
     });
     
     // Observe grid items individually
     document.querySelectorAll('.project-card, .skill-category, .achievement-card').forEach(el => {
-      el.classList.add('animate-on-scroll');
       observer.observe(el);
     });
   }

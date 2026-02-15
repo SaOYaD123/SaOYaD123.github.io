@@ -1369,7 +1369,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   transition: var(--transition-smooth);
-  will-change: transform, box-shadow;
   position: relative;
   overflow: hidden;
 }
@@ -1529,7 +1528,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   overflow: hidden;
   transition: var(--transition-smooth);
   cursor: pointer;
-  will-change: transform, box-shadow;
   position: relative;
 }
 
@@ -1782,7 +1780,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   transition: var(--transition-smooth);
   position: relative;
   overflow: hidden;
-  will-change: transform, box-shadow;
 }
 
 .achievement-card::before {
