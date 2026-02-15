@@ -994,7 +994,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   background-clip: text;
   position: relative;
   animation: fadeInUp 0.8s ease, gradientText 5s ease infinite;
-  will-change: background-position;
 }
 
 .section-title::after {
@@ -1067,7 +1066,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: gradientText 5s ease infinite, scaleIn 0.8s ease;
-  will-change: background-position;
 }
 
 @keyframes gradientText {
@@ -1156,8 +1154,6 @@ button:hover ~ .custom-cursor .cursor-outline {
   background: var(--gradient-primary);
   color: white;
   box-shadow: var(--shadow-soft);
-  animation: pulseGlow 3s ease-in-out infinite;
-  will-change: transform, box-shadow;
 }
 
 .btn-primary:hover {
