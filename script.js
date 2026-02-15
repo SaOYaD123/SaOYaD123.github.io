@@ -1119,6 +1119,14 @@ class AnimationObserver {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('animated');
+          
+          // Stagger animation for child elements
+          const children = entry.target.querySelectorAll('.project-card, .skill-category, .achievement-card, .stat-card');
+          children.forEach((child, index) => {
+            setTimeout(() => {
+              child.classList.add('animated');
+            }, index * 100);
+          });
         }
       });
     }, {
@@ -1127,6 +1135,12 @@ class AnimationObserver {
     });
 
     document.querySelectorAll('.animate-on-scroll, .section').forEach(el => {
+      el.classList.add('animate-on-scroll');
+      observer.observe(el);
+    });
+    
+    // Observe grid items individually
+    document.querySelectorAll('.project-card, .skill-category, .achievement-card').forEach(el => {
       el.classList.add('animate-on-scroll');
       observer.observe(el);
     });
@@ -1151,6 +1165,39 @@ class LoadingScreen {
   }
 }
 
+// ==================== Parallax Effect ====================
+class ParallaxEffect {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    const heroSection = document.querySelector('.hero-section');
+    const floatingShapes = document.querySelector('.floating-shapes');
+    
+    if (!heroSection) return;
+
+    window.addEventListener('scroll', throttle(() => {
+      const scrolled = window.pageYOffset;
+      const parallaxSpeed = 0.5;
+      
+      // Parallax for hero content
+      if (scrolled < window.innerHeight) {
+        const heroContent = heroSection.querySelector('.hero-content');
+        if (heroContent) {
+          heroContent.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+          heroContent.style.opacity = 1 - (scrolled / window.innerHeight);
+        }
+        
+        // Parallax for floating shapes
+        if (floatingShapes) {
+          floatingShapes.style.transform = `translateY(${scrolled * 0.3}px)`;
+        }
+      }
+    }, 16));
+  }
+}
+
 // ==================== Main Application ====================
 class PortfolioApp {
   constructor() {
@@ -1171,6 +1218,9 @@ class PortfolioApp {
     // Initialize scroll features
     new ScrollProgress();
     new BackToTop();
+    
+    // Initialize parallax effects
+    new ParallaxEffect();
     
     // Initialize custom cursor
     new CustomCursor();

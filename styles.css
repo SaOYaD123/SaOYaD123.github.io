@@ -1050,9 +1050,21 @@ button:hover ~ .custom-cursor .cursor-outline {
   font-weight: 800;
   margin-bottom: 1rem;
   background: var(--gradient-primary);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradientText 5s ease infinite, scaleIn 0.8s ease;
+  will-change: background-position;
+}
+
+@keyframes gradientText {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .hero-subtitle {
@@ -1132,11 +1144,18 @@ button:hover ~ .custom-cursor .cursor-outline {
   background: var(--gradient-primary);
   color: white;
   box-shadow: var(--shadow-soft);
+  animation: pulseGlow 3s ease-in-out infinite;
+  will-change: transform, box-shadow;
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
+  transform: translateY(-3px) scale(1.05);
   box-shadow: var(--shadow-glow-pink);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .btn-secondary {
@@ -1342,12 +1361,30 @@ button:hover ~ .custom-cursor .cursor-outline {
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   transition: var(--transition-smooth);
+  will-change: transform, box-shadow;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-category::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 182, 193, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.skill-category:hover::before {
+  left: 100%;
 }
 
 .skill-category:hover {
   background: var(--glass-hover);
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-strong);
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: var(--shadow-strong), 0 20px 40px rgba(221, 160, 221, 0.3);
 }
 
 .skill-category h3 {
@@ -1484,12 +1521,32 @@ button:hover ~ .custom-cursor .cursor-outline {
   overflow: hidden;
   transition: var(--transition-smooth);
   cursor: pointer;
+  will-change: transform, box-shadow;
+  position: relative;
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: var(--gradient-primary);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .project-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-strong);
-  border-color: var(--primary-pink);
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: var(--shadow-strong), 0 25px 50px rgba(255, 182, 193, 0.2);
+  border-color: transparent;
+}
+
+.project-card:hover::after {
+  opacity: 1;
 }
 
 .project-image {
@@ -2125,6 +2182,33 @@ button:hover ~ .custom-cursor .cursor-outline {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 182, 193, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 182, 193, 0.8), 0 0 60px rgba(221, 160, 221, 0.6);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
   }
 }
 
