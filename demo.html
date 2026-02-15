@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 Features Demo - SaOYaD Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .demo-section {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+    }
+    
+    .demo-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-pink);
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .demo-card {
+      padding: 1.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      min-height: 150px;
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .feature-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary-pink);
+      font-weight: bold;
+    }
+    
+    .button-demo {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--primary-pink), var(--lavender));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .button-demo:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
+    }
+    
+    .theme-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .theme-card {
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .theme-card:hover {
+      transform: scale(1.05);
+    }
+    
+    .animation-demo {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .anim-box {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--primary-pink), var(--lavender));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    
+    .easter-egg-guide {
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+      color: white;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      margin-top: 1rem;
+    }
+    
+    .easter-egg-guide h3 {
+      margin-top: 0;
+    }
+    
+    .code-block {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      font-family: 'Courier New', monospace;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center; font-size: 3rem; margin-bottom: 2rem;">
+    🚀 2026 Portfolio Features Demo
+  </h1>
+
+  <!-- BMW Animation Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">🏎️ BMW M4 Drift Animation</h2>
+    <p>A BMW M4 drifts across the hero section with smoke particles and skid marks!</p>
+    <button class="button-demo" onclick="window.bmwDrift && window.bmwDrift.trigger()">
+      Trigger BMW Drift
+    </button>
+    <ul class="feature-list">
+      <li>SVG-based illustration with drift stance</li>
+      <li>Animated smoke particle trail</li>
+      <li>Tire skid marks that fade</li>
+      <li>Neon underglow effect</li>
+      <li>Mobile-optimized version</li>
+    </ul>
+  </div>
+
+  <!-- Theme System Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">🎨 Multi-Theme System (6 Themes)</h2>
+    <p>Click any theme below to switch instantly:</p>
+    <div class="theme-preview">
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #E6E6FA);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('dark')">
+        <div style="color: white;">Dark Mode</div>
+      </div>
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFF5F7, #FFE4E9);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('light')">
+        <div style="color: #6B4E71;">Light Mode</div>
+      </div>
+      <div class="theme-card" style="background: linear-gradient(135deg, #00F0FF, #FF006E);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('cyberpunk')">
+        <div style="color: white;">Cyberpunk</div>
+      </div>
+      <div class="theme-card" style="background: linear-gradient(135deg, #B537F2, #00F0FF);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('neon')">
+        <div style="color: white;">Neon Nights</div>
+      </div>
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #DDA0DD);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('pastel')">
+        <div style="color: #6B4E71;">Pastel Dreams</div>
+      </div>
+      <div class="theme-card" style="background: linear-gradient(135deg, #4A90E2, #B0C4DE);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('midnight')">
+        <div style="color: white;">Midnight Blue</div>
+      </div>
+    </div>
+    <p style="margin-top: 1rem;"><strong>Auto Theme:</strong> Changes based on time of day (Morning → Pastel, Afternoon → Light, Evening → Neon, Night → Midnight)</p>
+  </div>
+
+  <!-- 3D Card Effects Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">📦 3D Card Tilt Effects</h2>
+    <p>Hover over these cards to see the 3D tilt effect:</p>
+    <div class="demo-grid">
+      <div class="demo-card project-card">
+        <h3>Project Card</h3>
+        <p>Tilts based on mouse position with dynamic lighting</p>
+      </div>
+      <div class="demo-card skill-card">
+        <h3>Skill Card</h3>
+        <p>Smooth spring-based transitions</p>
+      </div>
+      <div class="demo-card achievement-card">
+        <h3>Achievement Card</h3>
+        <p>Perspective depth of 1000px</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Particle System Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">⭐ Advanced Particle System</h2>
+    <ul class="feature-list">
+      <li>Base particles with constellation connections</li>
+      <li>Meteor showers (diagonal streaks)</li>
+      <li>Floating orbs with glow effects</li>
+      <li>Cursor repel interaction</li>
+      <li>Canvas-based rendering for 60fps</li>
+    </ul>
+    <p><strong>Note:</strong> The particle system is running in the background on this page!</p>
+  </div>
+
+  <!-- Animation Library Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">🎭 CSS Animation Library</h2>
+    <p>Hover over each box to see the animation:</p>
+    <div class="animation-demo">
+      <div class="anim-box slide-in-left" style="animation-delay: 0.1s;">Slide Left</div>
+      <div class="anim-box slide-in-right" style="animation-delay: 0.2s;">Slide Right</div>
+      <div class="anim-box floating">Floating</div>
+      <div class="anim-box" onmouseenter="this.classList.add('elastic-bounce')" onmouseleave="this.classList.remove('elastic-bounce')">Elastic Bounce</div>
+      <div class="anim-box glow-pulse">Glow Pulse</div>
+      <div class="anim-box shimmer">Shimmer</div>
+    </div>
+  </div>
+
+  <!-- Performance Mode Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">⚡ Performance Mode</h2>
+    <p>Toggle between full experience and optimized performance:</p>
+    <button class="button-demo" onclick="window.performanceMode && window.performanceMode.toggle()">
+      Toggle Performance Mode
+    </button>
+    <ul class="feature-list">
+      <li>Reduces particle count to 15</li>
+      <li>Disables heavy animations</li>
+      <li>Maintains 60fps guarantee</li>
+      <li>Improves battery life on mobile</li>
+    </ul>
+    <p><strong>Look for:</strong> Green lightning icon = Performance ON, Orange = Full experience</p>
+  </div>
+
+  <!-- Easter Eggs Demo -->
+  <div class="demo-section">
+    <h2 class="demo-title">🎮 Easter Eggs</h2>
+    <div class="easter-egg-guide">
+      <h3>🌈 Rainbow Logo Mode</h3>
+      <p>Click the logo in the navigation 5 times quickly</p>
+      <div class="code-block">Effect: Logo cycles through rainbow colors for 10 seconds</div>
+      
+      <h3 style="margin-top: 1.5rem;">🏁 BMW Parade</h3>
+      <p>Enter the Konami Code on your keyboard:</p>
+      <div class="code-block">↑ ↑ ↓ ↓ ← → ← → B A</div>
+      <div class="code-block">Effect: Triggers 5 BMW drift animations in sequence!</div>
+      
+      <h3 style="margin-top: 1.5rem;">🏎️ Console Drift Command</h3>
+      <p>Open browser console (F12) and type:</p>
+      <div class="code-block">drift()</div>
+      <div class="code-block">Effect: Manually triggers a BMW drift</div>
+    </div>
+  </div>
+
+  <!-- Feature Summary -->
+  <div class="demo-section">
+    <h2 class="demo-title">📊 Feature Summary</h2>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <h3>🎨 Visual Effects</h3>
+        <ul class="feature-list">
+          <li>BMW M4 Drift Animation</li>
+          <li>3D Card Tilts</li>
+          <li>Fluid Morphing Backgrounds</li>
+          <li>Custom Cursor Trail</li>
+        </ul>
+      </div>
+      <div class="demo-card">
+        <h3>🎭 Themes</h3>
+        <ul class="feature-list">
+          <li>6 Color Themes</li>
+          <li>Auto Time-based Theme</li>
+          <li>Theme Picker UI</li>
+          <li>Smooth Transitions</li>
+        </ul>
+      </div>
+      <div class="demo-card">
+        <h3>⚡ Performance</h3>
+        <ul class="feature-list">
+          <li>Performance Mode</li>
+          <li>60fps Animations</li>
+          <li>Mobile Optimized</li>
+          <li>Reduced Motion Support</li>
+        </ul>
+      </div>
+      <div class="demo-card">
+        <h3>🎮 Extras</h3>
+        <ul class="feature-list">
+          <li>3 Easter Eggs</li>
+          <li>Advanced Particles</li>
+          <li>Animation Library</li>
+          <li>Full Accessibility</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; padding: 3rem 0; font-size: 1.2rem;">
+    <p>🚀 <strong>All features are live on the main portfolio page!</strong></p>
+    <p style="margin-top: 1rem; opacity: 0.7;">
+      See <code>FEATURES-2026.md</code> for complete documentation
+    </p>
+  </div>
+
+  <!-- Load all scripts -->
+  <script src="assets/js/theme-system.js"></script>
+  <script src="assets/js/performance-mode.js"></script>
+  <script src="assets/js/particle-engine.js"></script>
+  <script src="assets/js/3d-effects.js"></script>
+  <script src="assets/js/bmw-animation.js"></script>
+  <script src="assets/js/cursor-trail.js"></script>
+</body>
+</html>
