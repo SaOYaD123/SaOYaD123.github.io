@@ -7,6 +7,64 @@
 [![Live Site](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-blue?style=for-the-badge)](https://SaOYaD-SZN.github.io)
 [![GitHub Pages](https://img.shields.io/badge/Powered_by-GitHub_Pages-181717?style=for-the-badge&logo=github)](https://pages.github.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
+[![Contributions](https://img.shields.io/badge/Contributions-Welcome-orange?style=for-the-badge)](CONTRIBUTING.md)
+
+![GitHub stars](https://img.shields.io/github/stars/SaOYaD-SZN/SaOYaD-SZN.github.io?style=social)
+![GitHub forks](https://img.shields.io/github/forks/SaOYaD-SZN/SaOYaD-SZN.github.io?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/SaOYaD-SZN/SaOYaD-SZN.github.io?style=social)
+
+</div>
+
+---
+
+## 👋 About Me
+
+Hi there! I'm **SaOYaD** — a passionate developer focused on crafting premium web experiences using cutting-edge technologies. This repository powers my personal portfolio site.
+
+<div align="center">
+
+## 📊 GitHub Stats
+
+![SaOYaD's GitHub Stats](https://github-readme-stats.vercel.app/api?username=SaOYaD-SZN&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=SaOYaD-SZN&layout=compact&theme=tokyonight&hide_border=true)
+
+![GitHub Streak](https://streak-stats.demolab.com/?user=SaOYaD-SZN&theme=tokyonight&hide_border=true)
+
+</div>
+
+---
+
+## 🏆 GitHub Achievements
+
+<div align="center">
+
+![Trophy](https://github-profile-trophy.vercel.app/?username=SaOYaD-SZN&theme=tokyonight&no-frame=true&row=1&column=7)
+
+</div>
+
+| Achievement | Description |
+|---|---|
+| 🦈 Pull Shark | Opened pull requests that were merged |
+| ⚡ Quickdraw | Closed an issue or PR within 5 minutes of opening |
+| 🚀 YOLO | Merged a PR without a code review |
+| 👯 Pair Extraordinaire | Co-authored commits |
+| 🌟 Starstruck | Created a repo with many stars |
+| 🧊 Arctic Code Vault | Contributed to Arctic Code Vault |
+
+---
+
+## 🛠️ Skills & Technologies
+
+<div align="center">
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white)
 
 </div>
 
@@ -192,15 +250,17 @@ Target metrics (Lighthouse):
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Here's how you can get involved:
+We welcome contributions from the community! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+
+Quick start:
 
 1. **Fork** this repository
 2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add: Amazing new feature'`)
+3. **Commit** your changes (`git commit -m 'feat: add amazing new feature'`)
 4. **Push** to the branch (`git push origin feature/AmazingFeature`)
 5. **Open** a Pull Request
 
-For bug reports or feature requests, please [open an issue](../../issues) with detailed information.
+For bug reports or feature requests, please use the [issue templates](../../issues/new/choose).
 
 ## 📄 License
 
