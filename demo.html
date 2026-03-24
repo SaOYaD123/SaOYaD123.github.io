@@ -149,7 +149,7 @@
   <div class="demo-section">
     <h2 class="demo-title">🏎️ BMW M4 Drift Animation</h2>
     <p>A BMW M4 drifts across the hero section with smoke particles and skid marks!</p>
-    <button class="button-demo" onclick="window.bmwDrift && window.bmwDrift.trigger()">
+    <button class="button-demo js-bmw-trigger">
       Trigger BMW Drift
     </button>
     <ul class="feature-list">
@@ -166,22 +166,22 @@
     <h2 class="demo-title">🎨 Multi-Theme System (6 Themes)</h2>
     <p>Click any theme below to switch instantly:</p>
     <div class="theme-preview">
-      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #E6E6FA);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('dark')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #E6E6FA);" data-theme="dark" role="button" tabindex="0">
         <div style="color: white;">Dark Mode</div>
       </div>
-      <div class="theme-card" style="background: linear-gradient(135deg, #FFF5F7, #FFE4E9);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('light')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFF5F7, #FFE4E9);" data-theme="light" role="button" tabindex="0">
         <div style="color: #6B4E71;">Light Mode</div>
       </div>
-      <div class="theme-card" style="background: linear-gradient(135deg, #00F0FF, #FF006E);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('cyberpunk')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #00F0FF, #FF006E);" data-theme="cyberpunk" role="button" tabindex="0">
         <div style="color: white;">Cyberpunk</div>
       </div>
-      <div class="theme-card" style="background: linear-gradient(135deg, #B537F2, #00F0FF);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('neon')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #B537F2, #00F0FF);" data-theme="neon" role="button" tabindex="0">
         <div style="color: white;">Neon Nights</div>
       </div>
-      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #DDA0DD);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('pastel')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #FFB6C1, #DDA0DD);" data-theme="pastel" role="button" tabindex="0">
         <div style="color: #6B4E71;">Pastel Dreams</div>
       </div>
-      <div class="theme-card" style="background: linear-gradient(135deg, #4A90E2, #B0C4DE);" onclick="window.enhancedTheme && window.enhancedTheme.applyTheme('midnight')">
+      <div class="theme-card" style="background: linear-gradient(135deg, #4A90E2, #B0C4DE);" data-theme="midnight" role="button" tabindex="0">
         <div style="color: white;">Midnight Blue</div>
       </div>
     </div>
@@ -229,7 +229,7 @@
       <div class="anim-box slide-in-left" style="animation-delay: 0.1s;">Slide Left</div>
       <div class="anim-box slide-in-right" style="animation-delay: 0.2s;">Slide Right</div>
       <div class="anim-box floating">Floating</div>
-      <div class="anim-box" onmouseenter="this.classList.add('elastic-bounce')" onmouseleave="this.classList.remove('elastic-bounce')">Elastic Bounce</div>
+      <div class="anim-box js-elastic-bounce">Elastic Bounce</div>
       <div class="anim-box glow-pulse">Glow Pulse</div>
       <div class="anim-box shimmer">Shimmer</div>
     </div>
@@ -239,7 +239,7 @@
   <div class="demo-section">
     <h2 class="demo-title">⚡ Performance Mode</h2>
     <p>Toggle between full experience and optimized performance:</p>
-    <button class="button-demo" onclick="window.performanceMode && window.performanceMode.toggle()">
+    <button class="button-demo js-perf-toggle">
       Toggle Performance Mode
     </button>
     <ul class="feature-list">
@@ -322,11 +322,47 @@
   </div>
 
   <!-- Load all scripts -->
-  <script src="assets/js/theme-system.js"></script>
-  <script src="assets/js/performance-mode.js"></script>
-  <script src="assets/js/particle-engine.js"></script>
-  <script src="assets/js/3d-effects.js"></script>
-  <script src="assets/js/bmw-animation.js"></script>
-  <script src="assets/js/cursor-trail.js"></script>
+  <script src="assets/js/theme-system.js" defer></script>
+  <script src="assets/js/performance-mode.js" defer></script>
+  <script src="assets/js/particle-engine.js" defer></script>
+  <script src="assets/js/3d-effects.js" defer></script>
+  <script src="assets/js/bmw-animation.js" defer></script>
+  <script src="assets/js/cursor-trail.js" defer></script>
+
+  <!-- Demo event listeners (runs after deferred scripts) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // BMW drift trigger
+      const bmwTrigger = document.querySelector('.js-bmw-trigger');
+      if (bmwTrigger) {
+        bmwTrigger.addEventListener('click', () => window.bmwDrift?.trigger());
+      }
+
+      // Theme cards
+      document.querySelectorAll('.theme-card[data-theme]').forEach(card => {
+        const activate = () => window.enhancedTheme?.applyTheme(card.dataset.theme);
+        card.addEventListener('click', activate);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === ' ') e.preventDefault();
+            activate();
+          }
+        });
+      });
+
+      // Elastic bounce demo box
+      const elasticBox = document.querySelector('.js-elastic-bounce');
+      if (elasticBox) {
+        elasticBox.addEventListener('mouseenter', () => elasticBox.classList.add('elastic-bounce'));
+        elasticBox.addEventListener('mouseleave', () => elasticBox.classList.remove('elastic-bounce'));
+      }
+
+      // Performance mode toggle
+      const perfToggle = document.querySelector('.js-perf-toggle');
+      if (perfToggle) {
+        perfToggle.addEventListener('click', () => window.performanceMode?.toggle());
+      }
+    });
+  </script>
 </body>
 </html>

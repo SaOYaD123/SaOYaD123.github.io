@@ -1,4 +1,5 @@
 // ==================== Configuration & Constants ====================
+/** @type {{ GITHUB_USERNAME: string, GITHUB_API_BASE: string, TYPEWRITER_SPEED: number, TYPEWRITER_DELETE_SPEED: number, TYPEWRITER_PAUSE: number, PARTICLE_COUNT: number, THEME_KEY: string }} */
 const CONFIG = {
   GITHUB_USERNAME: 'SaOYaD-SZN',
   GITHUB_API_BASE: 'https://api.github.com',
@@ -9,6 +10,7 @@ const CONFIG = {
   THEME_KEY: 'saoyad-theme',
 };
 
+/** @type {string[]} */
 const TYPEWRITER_TEXTS = [
   'Full-Stack Developer',
   'Linux Enthusiast',
@@ -18,6 +20,13 @@ const TYPEWRITER_TEXTS = [
 ];
 
 // ==================== Utility Functions ====================
+/**
+ * Returns a debounced version of the provided function that delays invoking it
+ * until after `wait` milliseconds have elapsed since the last invocation.
+ * @param {Function} func - The function to debounce.
+ * @param {number} wait - Delay in milliseconds.
+ * @returns {Function}
+ */
 const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
@@ -30,6 +39,13 @@ const debounce = (func, wait) => {
   };
 };
 
+/**
+ * Returns a throttled version of the provided function that invokes it at most
+ * once per `limit` milliseconds.
+ * @param {Function} func - The function to throttle.
+ * @param {number} limit - Minimum interval in milliseconds.
+ * @returns {Function}
+ */
 const throttle = (func, limit) => {
   let inThrottle;
   return function(...args) {
@@ -41,6 +57,11 @@ const throttle = (func, limit) => {
   };
 };
 
+/**
+ * Sanitizes a string to prevent XSS by escaping HTML special characters.
+ * @param {string} str - The string to sanitize.
+ * @returns {string}
+ */
 const sanitizeHTML = (str) => {
   const temp = document.createElement('div');
   temp.textContent = str;
@@ -48,6 +69,7 @@ const sanitizeHTML = (str) => {
 };
 
 // ==================== Theme Manager ====================
+/** Manages dark/light theme switching with localStorage persistence. */
 class ThemeManager {
   constructor() {
     this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
@@ -96,6 +118,7 @@ class ThemeManager {
 }
 
 // ==================== GitHub API Manager ====================
+/** Handles all GitHub REST API requests with in-memory caching and fallback data. */
 class GitHubAPI {
   constructor(username) {
     this.username = username;
@@ -133,7 +156,7 @@ class GitHubAPI {
     
     repos.forEach(repo => {
       if (repo.language) {
-        languageStats[repo.language] = (languageStats[repo.language] || 0) + 1;
+        languageStats[repo.language] = (languageStats[repo.language] ?? 0) + 1;
       }
     });
 
@@ -162,18 +185,19 @@ class GitHubAPI {
   }
 
   calculateTotalStars(repos) {
-    return repos.reduce((total, repo) => total + (repo.stargazers_count || 0), 0);
+    return repos.reduce((total, repo) => total + (repo.stargazers_count ?? 0), 0);
   }
 
   getFeaturedRepos(repos) {
     return repos
       .filter(repo => !repo.fork)
-      .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
+      .sort((a, b) => (b.stargazers_count ?? 0) - (a.stargazers_count ?? 0))
       .slice(0, 6);
   }
 }
 
 // ==================== UI Components ====================
+/** Renders all portfolio sections using GitHub API data. */
 class UIComponents {
   constructor(api) {
     this.api = api;
@@ -428,7 +452,7 @@ class UIComponents {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
-              ${repo.stargazers_count || 0}
+              ${repo.stargazers_count ?? 0}
             </div>
             <div class="project-stat">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -437,7 +461,7 @@ class UIComponents {
                 <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
                 <line x1="6" y1="9" x2="6" y2="21"></line>
               </svg>
-              ${repo.forks_count || 0}
+              ${repo.forks_count ?? 0}
             </div>
           </div>
         </div>
@@ -715,6 +739,7 @@ class UIComponents {
 }
 
 // ==================== Particle System ====================
+/** Canvas-based particle animation system for the background. */
 class ParticleSystem {
   constructor(canvas) {
     this.canvas = canvas;
@@ -768,6 +793,7 @@ class ParticleSystem {
 }
 
 // ==================== Navigation ====================
+/** Controls navbar scroll behaviour, active-link highlighting, mobile menu and keyboard navigation. */
 class Navigation {
   constructor() {
     this.navbar = document.querySelector('.navbar');
@@ -792,7 +818,7 @@ class Navigation {
     let lastScroll = 0;
     
     window.addEventListener('scroll', throttle(() => {
-      const currentScroll = window.pageYOffset;
+      const currentScroll = window.scrollY;
       
       if (currentScroll > 100) {
         this.navbar.classList.add('scrolled');
@@ -842,11 +868,11 @@ class Navigation {
     if (!this.navScrollProgress) return;
     
     window.addEventListener('scroll', throttle(() => {
-      const winScroll = document.documentElement.scrollTop;
+      const winScroll = window.scrollY;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       
-      this.navScrollProgress.style.width = scrolled + '%';
+      this.navScrollProgress.style.width = `${scrolled}%`;
     }, 50));
   }
 
@@ -938,6 +964,7 @@ class Navigation {
 }
 
 // ==================== Scroll Progress ====================
+/** Updates the scroll-progress bar at the top of the page. */
 class ScrollProgress {
   constructor() {
     this.progressBar = document.querySelector('.scroll-progress');
@@ -946,18 +973,19 @@ class ScrollProgress {
 
   init() {
     window.addEventListener('scroll', throttle(() => {
-      const winScroll = document.documentElement.scrollTop;
+      const winScroll = window.scrollY;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
       
       if (this.progressBar) {
-        this.progressBar.style.width = scrolled + '%';
+        this.progressBar.style.width = `${scrolled}%`;
       }
     }, 50));
   }
 }
 
 // ==================== Back to Top Button ====================
+/** Shows/hides and animates the back-to-top floating button. */
 class BackToTop {
   constructor() {
     this.button = document.querySelector('.back-to-top');
@@ -968,7 +996,7 @@ class BackToTop {
     if (!this.button) return;
 
     window.addEventListener('scroll', throttle(() => {
-      if (window.pageYOffset > 300) {
+      if (window.scrollY > 300) {
         this.button.classList.add('visible');
       } else {
         this.button.classList.remove('visible');
@@ -985,6 +1013,7 @@ class BackToTop {
 }
 
 // ==================== Custom Cursor ====================
+/** Replaces the native mouse cursor with a custom dot + outline on pointer devices. */
 class CustomCursor {
   constructor() {
     this.cursor = document.querySelector('.custom-cursor');
@@ -997,10 +1026,10 @@ class CustomCursor {
     if (!this.cursor || window.matchMedia('(pointer: coarse)').matches) return;
 
     document.addEventListener('mousemove', (e) => {
-      this.dot.style.left = e.clientX + 'px';
-      this.dot.style.top = e.clientY + 'px';
-      this.outline.style.left = e.clientX + 'px';
-      this.outline.style.top = e.clientY + 'px';
+      this.dot.style.left = `${e.clientX}px`;
+      this.dot.style.top = `${e.clientY}px`;
+      this.outline.style.left = `${e.clientX}px`;
+      this.outline.style.top = `${e.clientY}px`;
     });
 
     document.querySelectorAll('a, button').forEach(el => {
@@ -1018,6 +1047,7 @@ class CustomCursor {
 }
 
 // ==================== Form Validation ====================
+/** Provides real-time client-side validation for the contact form. */
 class FormValidator {
   constructor(form) {
     this.form = form;
@@ -1109,6 +1139,7 @@ class FormValidator {
 }
 
 // ==================== Intersection Observer for Animations ====================
+/** Observes sections and adds the `animated` class when they enter the viewport. */
 class AnimationObserver {
   constructor() {
     this.init();
@@ -1134,6 +1165,7 @@ class AnimationObserver {
 }
 
 // ==================== Loading Screen ====================
+/** Hides the full-page loading overlay once the window `load` event fires. */
 class LoadingScreen {
   constructor() {
     this.loadingScreen = document.querySelector('.loading-screen');
@@ -1152,6 +1184,7 @@ class LoadingScreen {
 }
 
 // ==================== Main Application ====================
+/** Bootstraps all modules and orchestrates data fetching + rendering. */
 class PortfolioApp {
   constructor() {
     this.api = new GitHubAPI(CONFIG.GITHUB_USERNAME);

@@ -1,5 +1,5 @@
 // Service Worker for PWA Support
-const CACHE_NAME = 'saoyad-portfolio-v1';
+const CACHE_NAME = 'saoyad-portfolio-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -13,30 +13,30 @@ const urlsToCache = [
 // Install event - cache resources
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      console.log('Service Worker: Caching files');
+      await cache.addAll(urlsToCache);
+      await self.skipWaiting();
+    })()
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys()
-      .then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cache => {
-            if (cache !== CACHE_NAME) {
-              console.log('Service Worker: Clearing old cache');
-              return caches.delete(cache);
-            }
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => {
+            console.log('Service Worker: Clearing old cache');
+            return caches.delete(name);
           })
-        );
-      })
-      .then(() => self.clients.claim())
+      );
+      await self.clients.claim();
+    })()
   );
 });
 
@@ -48,35 +48,29 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
+    (async () => {
+      const cached = await caches.match(event.request);
+
+      // Cache hit - return response
+      if (cached) {
+        return cached;
+      }
+
+      try {
+        const response = await fetch(event.request.clone());
+
+        // Cache valid same-origin responses
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, responseToCache);
         }
 
-        // Clone the request
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(response => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone the response
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        }).catch(() => {
-          // Return offline page or fallback
-          return caches.match('/index.html');
-        });
-      })
+        return response;
+      } catch {
+        // Return offline fallback
+        return caches.match('/index.html');
+      }
+    })()
   );
 });
