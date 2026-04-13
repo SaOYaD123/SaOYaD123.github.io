@@ -23,8 +23,8 @@ const TYPEWRITER_TEXTS = [
 /**
  * Returns a debounced version of the provided function that delays invoking it
  * until after `wait` milliseconds have elapsed since the last invocation.
- * @param {Function} func - The function to debounce.
- * @param {number} wait - Delay in milliseconds.
+ * @param {Function} func
+ * @param {number} wait
  * @returns {Function}
  */
 const debounce = (func, wait) => {
@@ -42,8 +42,8 @@ const debounce = (func, wait) => {
 /**
  * Returns a throttled version of the provided function that invokes it at most
  * once per `limit` milliseconds.
- * @param {Function} func - The function to throttle.
- * @param {number} limit - Minimum interval in milliseconds.
+ * @param {Function} func
+ * @param {number} limit
  * @returns {Function}
  */
 const throttle = (func, limit) => {
@@ -59,7 +59,7 @@ const throttle = (func, limit) => {
 
 /**
  * Sanitizes a string to prevent XSS by escaping HTML special characters.
- * @param {string} str - The string to sanitize.
+ * @param {string} str
  * @returns {string}
  */
 const sanitizeHTML = (str) => {
@@ -68,50 +68,106 @@ const sanitizeHTML = (str) => {
   return temp.innerHTML;
 };
 
+/**
+ * Sanitizes a URL for use in href/src attributes. Only allows http, https,
+ * and mailto schemes. Returns an empty string for invalid or dangerous URLs.
+ * @param {string} url
+ * @returns {string}
+ */
+const sanitizeURL = (url) => {
+  if (!url) return '';
+  try {
+    const parsed = new URL(url, window.location.href);
+    if (['http:', 'https:', 'mailto:'].includes(parsed.protocol)) {
+      return parsed.href;
+    }
+  } catch (_) {
+    // Relative paths (e.g. 'logo.avif') are safe to return as-is
+    if (/^[a-zA-Z0-9_./\-]+$/.test(url)) return url;
+  }
+  return '';
+};
+
 // ==================== Theme Manager ====================
-/** Manages dark/light theme switching with localStorage persistence. */
+/** Manages 4-theme selection with localStorage persistence and a theme picker panel. */
 class ThemeManager {
   constructor() {
+    this.themes = ['dark', 'cyberpunk', 'neon', 'pastel'];
     this.currentTheme = this.getStoredTheme() || this.getSystemTheme();
     this.init();
   }
 
   init() {
-    this.applyTheme(this.currentTheme);
+    this.setTheme(this.currentTheme);
     this.setupToggle();
     this.watchSystemTheme();
   }
 
   getStoredTheme() {
-    return localStorage.getItem(CONFIG.THEME_KEY);
+    const stored = localStorage.getItem(CONFIG.THEME_KEY);
+    return this.themes.includes(stored) ? stored : null;
   }
 
   getSystemTheme() {
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'pastel' : 'dark';
   }
 
-  applyTheme(theme) {
+  setTheme(theme) {
+    if (!this.themes.includes(theme)) theme = 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(CONFIG.THEME_KEY, theme);
     this.currentTheme = theme;
+    this.updateUI();
   }
 
-  toggle() {
-    const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
-    this.applyTheme(newTheme);
+  updateUI() {
+    document.querySelectorAll('.theme-option').forEach(btn => {
+      const isActive = btn.dataset.theme === this.currentTheme;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
   }
 
   setupToggle() {
     const toggleBtn = document.querySelector('.theme-toggle');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => this.toggle());
-    }
+    const panel = document.getElementById('theme-panel');
+
+    if (!toggleBtn || !panel) return;
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = panel.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.theme-selector')) {
+        panel.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.focus();
+      }
+    });
+
+    document.querySelectorAll('.theme-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.setTheme(btn.dataset.theme);
+        panel.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
   }
 
   watchSystemTheme() {
     window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
       if (!localStorage.getItem(CONFIG.THEME_KEY)) {
-        this.applyTheme(e.matches ? 'light' : 'dark');
+        this.setTheme(e.matches ? 'pastel' : 'dark');
       }
     });
   }
@@ -153,7 +209,7 @@ class GitHubAPI {
 
   async fetchLanguages(repos) {
     const languageStats = {};
-    
+
     repos.forEach(repo => {
       if (repo.language) {
         languageStats[repo.language] = (languageStats[repo.language] ?? 0) + 1;
@@ -162,7 +218,7 @@ class GitHubAPI {
 
     const totalRepos = Object.values(languageStats).reduce((a, b) => a + b, 0);
     const languagePercentages = {};
-    
+
     for (const [lang, count] of Object.entries(languageStats)) {
       languagePercentages[lang] = ((count / totalRepos) * 100).toFixed(1);
     }
@@ -180,7 +236,7 @@ class GitHubAPI {
       location: 'Unknown',
       public_repos: 0,
       followers: 0,
-      following: 0
+      following: 0,
     };
   }
 
@@ -206,17 +262,16 @@ class UIComponents {
     this.typewriterDeleting = false;
   }
 
-  // Typewriter Effect
   startTypewriter() {
     const element = document.querySelector('.typewriter-text');
     if (!element) return;
 
     const type = () => {
       const currentText = TYPEWRITER_TEXTS[this.typewriterTextIndex];
-      
+
       if (this.typewriterDeleting) {
         element.textContent = currentText.substring(0, this.typewriterIndex--);
-        
+
         if (this.typewriterIndex < 0) {
           this.typewriterDeleting = false;
           this.typewriterTextIndex = (this.typewriterTextIndex + 1) % TYPEWRITER_TEXTS.length;
@@ -225,27 +280,26 @@ class UIComponents {
         }
       } else {
         element.textContent = currentText.substring(0, this.typewriterIndex++);
-        
+
         if (this.typewriterIndex > currentText.length) {
           this.typewriterDeleting = true;
           setTimeout(type, CONFIG.TYPEWRITER_PAUSE);
           return;
         }
       }
-      
+
       setTimeout(type, this.typewriterDeleting ? CONFIG.TYPEWRITER_DELETE_SPEED : CONFIG.TYPEWRITER_SPEED);
     };
 
     type();
   }
 
-  // Render Hero Section
   async renderHero(userData) {
     const heroContent = document.querySelector('.hero-content');
     if (!heroContent) return;
 
     heroContent.innerHTML = `
-      <img src="${userData.avatar_url}" alt="${sanitizeHTML(userData.name)}" class="hero-avatar" loading="lazy">
+      <img src="${sanitizeURL(userData.avatar_url)}" alt="${sanitizeHTML(userData.name || 'SaOYaD')}" class="hero-avatar" loading="lazy">
       <p class="hero-greeting">Hello, I'm</p>
       <h1 class="hero-title">${sanitizeHTML(userData.name || 'SaOYaD')}</h1>
       <div class="hero-subtitle">
@@ -275,14 +329,14 @@ class UIComponents {
           </svg>
         </a>
         ${userData.twitter_username ? `
-        <a href="https://twitter.com/${userData.twitter_username}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+        <a href="https://twitter.com/${encodeURIComponent(userData.twitter_username)}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
           </svg>
         </a>
         ` : ''}
         ${userData.blog ? `
-        <a href="${userData.blog}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Website">
+        <a href="${sanitizeURL(userData.blog)}" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Website">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -296,7 +350,6 @@ class UIComponents {
     this.startTypewriter();
   }
 
-  // Render About Section
   async renderAbout(userData, repos) {
     const aboutSection = document.querySelector('.about-section .container');
     if (!aboutSection) return;
@@ -304,9 +357,9 @@ class UIComponents {
     const totalStars = this.api.calculateTotalStars(repos);
 
     aboutSection.innerHTML += `
-      <div class="about-content">
+      <div class="about-content animate-on-scroll">
         <div class="about-image">
-          <img src="${userData.avatar_url}" alt="${sanitizeHTML(userData.name)}" loading="lazy">
+          <img src="${sanitizeURL(userData.avatar_url)}" alt="${sanitizeHTML(userData.name || 'SaOYaD')}" loading="lazy">
         </div>
         <div class="about-text">
           <h3>About Me</h3>
@@ -335,7 +388,6 @@ class UIComponents {
     `;
   }
 
-  // Render Skills Section
   renderSkills() {
     const skillsSection = document.querySelector('.skills-section .container');
     if (!skillsSection) return;
@@ -362,18 +414,18 @@ class UIComponents {
     };
 
     const skillsHTML = Object.entries(skills).map(([category, items]) => `
-      <div class="skill-category">
+      <div class="skill-category animate-on-scroll card-3d">
         <h3>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
-          ${category}
+          ${sanitizeHTML(category)}
         </h3>
         ${items.map(skill => `
           <div class="skill-item">
             <div class="skill-name">
-              <span>${skill.name}</span>
+              <span>${sanitizeHTML(skill.name)}</span>
               <span class="skill-percentage">${skill.level}%</span>
             </div>
             <div class="skill-bar">
@@ -385,8 +437,6 @@ class UIComponents {
     `).join('');
 
     skillsSection.innerHTML += `<div class="skills-grid">${skillsHTML}</div>`;
-
-    // Animate skill bars when in view
     this.animateSkillBars();
   }
 
@@ -410,7 +460,6 @@ class UIComponents {
     if (skillsSection) observer.observe(skillsSection);
   }
 
-  // Render Projects
   renderProjects(repos) {
     const projectsGrid = document.getElementById('projects-grid');
     if (!projectsGrid) return;
@@ -418,19 +467,19 @@ class UIComponents {
     const featuredRepos = this.api.getFeaturedRepos(repos);
 
     projectsGrid.innerHTML = featuredRepos.map(repo => `
-      <div class="project-card" data-name="${sanitizeHTML(repo.name)}" data-language="${sanitizeHTML(repo.language || '')}">
+      <div class="project-card card-3d" data-name="${sanitizeHTML(repo.name)}" data-language="${sanitizeHTML(repo.language || '')}">
         <div class="project-image">
           <img src="wallpaper.jpg" alt="${sanitizeHTML(repo.name)}" loading="lazy">
           <div class="project-overlay">
             ${repo.html_url ? `
-            <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View on GitHub">
+            <a href="${sanitizeURL(repo.html_url)}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View on GitHub">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
             </a>
             ` : ''}
             ${repo.homepage ? `
-            <a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Live Demo">
+            <a href="${sanitizeURL(repo.homepage)}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View Live Demo">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
@@ -476,28 +525,25 @@ class UIComponents {
     const searchBox = document.getElementById('project-search');
     const filterButtons = document.querySelector('.filter-buttons');
 
-    // Get unique languages for filters
     const languages = new Set();
     projectCards.forEach(card => {
       const lang = card.getAttribute('data-language');
       if (lang) languages.add(lang);
     });
 
-    // Create filter buttons
     if (filterButtons) {
       filterButtons.innerHTML = `
         <button class="filter-btn active" data-filter="all">All</button>
         ${[...languages].map(lang => `
-          <button class="filter-btn" data-filter="${lang}">${lang}</button>
+          <button class="filter-btn" data-filter="${sanitizeHTML(lang)}">${sanitizeHTML(lang)}</button>
         `).join('')}
       `;
 
-      // Filter functionality
       filterButtons.addEventListener('click', (e) => {
         if (e.target.classList.contains('filter-btn')) {
           filterButtons.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
           e.target.classList.add('active');
-          
+
           const filter = e.target.getAttribute('data-filter');
           projectCards.forEach(card => {
             if (filter === 'all' || card.getAttribute('data-language') === filter) {
@@ -510,7 +556,6 @@ class UIComponents {
       });
     }
 
-    // Search functionality
     if (searchBox) {
       searchBox.addEventListener('input', debounce((e) => {
         const searchTerm = e.target.value.toLowerCase();
@@ -527,7 +572,6 @@ class UIComponents {
     }
   }
 
-  // Render Activity Section
   async renderActivity(userData, repos) {
     const activitySection = document.querySelector('.activity-section .container');
     if (!activitySection) return;
@@ -536,7 +580,7 @@ class UIComponents {
     const languages = await this.api.fetchLanguages(repos);
 
     activitySection.innerHTML += `
-      <div class="activity-dashboard">
+      <div class="activity-dashboard animate-on-scroll">
         <div class="activity-card">
           <div class="activity-header">
             <h3 class="activity-title">Total Repositories</h3>
@@ -546,7 +590,6 @@ class UIComponents {
           </div>
           <div class="activity-value">${userData.public_repos}</div>
         </div>
-        
         <div class="activity-card">
           <div class="activity-header">
             <h3 class="activity-title">Total Stars</h3>
@@ -556,7 +599,6 @@ class UIComponents {
           </div>
           <div class="activity-value">${totalStars}</div>
         </div>
-        
         <div class="activity-card">
           <div class="activity-header">
             <h3 class="activity-title">Followers</h3>
@@ -569,8 +611,7 @@ class UIComponents {
           </div>
           <div class="activity-value">${userData.followers}</div>
         </div>
-        
-        <div class="activity-card" style="grid-column: span 2;">
+        <div class="activity-card" style="grid-column: span 3;">
           <div class="activity-header">
             <h3 class="activity-title">Top Languages</h3>
             <svg class="activity-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -583,9 +624,9 @@ class UIComponents {
               <div class="language-item">
                 <span class="language-name">${sanitizeHTML(lang)}</span>
                 <div class="language-bar-container">
-                  <div class="language-bar" style="width: 0%" data-width="${percentage}%"></div>
+                  <div class="language-bar" style="width: 0%" data-width="${sanitizeHTML(percentage)}%"></div>
                 </div>
-                <span class="language-percentage">${percentage}%</span>
+                <span class="language-percentage">${sanitizeHTML(percentage)}%</span>
               </div>
             `).join('')}
           </div>
@@ -593,7 +634,6 @@ class UIComponents {
       </div>
     `;
 
-    // Animate language bars
     this.animateLanguageBars();
   }
 
@@ -617,7 +657,6 @@ class UIComponents {
     if (activitySection) observer.observe(activitySection);
   }
 
-  // Render Achievements
   renderAchievements() {
     const achievementsSection = document.querySelector('.achievements-section .achievements-grid');
     if (!achievementsSection) return;
@@ -627,31 +666,31 @@ class UIComponents {
         icon: '🏆',
         title: 'Open Source Contributor',
         description: 'Active contributor to open source projects',
-        date: '2024'
+        date: '2024',
       },
       {
         icon: '🎓',
         title: 'Self-Taught Developer',
         description: 'Mastered web development through dedication',
-        date: '2023'
+        date: '2023',
       },
       {
         icon: '💻',
         title: 'Full-Stack Developer',
         description: 'Proficient in both frontend and backend',
-        date: '2024'
+        date: '2024',
       },
       {
         icon: '🐧',
         title: 'Linux Enthusiast',
         description: 'Expert in Linux systems administration',
-        date: '2023'
-      }
+        date: '2023',
+      },
     ];
 
     achievementsSection.innerHTML = achievements.map(achievement => `
-      <div class="achievement-card">
-        <div class="achievement-icon">${achievement.icon}</div>
+      <div class="achievement-card animate-on-scroll card-3d">
+        <span class="achievement-icon">${achievement.icon}</span>
         <h3 class="achievement-title">${sanitizeHTML(achievement.title)}</h3>
         <p class="achievement-description">${sanitizeHTML(achievement.description)}</p>
         <span class="achievement-date">${sanitizeHTML(achievement.date)}</span>
@@ -659,7 +698,6 @@ class UIComponents {
     `).join('');
   }
 
-  // Render Testimonials
   renderTestimonials() {
     const testimonialsSection = document.querySelector('.testimonials-section .testimonials-carousel');
     if (!testimonialsSection) return;
@@ -670,29 +708,29 @@ class UIComponents {
         author: 'John Doe',
         role: 'Senior Developer',
         avatar: 'logo.avif',
-        rating: 5
+        rating: 5,
       },
       {
         text: 'Delivers high-quality code and has deep knowledge of modern web technologies.',
         author: 'Jane Smith',
         role: 'Tech Lead',
         avatar: 'logo.avif',
-        rating: 5
+        rating: 5,
       },
       {
         text: 'Passionate about technology and always willing to learn new things. Great team player!',
         author: 'Mike Johnson',
         role: 'Project Manager',
         avatar: 'logo.avif',
-        rating: 5
-      }
+        rating: 5,
+      },
     ];
 
     testimonialsSection.innerHTML = testimonials.map(testimonial => `
-      <div class="testimonial-card">
+      <div class="testimonial-card animate-on-scroll">
         <p class="testimonial-text">"${sanitizeHTML(testimonial.text)}"</p>
         <div class="testimonial-author">
-          <img src="${testimonial.avatar}" alt="${sanitizeHTML(testimonial.author)}" class="author-avatar" loading="lazy">
+          <img src="${sanitizeURL(testimonial.avatar)}" alt="${sanitizeHTML(testimonial.author)}" class="author-avatar" loading="lazy">
           <div class="author-info">
             <div class="author-name">${sanitizeHTML(testimonial.author)}</div>
             <div class="author-role">${sanitizeHTML(testimonial.role)}</div>
@@ -709,7 +747,6 @@ class UIComponents {
     `).join('');
   }
 
-  // Render Contact Section
   renderContact() {
     const contactLinks = document.querySelector('.contact-links');
     if (!contactLinks) return;
@@ -730,7 +767,6 @@ class UIComponents {
       </a>
     `;
 
-    // Render footer social links
     const footerSocial = document.querySelector('.footer-social');
     if (footerSocial) {
       footerSocial.innerHTML = contactLinks.innerHTML;
@@ -745,6 +781,7 @@ class ParticleSystem {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.particles = [];
+    this.animationId = null;
     this.init();
   }
 
@@ -752,7 +789,7 @@ class ParticleSystem {
     this.resize();
     this.createParticles();
     this.animate();
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('resize', debounce(() => this.resize(), 250));
   }
 
   resize() {
@@ -772,9 +809,21 @@ class ParticleSystem {
     }
   }
 
+  getParticleColor() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const colorMap = {
+      dark: 'rgba(255, 182, 193, 0.45)',
+      cyberpunk: 'rgba(0, 240, 255, 0.45)',
+      neon: 'rgba(181, 55, 242, 0.45)',
+      pastel: 'rgba(200, 75, 122, 0.3)',
+    };
+    return colorMap[theme] || colorMap.dark;
+  }
+
   animate() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
+    const color = this.getParticleColor();
+
     this.particles.forEach(particle => {
       particle.x += particle.vx;
       particle.y += particle.vy;
@@ -784,11 +833,11 @@ class ParticleSystem {
 
       this.ctx.beginPath();
       this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = 'rgba(255, 182, 193, 0.5)';
+      this.ctx.fillStyle = color;
       this.ctx.fill();
     });
 
-    requestAnimationFrame(() => this.animate());
+    this.animationId = requestAnimationFrame(() => this.animate());
   }
 }
 
@@ -815,114 +864,87 @@ class Navigation {
   }
 
   setupScrollBehavior() {
-    let lastScroll = 0;
-    
     window.addEventListener('scroll', throttle(() => {
-      const currentScroll = window.scrollY;
-      
-      if (currentScroll > 100) {
+      if (window.scrollY > 100) {
         this.navbar.classList.add('scrolled');
       } else {
         this.navbar.classList.remove('scrolled');
       }
-      
-      lastScroll = currentScroll;
     }, 100));
   }
 
   setupActiveLinksWithObserver() {
-    // Use Intersection Observer for more accurate active section detection
     const observerOptions = {
       root: null,
       rootMargin: '-20% 0px -70% 0px',
-      threshold: 0
+      threshold: 0,
     };
 
-    const observerCallback = (entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          
-          // Remove active class from all links
-          this.navLinks.forEach(link => {
-            link.classList.remove('active');
-          });
-          
-          // Add active class to current section link
+          this.navLinks.forEach(link => link.classList.remove('active'));
           const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-          }
+          if (activeLink) activeLink.classList.add('active');
         }
       });
-    };
+    }, observerOptions);
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    
-    this.sections.forEach(section => {
-      observer.observe(section);
-    });
+    this.sections.forEach(section => observer.observe(section));
   }
 
   setupNavScrollProgress() {
     if (!this.navScrollProgress) return;
-    
+
     window.addEventListener('scroll', throttle(() => {
       const winScroll = window.scrollY;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
-      
       this.navScrollProgress.style.width = `${scrolled}%`;
     }, 50));
   }
 
   setupMobileMenu() {
-    if (this.hamburger && this.navMenu) {
-      this.hamburger.addEventListener('click', () => {
-        const isActive = this.hamburger.classList.toggle('active');
-        this.navMenu.classList.toggle('active');
-        this.hamburger.setAttribute('aria-expanded', isActive);
-        
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = isActive ? 'hidden' : '';
-      });
+    if (!this.hamburger || !this.navMenu) return;
 
-      this.navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          this.hamburger.classList.remove('active');
-          this.navMenu.classList.remove('active');
-          this.hamburger.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-        });
+    this.hamburger.addEventListener('click', () => {
+      const isActive = this.hamburger.classList.toggle('active');
+      this.navMenu.classList.toggle('active');
+      this.hamburger.setAttribute('aria-expanded', String(isActive));
+      document.body.style.overflow = isActive ? 'hidden' : '';
+    });
+
+    this.navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        this.hamburger.classList.remove('active');
+        this.navMenu.classList.remove('active');
+        this.hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
       });
-      
-      // Close menu on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.navMenu.classList.contains('active')) {
-          this.hamburger.classList.remove('active');
-          this.navMenu.classList.remove('active');
-          this.hamburger.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-        }
-      });
-    }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.navMenu.classList.contains('active')) {
+        this.hamburger.classList.remove('active');
+        this.navMenu.classList.remove('active');
+        this.hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
   }
 
   setupSmoothScroll() {
     this.navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        if (href.startsWith('#')) {
+        if (href && href.startsWith('#')) {
           e.preventDefault();
           const target = document.querySelector(href);
           if (target) {
             const navHeight = this.navbar.offsetHeight;
-            const targetPosition = target.offsetTop - navHeight;
-            
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
+            const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
           }
         }
       });
@@ -933,8 +955,8 @@ class Navigation {
     this.navLinks.forEach((link, index) => {
       link.addEventListener('keydown', (e) => {
         let targetLink = null;
-        
-        switch(e.key) {
+
+        switch (e.key) {
           case 'ArrowRight':
           case 'ArrowDown':
             e.preventDefault();
@@ -954,10 +976,8 @@ class Navigation {
             targetLink = this.navLinks[this.navLinks.length - 1];
             break;
         }
-        
-        if (targetLink) {
-          targetLink.focus();
-        }
+
+        if (targetLink) targetLink.focus();
       });
     });
   }
@@ -976,7 +996,6 @@ class ScrollProgress {
       const winScroll = window.scrollY;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
-      
       if (this.progressBar) {
         this.progressBar.style.width = `${scrolled}%`;
       }
@@ -1004,10 +1023,7 @@ class BackToTop {
     }, 100));
 
     this.button.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 }
@@ -1016,14 +1032,13 @@ class BackToTop {
 /** Replaces the native mouse cursor with a custom dot + outline on pointer devices. */
 class CustomCursor {
   constructor() {
-    this.cursor = document.querySelector('.custom-cursor');
     this.dot = document.querySelector('.cursor-dot');
     this.outline = document.querySelector('.cursor-outline');
     this.init();
   }
 
   init() {
-    if (!this.cursor || window.matchMedia('(pointer: coarse)').matches) return;
+    if (!this.dot || !this.outline || window.matchMedia('(pointer: coarse)').matches) return;
 
     document.addEventListener('mousemove', (e) => {
       this.dot.style.left = `${e.clientX}px`;
@@ -1037,10 +1052,48 @@ class CustomCursor {
         this.dot.style.transform = 'translate(-50%, -50%) scale(2)';
         this.outline.style.transform = 'translate(-50%, -50%) scale(1.5)';
       });
-      
       el.addEventListener('mouseleave', () => {
         this.dot.style.transform = 'translate(-50%, -50%) scale(1)';
         this.outline.style.transform = 'translate(-50%, -50%) scale(1)';
+      });
+    });
+  }
+}
+
+// ==================== 3D Tilt Effects ====================
+/** Applies perspective tilt on .card-3d elements based on mouse position. */
+class ThreeDEffects {
+  constructor() {
+    this.init();
+  }
+
+  init() {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    document.addEventListener('mousemove', throttle((e) => {
+      document.querySelectorAll('.card-3d').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const deltaX = (e.clientX - centerX) / (rect.width / 2);
+        const deltaY = (e.clientY - centerY) / (rect.height / 2);
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance < 2) {
+          const rotateX = deltaY * -7;
+          const rotateY = deltaX * 7;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
+          card.style.setProperty('--glow-x', `${(deltaX + 1) * 50}%`);
+          card.style.setProperty('--glow-y', `${(deltaY + 1) * 50}%`);
+        } else {
+          card.style.transform = '';
+        }
+      });
+    }, 16));
+
+    document.querySelectorAll('.card-3d').forEach(card => {
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
       });
     });
   }
@@ -1059,19 +1112,13 @@ class FormValidator {
 
     this.form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      if (this.validateForm()) {
-        this.submitForm();
-      }
+      if (this.validateForm()) this.submitForm();
     });
 
-    // Real-time validation
     this.form.querySelectorAll('input, textarea').forEach(field => {
       field.addEventListener('blur', () => this.validateField(field));
       field.addEventListener('input', () => {
-        if (field.classList.contains('error')) {
-          this.validateField(field);
-        }
+        if (field.classList.contains('error')) this.validateField(field);
       });
     });
   }
@@ -1105,41 +1152,28 @@ class FormValidator {
 
   validateForm() {
     let isValid = true;
-    
     this.form.querySelectorAll('input, textarea').forEach(field => {
-      if (!this.validateField(field)) {
-        isValid = false;
-      }
+      if (!this.validateField(field)) isValid = false;
     });
-
     return isValid;
   }
 
   submitForm() {
-    const formData = new FormData(this.form);
-    const data = Object.fromEntries(formData);
-    
-    // Simulate form submission
     const statusDiv = this.form.querySelector('.form-status');
-    
     if (statusDiv) {
       statusDiv.className = 'form-status success';
       statusDiv.textContent = 'Message sent successfully! Thank you for reaching out.';
-      
       this.form.reset();
-      
       setTimeout(() => {
         statusDiv.className = 'form-status';
         statusDiv.textContent = '';
       }, 5000);
     }
-    
-    console.log('Form submitted:', data);
   }
 }
 
 // ==================== Intersection Observer for Animations ====================
-/** Observes sections and adds the `animated` class when they enter the viewport. */
+/** Observes elements and adds the `animated` class when they enter the viewport. */
 class AnimationObserver {
   constructor() {
     this.init();
@@ -1154,10 +1188,12 @@ class AnimationObserver {
       });
     }, {
       threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
+      rootMargin: '0px 0px -80px 0px',
     });
 
-    document.querySelectorAll('.animate-on-scroll, .section').forEach(el => {
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.section').forEach(el => {
       el.classList.add('animate-on-scroll');
       observer.observe(el);
     });
@@ -1192,46 +1228,32 @@ class PortfolioApp {
   }
 
   async init() {
-    // Initialize theme
     new ThemeManager();
-    
-    // Initialize loading screen
     new LoadingScreen();
-    
-    // Initialize navigation
     new Navigation();
-    
-    // Initialize scroll features
     new ScrollProgress();
     new BackToTop();
-    
-    // Initialize custom cursor
     new CustomCursor();
-    
-    // Initialize particles
+    new ThreeDEffects();
+
     const canvas = document.getElementById('particles-canvas');
     if (canvas) new ParticleSystem(canvas);
-    
-    // Initialize form validation
+
     const contactForm = document.getElementById('contact-form');
     if (contactForm) new FormValidator(contactForm);
-    
-    // Initialize animation observer
+
     new AnimationObserver();
-    
-    // Load and render data
+
     await this.loadData();
   }
 
   async loadData() {
     try {
-      // Fetch GitHub data
       const [userData, repos] = await Promise.all([
         this.api.fetchUserData(),
-        this.api.fetchRepositories()
+        this.api.fetchRepositories(),
       ]);
 
-      // Render all sections
       await this.ui.renderHero(userData);
       await this.ui.renderAbout(userData, repos);
       this.ui.renderSkills();
@@ -1240,7 +1262,6 @@ class PortfolioApp {
       this.ui.renderAchievements();
       this.ui.renderTestimonials();
       this.ui.renderContact();
-      
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -1252,4 +1273,3 @@ document.addEventListener('DOMContentLoaded', () => {
   const app = new PortfolioApp();
   app.init();
 });
-
