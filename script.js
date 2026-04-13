@@ -1042,7 +1042,7 @@ class CustomCursor {
 
 // ==================== 3D Tilt Effects ====================
 /** Applies perspective tilt on .card-3d elements based on mouse position. */
-class ThreeD_Effects {
+class ThreeDEffects {
   constructor() {
     this.init();
   }
@@ -1214,7 +1214,7 @@ class PortfolioApp {
     new ScrollProgress();
     new BackToTop();
     new CustomCursor();
-    new ThreeD_Effects();
+    new ThreeDEffects();
 
     const canvas = document.getElementById('particles-canvas');
     if (canvas) new ParticleSystem(canvas);
