@@ -7,43 +7,43 @@
   <meta name="keywords" content="SaOYaD, Developer, Portfolio, GitHub, JavaScript, Full-Stack, Web Developer, Linux, Modern Web Design">
   <meta name="author" content="SaOYaD">
   <meta name="theme-color" content="#1A0B2E">
-  
+
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://SaOYaD-SZN.github.io/">
-  <meta property="og:title" content="SaOYaD - Premium Portfolio">
+  <meta property="og:title" content="SaOYaD - Premium Portfolio 2050">
   <meta property="og:description" content="Full-Stack Developer & Linux Enthusiast. Explore my premium portfolio and cutting-edge projects.">
   <meta property="og:image" content="https://SaOYaD-SZN.github.io/logo.avif">
-  
+
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://SaOYaD-SZN.github.io/">
-  <meta property="twitter:title" content="SaOYaD - Premium Portfolio">
+  <meta property="twitter:title" content="SaOYaD - Premium Portfolio 2050">
   <meta property="twitter:description" content="Full-Stack Developer & Linux Enthusiast. Explore my premium portfolio and cutting-edge projects.">
   <meta property="twitter:image" content="https://SaOYaD-SZN.github.io/logo.avif">
-  
+
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https://api.github.com; frame-src 'self';">
-  
+
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/avif" href="logo.avif">
   <link rel="apple-touch-icon" href="logo.avif">
-  
+
   <!-- Preconnect for Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.github.com">
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-  
-  <title>SaOYaD - Premium Portfolio 2026</title>
-  
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+  <title>SaOYaD - Premium Portfolio 2050</title>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
-  
+
   <!-- JSON-LD Schema Markup -->
   <script type="application/ld+json">
   {
@@ -73,23 +73,36 @@
     <p class="loading-text">Loading Experience...</p>
   </div>
 
-  <!-- Theme Toggle Button -->
-  <button class="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle Theme">
-    <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-    <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </button>
+  <!-- Theme Selector -->
+  <div class="theme-selector">
+    <button class="theme-toggle" aria-label="Select theme" aria-expanded="false" aria-controls="theme-panel" title="Change Theme">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+    </button>
+    <div class="theme-panel" id="theme-panel" role="dialog" aria-label="Theme selection">
+      <p class="theme-panel-title">Choose Theme</p>
+      <div class="theme-options">
+        <button class="theme-option" data-theme="dark" aria-label="Dark theme" aria-pressed="false">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #1A0B2E 50%, #FFB6C1 100%)"></span>
+          <span class="theme-label">Dark</span>
+        </button>
+        <button class="theme-option" data-theme="cyberpunk" aria-label="Cyberpunk theme" aria-pressed="false">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #0D0221 50%, #00F0FF 100%)"></span>
+          <span class="theme-label">Cyberpunk</span>
+        </button>
+        <button class="theme-option" data-theme="neon" aria-label="Neon Nights theme" aria-pressed="false">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #0A0E27 50%, #B537F2 100%)"></span>
+          <span class="theme-label">Neon Nights</span>
+        </button>
+        <button class="theme-option" data-theme="pastel" aria-label="Pastel Dreams theme" aria-pressed="false">
+          <span class="theme-preview" style="background: linear-gradient(135deg, #FFF5F7 50%, #FFB6C1 100%)"></span>
+          <span class="theme-label">Pastel</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Back to Top Button -->
   <button class="back-to-top" aria-label="Scroll to top" title="Back to Top">
@@ -101,7 +114,7 @@
 
   <!-- Animated Background -->
   <div class="animated-bg" aria-hidden="true"></div>
-  
+
   <!-- Floating Shapes Background -->
   <div class="floating-shapes" aria-hidden="true">
     <div class="shape shape-1"></div>
@@ -110,23 +123,17 @@
     <div class="shape shape-4"></div>
     <div class="shape shape-5"></div>
   </div>
-  
+
   <!-- Particle Canvas -->
   <canvas id="particles-canvas" aria-hidden="true"></canvas>
-  
+
   <!-- Custom Cursor -->
   <div class="custom-cursor" aria-hidden="true">
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
   </div>
 
-  <!-- Sakura Petals Container -->
-  <div class="sakura-container" aria-hidden="true"></div>
-  
-  <!-- Sparkles Container -->
-  <div class="sparkles-container" aria-hidden="true"></div>
-
-  <!-- Decorative Elements -->
+  <!-- Decorative Stars -->
   <div class="decorative-stars" aria-hidden="true">
     <svg class="star star-1" width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path d="M10 0L12.2451 7.75486L20 10L12.2451 12.2451L10 20L7.75486 12.2451L0 10L7.75486 7.75486L10 0Z" fill="#FFB6C1" opacity="0.6"/>
@@ -153,13 +160,13 @@
         <img src="logo.avif" alt="SaOYaD Logo" width="40" height="40">
         <span>SaOYaD</span>
       </a>
-      
+
       <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      
+
       <ul class="nav-menu" role="menubar">
         <li role="none"><a href="#home" class="nav-link active" role="menuitem">Home</a></li>
         <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
@@ -182,16 +189,10 @@
 
   <!-- Hero Section -->
   <section id="home" class="hero-section" role="banner">
-    <!-- Fluid Morphing Background -->
     <div class="fluid-background" aria-hidden="true"></div>
-    
     <div class="hero-content">
       <!-- Content will be dynamically loaded -->
     </div>
-    
-    <!-- BMW M4 Drift Container will be injected here by bmw-animation.js -->
-    
-    <!-- Scroll Indicator -->
     <div class="scroll-indicator" aria-hidden="true">
       <div class="scroll-mouse">
         <div class="scroll-wheel"></div>
@@ -213,7 +214,7 @@
     <!-- Skills Section -->
     <section id="skills" class="section skills-section">
       <div class="container">
-        <h2 class="section-title">Skills & Expertise</h2>
+        <h2 class="section-title">Skills &amp; Expertise</h2>
         <!-- Content will be dynamically loaded -->
       </div>
     </section>
@@ -251,7 +252,7 @@
     <!-- Achievements Section -->
     <section id="achievements" class="section achievements-section">
       <div class="container">
-        <h2 class="section-title">Achievements & Certifications</h2>
+        <h2 class="section-title">Achievements &amp; Certifications</h2>
         <div class="achievements-grid">
           <!-- Content will be dynamically loaded -->
         </div>
@@ -283,17 +284,17 @@
           <form class="contact-form" id="contact-form" novalidate>
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" id="name" name="name" required aria-required="true">
+              <input type="text" id="name" name="name" required aria-required="true" placeholder="Your name">
               <span class="form-error" role="alert"></span>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" required aria-required="true">
+              <input type="email" id="email" name="email" required aria-required="true" placeholder="your@email.com">
               <span class="form-error" role="alert"></span>
             </div>
             <div class="form-group">
               <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+              <textarea id="message" name="message" rows="5" required aria-required="true" placeholder="Your message..."></textarea>
               <span class="form-error" role="alert"></span>
             </div>
             <button type="submit" class="btn btn-primary">
@@ -337,24 +338,15 @@
       <div class="footer-bottom">
         <p class="footer-message">Thanks For Visiting 💖</p>
         <p class="footer-copyright">
-          © 2026 SaOYaD. Built with passion and cutting-edge web technologies.
+          &copy; 2050 SaOYaD. Built with passion and cutting-edge web technologies.
         </p>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <!-- Core functionality -->
   <script src="script.js" defer></script>
-  
-  <!-- 2026 Enhanced Features -->
-  <script src="assets/js/theme-system.js" defer></script>
-  <script src="assets/js/performance-mode.js" defer></script>
-  <script src="assets/js/particle-engine.js" defer></script>
-  <script src="assets/js/3d-effects.js" defer></script>
-  <script src="assets/js/bmw-animation.js" defer></script>
-  <script src="assets/js/cursor-trail.js" defer></script>
-  
+
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
